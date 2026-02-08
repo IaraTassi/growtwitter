@@ -18,6 +18,26 @@ type CreateAccountResponse = {
   };
 };
 
+export type AuthUser = {
+  id: string;
+  name: string;
+  userName: string;
+  email: string;
+  imageUrl?: string;
+};
+
+export type LoginDto = {
+  identifier: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  ok: boolean;
+  message: string;
+  token: string;
+  user: AuthUser;
+};
+
 export async function createAccount(
   data: CreateAccountDto,
 ): Promise<CreateAccountResponse> {
@@ -33,4 +53,22 @@ export async function createAccount(
   }
 
   return response.json();
+}
+
+export async function login(data: LoginDto): Promise<LoginResponse> {
+  const response = await fetch("/api/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const body = await response.json();
+
+  if (!response.ok) {
+    throw new Error(body.message ?? "Invalid credentials");
+  }
+
+  return body;
 }

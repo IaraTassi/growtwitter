@@ -15,7 +15,7 @@ describe("authService - createAccount", () => {
       },
     };
 
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
     } as Response);
@@ -33,7 +33,7 @@ describe("authService - createAccount", () => {
   });
 
   it("should throw error when api returns 400", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: false,
       status: 400,
       json: async () => ({ message: "Invalid data" }),
@@ -51,7 +51,7 @@ describe("authService - createAccount", () => {
   });
 
   it("should throw error when api returns 500", async () => {
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: false,
       status: 500,
       json: async () => ({ message: "Server error" }),
