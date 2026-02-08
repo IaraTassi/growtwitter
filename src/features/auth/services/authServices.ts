@@ -1,47 +1,16 @@
-export type CreateAccountDto = {
-  name: string;
-  userName: string;
-  email: string;
-  password: string;
-  imageUrl?: string;
-};
+import type {
+  CreateAccountDto,
+  CreateAccountResponse,
+  LoginDto,
+  LoginResponse,
+} from "../types";
 
-type CreateAccountResponse = {
-  ok: boolean;
-  message: string;
-  user: {
-    id: string;
-    name: string;
-    userName: string;
-    email: string;
-    imageUrl?: string;
-  };
-};
-
-export type AuthUser = {
-  id: string;
-  name: string;
-  userName: string;
-  email: string;
-  imageUrl?: string;
-};
-
-export type LoginDto = {
-  identifier: string;
-  password: string;
-};
-
-export type LoginResponse = {
-  ok: boolean;
-  message: string;
-  token: string;
-  user: AuthUser;
-};
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function createAccount(
   data: CreateAccountDto,
 ): Promise<CreateAccountResponse> {
-  const response = await fetch("/api/users", {
+  const response = await fetch(`${BASE_URL}/users`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -56,7 +25,7 @@ export async function createAccount(
 }
 
 export async function login(data: LoginDto): Promise<LoginResponse> {
-  const response = await fetch("/api/users/login", {
+  const response = await fetch(`${BASE_URL}/users/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
