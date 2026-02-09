@@ -42,3 +42,5 @@ export type LoginResponse = {
 export type ApiError = {
   message: string;
 };
+
+export type IdentifierMode = "email" | "username";
