@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { AuthState } from "./types";
 import { loginThunk, registerThunk } from "./authThunks";
+import { loadAuth, clearAuth, saveAuth } from "./authStorage";
+
+const persistedAuth = loadAuth();
 
 export const initialState: AuthState = {
-  user: null,
-  token: null,
+  user: persistedAuth.user,
+  token: persistedAuth.token,
   loading: false,
   error: null,
 };
@@ -17,6 +20,8 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.error = null;
+
+      clearAuth();
     },
   },
   extraReducers: (builder) => {
@@ -41,6 +46,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
+
+        saveAuth(action.payload.token, action.payload.user);
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
