@@ -11,17 +11,20 @@ export function LoginForm({ loading, error, onSubmit }: LoginFormProps) {
   });
   const [identifierMode, setIdentifierMode] = useState<IdentifierMode>("email");
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setLoginData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
 
-  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(loginData);
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit} aria-busy={loading} data-testid="login-form">
+    <form
+      onSubmit={handleSubmit}
+      aria-busy={loading || undefined}
+      data-testid="login-form"
+    >
       <label htmlFor="identifier">
         {identifierMode === "email" ? "Email" : "Nome de usuário"}
       </label>

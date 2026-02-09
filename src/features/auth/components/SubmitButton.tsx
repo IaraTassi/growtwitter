@@ -6,7 +6,11 @@ export function SubmitButton({
   disabled = false,
 }: SubmitButtonProps) {
   return (
-    <button type="submit" disabled={loading || disabled} aria-busy={loading}>
+    <button
+      type="submit"
+      disabled={loading || disabled}
+      aria-busy={loading || undefined}
+    >
       {loading ? "Carregando..." : label}
     </button>
   );

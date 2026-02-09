@@ -10,17 +10,10 @@ export function LoginPage() {
   const { loading, error } = useAppSelector((state) => state.auth);
   const [isLogin, setIsLogin] = useState(false);
 
-  function handleRegister(data: CreateAccountDto) {
+  const handleRegister = (data: CreateAccountDto) =>
     dispatch(registerThunk(data));
-  }
-
-  const handleLogin = (data: LoginDto) => {
-    dispatch(loginThunk(data));
-  };
-
-  const toggleMode = () => {
-    setIsLogin((prev) => !prev);
-  };
+  const handleLogin = (data: LoginDto) => dispatch(loginThunk(data));
+  const toggleMode = () => setIsLogin((prev) => !prev);
 
   return (
     <main className="login-page">

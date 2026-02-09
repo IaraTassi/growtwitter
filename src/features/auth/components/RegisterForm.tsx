@@ -12,20 +12,20 @@ export function RegisterForm({ loading, error, onSubmit }: RegisterFormProps) {
     imageUrl: "",
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setRegisterData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setRegisterData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(registerData);
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit} aria-busy={loading}>
+    <form
+      onSubmit={handleSubmit}
+      aria-busy={loading || undefined}
+      data-testid="register-form"
+    >
       <h2>Criar conta</h2>
 
       <label htmlFor="name">Nome</label>
@@ -34,8 +34,8 @@ export function RegisterForm({ loading, error, onSubmit }: RegisterFormProps) {
         name="name"
         type="text"
         placeholder="Nome completo"
-        required
         disabled={loading}
+        required
         value={registerData.name}
         onChange={handleChange}
       />
@@ -46,8 +46,8 @@ export function RegisterForm({ loading, error, onSubmit }: RegisterFormProps) {
         name="userName"
         type="text"
         placeholder="Nome de usuário"
-        required
         disabled={loading}
+        required
         value={registerData.userName}
         onChange={handleChange}
       />
@@ -58,8 +58,8 @@ export function RegisterForm({ loading, error, onSubmit }: RegisterFormProps) {
         name="email"
         type="email"
         placeholder="Email"
-        required
         disabled={loading}
+        required
         value={registerData.email}
         onChange={handleChange}
       />
@@ -70,8 +70,8 @@ export function RegisterForm({ loading, error, onSubmit }: RegisterFormProps) {
         name="password"
         type="password"
         placeholder="Senha"
-        required
         disabled={loading}
+        required
         value={registerData.password}
         onChange={handleChange}
       />
