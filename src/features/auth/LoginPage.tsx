@@ -4,6 +4,7 @@ import type { LoginDto, CreateAccountDto, IdentifierMode } from "./types";
 import { loginThunk, registerThunk } from "./authThunks";
 import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
 import { SubmitButton } from "./components/SubmitButton";
+import { AuthError } from "./components/AuthError";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
@@ -138,7 +139,7 @@ export function LoginPage() {
         />
       </form>
 
-      {error && <p className="error">{error}</p>}
+      <AuthError error={error} />
 
       <p onClick={toggleMode} style={{ cursor: "pointer", color: "blue" }}>
         {isLogin ? "Não tem conta? Cadastre-se" : "Já tem conta? Faça login"}

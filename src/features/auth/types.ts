@@ -43,6 +43,10 @@ export type ApiError = {
   message: string;
 };
 
+export type AuthErrorProps = {
+  error?: string | ApiError | null;
+};
+
 export type IdentifierMode = "email" | "username";
 
 export type RegisterFormProps = {
