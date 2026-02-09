@@ -1,5 +1,6 @@
 import type { RegisterFormProps, CreateAccountDto } from "../types";
 import { useState } from "react";
+import { SubmitButton } from "./SubmitButton";
 
 export function RegisterForm({ loading, error, onSubmit }: RegisterFormProps) {
   const [registerData, setRegisterData] = useState<CreateAccountDto>({
@@ -85,9 +86,7 @@ export function RegisterForm({ loading, error, onSubmit }: RegisterFormProps) {
         onChange={handleChange}
       />
 
-      <button type="submit" disabled={loading}>
-        Criar conta
-      </button>
+      <SubmitButton label="Criar conta" loading={loading} />
 
       {error && <p className="error">{error}</p>}
     </form>

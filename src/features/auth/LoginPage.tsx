@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import type { LoginDto, CreateAccountDto, IdentifierMode } from "./types";
 import { loginThunk, registerThunk } from "./authThunks";
 import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
+import { SubmitButton } from "./components/SubmitButton";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
@@ -123,15 +124,18 @@ export function LoginPage() {
             </button>
           </>
         )}
-        <button type="submit" disabled={loading}>
-          {loading
-            ? isLogin
-              ? "Entrando..."
-              : "Criando conta..."
-            : isLogin
-              ? "Entrar"
-              : "Criar Conta"}
-        </button>
+        <SubmitButton
+          label={
+            loading
+              ? isLogin
+                ? "Entrando..."
+                : "Criando conta..."
+              : isLogin
+                ? "Entrar"
+                : "Criar Conta"
+          }
+          disabled={loading}
+        />
       </form>
 
       {error && <p className="error">{error}</p>}

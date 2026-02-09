@@ -80,8 +80,10 @@ describe("RegisterForm", () => {
   it("should disable inputs and button when loading is true", () => {
     render(<RegisterForm loading={true} error={null} onSubmit={vi.fn()} />);
 
+    const button = screen.getByRole("button");
+    expect(button).toBeDisabled();
+    expect(button).toHaveTextContent("Carregando...");
     expect(screen.getByLabelText(/nome$/i)).toBeDisabled();
-    expect(screen.getByRole("button", { name: /criar conta/i })).toBeDisabled();
   });
 
   it("should display error message when error exists", () => {

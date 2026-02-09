@@ -50,3 +50,9 @@ export type RegisterFormProps = {
   error?: string | null;
   onSubmit: (data: CreateAccountDto) => void;
 };
+
+export type SubmitButtonProps = {
+  label: string;
+  loading?: boolean;
+  disabled?: boolean;
+};
