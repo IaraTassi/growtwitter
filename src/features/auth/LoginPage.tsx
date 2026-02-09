@@ -32,12 +32,6 @@ export function LoginPage() {
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isLogin) {
-      console.log("LOGIN", {
-        isLogin,
-        identifierMode,
-        loginData,
-      });
-
       dispatch(loginThunk(loginData));
     } else {
       dispatch(registerThunk(registerData));
