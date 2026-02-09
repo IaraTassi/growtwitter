@@ -103,7 +103,7 @@ describe("authService", () => {
       expect(result).toEqual(mockResponse);
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(fetch).toHaveBeenCalledWith(
-        `${BASE_URL}/users/login`,
+        `${BASE_URL}/api/users/login`,
         expect.objectContaining({
           method: "POST",
           headers: { "Content-Type": "application/json" },
