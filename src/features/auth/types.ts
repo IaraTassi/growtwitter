@@ -67,3 +67,9 @@ export type IdentifierToggleProps = {
   onToggle: () => void;
   disabled?: boolean;
 };
+
+export type LoginFormProps = {
+  loading?: boolean;
+  error?: string | ApiError | null;
+  onSubmit: (data: LoginDto) => void;
+};
