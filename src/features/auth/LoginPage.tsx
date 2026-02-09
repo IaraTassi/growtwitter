@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import type { LoginDto, CreateAccountDto, IdentifierMode } from "./types";
 import { loginThunk, registerThunk } from "./authThunks";
+import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
@@ -25,9 +26,9 @@ export function LoginPage() {
     setLoginData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  function handleRegister(data: CreateAccountDto) {
+    dispatch(registerThunk(data));
+  }
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,55 +60,10 @@ export function LoginPage() {
       <form onSubmit={handleSubmit} aria-busy={loading}>
         {!isLogin && (
           <>
-            <label htmlFor="name">Nome</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Nome completo"
-              disabled={loading}
-              value={registerData.name}
-              onChange={handleRegisterChange}
-            />
-            <label htmlFor="userName">Nome de Usuário</label>
-            <input
-              id="userName"
-              name="userName"
-              type="text"
-              placeholder="Nome de usuário"
-              disabled={loading}
-              value={registerData.userName}
-              onChange={handleRegisterChange}
-            />
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Email"
-              disabled={loading}
-              value={registerData.email}
-              onChange={handleRegisterChange}
-            />
-            <label htmlFor="password">Senha</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Senha"
-              disabled={loading}
-              value={registerData.password}
-              onChange={handleRegisterChange}
-            />
-            <label htmlFor="imageUrl">URL da foto de perfil (opcional)</label>
-            <input
-              id="imageUrl"
-              name="imageUrl"
-              type="url"
-              placeholder="URL da foto de perfil (opcional)"
-              disabled={loading}
-              value={registerData.imageUrl}
-              onChange={handleRegisterChange}
+            <RegisterForm
+              loading={loading}
+              error={error}
+              onSubmit={handleRegister}
             />
           </>
         )}

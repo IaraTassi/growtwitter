@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createAccount,
   login,
-} from "../src/features/auth/services/authServices";
+} from "../../../src/features/auth/services/authServices";
 
 describe("authService", () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;

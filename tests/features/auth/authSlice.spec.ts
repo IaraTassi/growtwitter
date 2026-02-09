@@ -1,6 +1,11 @@
-import { describe, it, expect } from "vitest";
-import authReducer, { initialState } from "../src/features/auth/authSlice";
-import { registerThunk, loginThunk } from "../src/features/auth/authThunks";
+import { describe, expect, it } from "vitest";
+import authReducer, {
+  initialState,
+} from "../../../src/features/auth/authSlice";
+import {
+  loginThunk,
+  registerThunk,
+} from "../../../src/features/auth/authThunks";
 
 describe("authSlice", () => {
   describe("authSlice - register", () => {

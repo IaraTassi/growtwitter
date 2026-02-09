@@ -44,3 +44,9 @@ export type ApiError = {
 };
 
 export type IdentifierMode = "email" | "username";
+
+export type RegisterFormProps = {
+  loading: boolean;
+  error?: string | null;
+  onSubmit: (data: CreateAccountDto) => void;
+};
