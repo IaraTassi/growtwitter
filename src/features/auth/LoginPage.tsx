@@ -5,6 +5,7 @@ import { loginThunk, registerThunk } from "./authThunks";
 import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
 import { SubmitButton } from "./components/SubmitButton";
 import { AuthError } from "./components/AuthError";
+import { IdentifierToggle } from "../../features/auth/components/IdentifierToggle";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
@@ -99,7 +100,6 @@ export function LoginPage() {
                 />
               </>
             )}
-
             <label htmlFor="password">Senha</label>
             <input
               id="password"
@@ -111,18 +111,15 @@ export function LoginPage() {
               onChange={handleLoginChange}
             />
 
-            <button
-              type="button"
-              className="toggle-identifier"
-              disabled={loading}
-              onClick={() =>
+            <IdentifierToggle
+              identifierMode={identifierMode}
+              onToggle={() =>
                 setIdentifierMode((prev) =>
                   prev === "email" ? "username" : "email",
                 )
               }
-            >
-              Usar {identifierMode === "email" ? "nome de usuário" : "email"}
-            </button>
+              disabled={loading}
+            />
           </>
         )}
         <SubmitButton

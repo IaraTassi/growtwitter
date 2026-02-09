@@ -60,3 +60,10 @@ export type SubmitButtonProps = {
   loading?: boolean;
   disabled?: boolean;
 };
+
+export type IdentifierToggleProps = {
+  identifierMode: "email" | "username";
+  loading?: boolean;
+  onToggle: () => void;
+  disabled?: boolean;
+};
