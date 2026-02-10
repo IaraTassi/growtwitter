@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import authReducer, {
   initialState,
-} from "../../../src/features/auth/authSlice";
+} from "../../../src/features/auth/store/authSlice";
 import {
   loginThunk,
   registerThunk,
-} from "../../../src/features/auth/authThunks";
+} from "../../../src/features/auth/store/authThunks";
 
 describe("authSlice", () => {
   describe("authSlice - register", () => {

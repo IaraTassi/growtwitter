@@ -67,3 +67,8 @@ export type LoginFormProps = {
   onSubmit: (data: LoginDto) => void;
   onSwitchMode?: () => void;
 };
+
+export type AuthLayoutProps = {
+  left: React.ReactNode;
+  right: React.ReactNode;
+};

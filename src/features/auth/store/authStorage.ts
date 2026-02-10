@@ -1,4 +1,4 @@
-import type { AuthUser } from "./types";
+import type { AuthUser } from "../types";
 
 export const saveAuth = (token: string, user: AuthUser) => {
   localStorage.setItem("token", token);

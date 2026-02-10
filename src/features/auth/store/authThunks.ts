@@ -4,9 +4,9 @@ import type {
   CreateAccountResponse,
   LoginDto,
   LoginResponse,
-} from "./types";
-import { createAccount } from "./services/authServices";
-import { login as loginService } from "./services/authServices";
+} from "../types";
+import { createAccount } from "../services/authServices";
+import { login as loginService } from "../services/authServices";
 
 export const registerThunk = createAsyncThunk<
   CreateAccountResponse,

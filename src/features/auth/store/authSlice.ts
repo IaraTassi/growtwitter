@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { AuthState } from "./types";
-import { loginThunk, registerThunk } from "./authThunks";
-import { loadAuth, clearAuth, saveAuth } from "./authStorage";
+import type { AuthState } from "../types";
+import { loginThunk, registerThunk } from "../store/authThunks";
+import { loadAuth, clearAuth, saveAuth } from "../store/authStorage";
 
 const persistedAuth = loadAuth();
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import type { LoginDto, CreateAccountDto } from "./types";
-import { loginThunk, registerThunk } from "./authThunks";
-import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
-import { LoginForm } from "./components/LoginForm";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { loginThunk, registerThunk } from "../../auth/store/authThunks";
+import { LoginForm } from "../components/LoginForm";
+import { RegisterForm } from "../components/RegisterForm";
+import type { CreateAccountDto, LoginDto } from "../types";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
