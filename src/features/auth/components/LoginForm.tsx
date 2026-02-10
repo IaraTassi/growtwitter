@@ -1,10 +1,14 @@
 import type { LoginFormProps, LoginDto, IdentifierMode } from "../types";
 import { useState } from "react";
-import { IdentifierToggle } from "./IdentifierToggle";
 import { SubmitButton } from "./SubmitButton";
 import { AuthError } from "./AuthError";
 
-export function LoginForm({ loading, error, onSubmit }: LoginFormProps) {
+export function LoginForm({
+  loading,
+  error,
+  onSubmit,
+  onSwitchMode,
+}: LoginFormProps) {
   const [loginData, setLoginData] = useState<LoginDto>({
     identifier: "",
     password: "",
@@ -19,52 +23,67 @@ export function LoginForm({ loading, error, onSubmit }: LoginFormProps) {
     onSubmit(loginData);
   };
 
+  const isEmail = identifierMode === "email";
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      aria-busy={loading || undefined}
-      data-testid="login-form"
-    >
-      <label htmlFor="identifier">
-        {identifierMode === "email" ? "Email" : "Nome de usuário"}
-      </label>
-      <input
-        id="identifier"
-        name="identifier"
-        type={identifierMode === "email" ? "email" : "text"}
-        placeholder={identifierMode === "email" ? "Email" : "Nome de usuário"}
-        disabled={loading}
-        required
-        value={loginData.identifier}
-        onChange={handleChange}
-      />
+    <>
+      <h2>Entrar no Growtwitter</h2>
 
-      <label htmlFor="password">Senha</label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        placeholder="Senha"
-        disabled={loading}
-        required
-        value={loginData.password}
-        onChange={handleChange}
-      />
+      <form
+        onSubmit={handleSubmit}
+        aria-busy={loading || undefined}
+        data-testid="login-form"
+      >
+        <label htmlFor="identifier">
+          {identifierMode === "email" ? "Email" : "Nome de usuário"}
+        </label>
+        <input
+          id="identifier"
+          name="identifier"
+          type={isEmail ? "email" : "text"}
+          placeholder={isEmail ? "Email" : "Nome de usuário"}
+          disabled={loading}
+          required
+          value={loginData.identifier}
+          onChange={handleChange}
+        />
 
-      <IdentifierToggle
-        identifierMode={identifierMode}
-        onToggle={() =>
-          setIdentifierMode((prev) => (prev === "email" ? "username" : "email"))
-        }
-        disabled={loading}
-      />
+        <p>
+          <span
+            role="button"
+            tabIndex={0}
+            onClick={() => setIdentifierMode(isEmail ? "username" : "email")}
+          >
+            {isEmail ? "Usar nome de usuário" : "Usar email"}
+          </span>
+        </p>
 
-      <SubmitButton
-        label={loading ? "Entrando..." : "Entrar"}
-        disabled={loading}
-      />
+        <label htmlFor="password">Senha</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Senha"
+          disabled={loading}
+          required
+          value={loginData.password}
+          onChange={handleChange}
+        />
 
-      <AuthError error={error} />
-    </form>
+        <SubmitButton
+          label={loading ? "Entrando..." : "Entrar"}
+          disabled={loading}
+        />
+
+        <AuthError error={error} />
+
+        <p>
+          Não tem conta?{" "}
+          <span role="button" onClick={onSwitchMode}>
+            Criar agora
+          </span>
+        </p>
+      </form>
+    </>
   );
 }

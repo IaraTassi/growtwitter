@@ -61,15 +61,9 @@ export type SubmitButtonProps = {
   disabled?: boolean;
 };
 
-export type IdentifierToggleProps = {
-  identifierMode: "email" | "username";
-  loading?: boolean;
-  onToggle: () => void;
-  disabled?: boolean;
-};
-
 export type LoginFormProps = {
   loading?: boolean;
   error?: string | ApiError | null;
   onSubmit: (data: LoginDto) => void;
+  onSwitchMode?: () => void;
 };
