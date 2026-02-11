@@ -1,0 +1,31 @@
+import { createTheme } from "@mui/material/styles";
+import { COLORS } from "./theme/colors";
+
+export const theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: { main: COLORS.button },
+    secondary: { main: COLORS.textHighlight },
+    background: {
+      default: COLORS.background,
+      paper: COLORS.cardExplorer,
+    },
+    text: {
+      primary: COLORS.textPrimary,
+      secondary: COLORS.textSecondary,
+      disabled: COLORS.textTertiary,
+    },
+    error: { main: COLORS.error },
+  },
+  typography: {
+    fontFamily: `'${COLORS.fontFamily}'`,
+  },
+  custom: {
+    profileContainerBg: COLORS.profileContainerBg,
+    modalBackground: COLORS.modalBackground,
+    tweetLogo: COLORS.tweetLogo,
+    cardExplorer: COLORS.cardExplorer,
+    iconDefault: COLORS.iconDefault,
+    textHighlight: COLORS.textHighlight,
+  },
+});
