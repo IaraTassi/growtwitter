@@ -77,13 +77,30 @@ describe("RegisterForm", () => {
     expect(onSubmit).toHaveBeenCalledWith(registerData);
   });
 
-  it("should disable inputs and button when loading is true", () => {
-    render(<RegisterForm loading={true} error={null} onSubmit={vi.fn()} />);
+  it("should disable all inputs and button when loading is true", () => {
+    render(
+      <RegisterForm
+        loading={true}
+        error={null}
+        onSubmit={vi.fn()}
+        onSwitchMode={vi.fn()}
+      />,
+    );
 
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", { name: /criando.../i });
     expect(button).toBeDisabled();
-    expect(button).toHaveTextContent("Carregando...");
-    expect(screen.getByLabelText(/nome$/i)).toBeDisabled();
+
+    const inputs = [
+      "Nome",
+      "Nome de usuário",
+      "Email",
+      "Senha",
+      "URL da Foto de perfil (opcional)",
+    ];
+
+    inputs.forEach((label) => {
+      expect(screen.getByLabelText(label)).toBeDisabled();
+    });
   });
 
   it("should display error message when error exists", () => {

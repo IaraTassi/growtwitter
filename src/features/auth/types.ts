@@ -47,12 +47,13 @@ export type AuthErrorProps = {
   error?: string | ApiError | null;
 };
 
-export type IdentifierMode = "email" | "username";
+export type IdentifierMode = "email" | "userName";
 
 export type RegisterFormProps = {
   loading: boolean;
   error?: string | null;
   onSubmit: (data: CreateAccountDto) => void;
+  onSwitchMode?: () => void;
 };
 
 export type SubmitButtonProps = {

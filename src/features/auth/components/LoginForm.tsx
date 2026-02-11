@@ -52,7 +52,7 @@ export function LoginForm({
           <span
             role="button"
             tabIndex={0}
-            onClick={() => setIdentifierMode(isEmail ? "username" : "email")}
+            onClick={() => setIdentifierMode(isEmail ? "userName" : "email")}
           >
             {isEmail ? "Usar nome de usuário" : "Usar email"}
           </span>
