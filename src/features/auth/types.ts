@@ -73,7 +73,3 @@ export type AuthLayoutProps = {
   left: React.ReactNode;
   right: React.ReactNode;
 };
-
-export type RegisterTextContentProps = {
-  onSwitchMode: () => void;
-};

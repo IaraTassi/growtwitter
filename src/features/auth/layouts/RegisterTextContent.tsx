@@ -1,8 +1,4 @@
-import type { RegisterTextContentProps } from "../types";
-
-export function RegisterTextContent({
-  onSwitchMode,
-}: RegisterTextContentProps) {
+export function RegisterTextContent() {
   return (
     <section>
       <header>
@@ -18,10 +14,6 @@ export function RegisterTextContent({
         você pode compartilhar opiniões, acompanhar pessoas do mundo todo e
         participar de conversas que realmente importam.
       </p>
-
-      <button onClick={onSwitchMode}>
-        Já tem conta? <strong>Entrar</strong>
-      </button>
     </section>
   );
 }
