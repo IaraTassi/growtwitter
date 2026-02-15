@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { COLORS } from "./theme/colors";
+import { COLORS } from "./../theme/colors";
 
 export const theme = createTheme({
   palette: {
@@ -18,7 +18,7 @@ export const theme = createTheme({
     error: { main: COLORS.error },
   },
   typography: {
-    fontFamily: `'${COLORS.fontFamily}'`,
+    fontFamily: "'Karla', sans-serif",
   },
   custom: {
     profileContainerBg: COLORS.profileContainerBg,

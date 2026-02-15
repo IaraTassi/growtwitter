@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { AppRoutes } from "./routes/AppRoutes";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "./theme";
+import { theme } from "./theme/theme";
 import { CssBaseline } from "@mui/material";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
