@@ -1,19 +1,46 @@
+import { Box, Typography } from "@mui/material";
+
 export function RegisterTextContent() {
   return (
-    <section>
-      <header>
-        <h2>Growtwitter</h2>
-        <p>
-          <small>Trabalho final do bloco intermediário.</small>
-        </p>
-      </header>
+    <Box
+      component="section"
+      sx={{
+        flex: 1,
+        bgcolor: "secondary.main",
+        color: "text.primary",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        px: 3,
+        py: 2,
+        gap: 1.5,
+        overflow: "hidden",
+      }}
+    >
+      <Typography
+        component="h2"
+        variant="h4"
+        sx={{ fontSize: "2rem", fontWeight: 700 }}
+      >
+        Growtwitter
+      </Typography>
 
-      <p>
+      <Typography component="p" variant="body2">
+        Trabalho final do bloco intermediário.
+      </Typography>
+
+      <Typography
+        component="p"
+        variant="body1"
+        sx={{
+          fontSize: { lineHeight: 1.5 },
+        }}
+      >
         Crie sua conta e faça parte do Growtwitter, uma rede social pensada para
         quem valoriza conexão, troca de ideias e liberdade de expressão. Aqui
         você pode compartilhar opiniões, acompanhar pessoas do mundo todo e
         participar de conversas que realmente importam.
-      </p>
-    </section>
+      </Typography>
+    </Box>
   );
 }
