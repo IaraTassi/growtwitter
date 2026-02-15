@@ -72,4 +72,5 @@ export type LoginFormProps = {
 export type AuthLayoutProps = {
   left: React.ReactNode;
   right: React.ReactNode;
+  reverse?: boolean;
 };
