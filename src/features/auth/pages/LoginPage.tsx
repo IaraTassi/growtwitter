@@ -4,32 +4,59 @@ import { loginThunk, registerThunk } from "../../auth/store/authThunks";
 import { LoginForm } from "../components/LoginForm";
 import { RegisterForm } from "../components/RegisterForm";
 import type { CreateAccountDto, LoginDto } from "../types";
+import { LoginTextContent } from "../layouts/LoginTextContent";
+import { RegisterTextContent } from "../layouts/RegisterTextContent";
+import { Box } from "@mui/material";
+import { COLORS } from "../../../theme/colors";
+import { AuthLayout } from "../layouts/AuthLayout";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const handleRegister = (data: CreateAccountDto) =>
     dispatch(registerThunk(data));
   const handleLogin = (data: LoginDto) => dispatch(loginThunk(data));
   const toggleMode = () => setIsLogin((prev) => !prev);
 
-  return (
-    <main className="login-page">
-      {isLogin ? (
-        <LoginForm loading={loading} error={error} onSubmit={handleLogin} />
-      ) : (
-        <RegisterForm
-          loading={loading}
-          error={error}
-          onSubmit={handleRegister}
-        />
-      )}
+  const content = isLogin
+    ? {
+        left: <LoginTextContent />,
+        right: (
+          <LoginForm
+            loading={loading}
+            error={error}
+            onSubmit={handleLogin}
+            onSwitchMode={toggleMode}
+          />
+        ),
+      }
+    : {
+        left: (
+          <RegisterForm
+            loading={loading}
+            error={error}
+            onSubmit={handleRegister}
+            onSwitchMode={toggleMode}
+          />
+        ),
+        right: <RegisterTextContent />,
+      };
 
-      <p onClick={toggleMode} style={{ cursor: "pointer", color: "blue" }}>
-        {isLogin ? "Não tem conta? Cadastre-se" : "Já tem conta? Faça login"}
-      </p>
-    </main>
+  return (
+    <Box
+      component="main"
+      sx={{
+        minHeight: "100vh",
+        bgcolor: COLORS.modalBackground,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        px: { xs: 3, sm: 4 },
+      }}
+    >
+      <AuthLayout left={content.left} right={content.right} />
+    </Box>
   );
 }
