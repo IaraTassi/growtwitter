@@ -1,48 +1,53 @@
 import { describe, vi, it, expect } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
 import type { CreateAccountDto } from "../../../src/features/auth/types";
 import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
 
 describe("RegisterForm", () => {
   const defaultProps = {
     loading: false,
     error: null,
     onSubmit: vi.fn(),
+    onSwitchMode: vi.fn(),
   };
 
   it("should render all form fields", () => {
     render(<RegisterForm {...defaultProps} />);
 
-    expect(screen.getByRole("textbox", { name: /nome$/i })).toBeInTheDocument();
-
-    expect(
-      screen.getByRole("textbox", { name: /nome de usuário/i }),
-    ).toBeInTheDocument();
-
-    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
-
-    expect(
-      screen.getByLabelText("Senha", { selector: 'input[type="password"]' }),
-    ).toBeInTheDocument();
-
-    expect(screen.getByLabelText(/foto de perfil/i)).toBeInTheDocument();
-
+    expect(screen.getByLabelText(/nome completo/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/nome de usuário/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/url da foto de perfil/i)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /criar conta/i }),
     ).toBeInTheDocument();
   });
 
-  it("should allow typing into inputs", () => {
+  it("should allow typing into inputs", async () => {
     render(<RegisterForm {...defaultProps} />);
 
-    const nameInput = screen.getByLabelText(/nome$/i);
-    fireEvent.change(nameInput, { target: { value: "Iara" } });
+    await userEvent.type(screen.getByLabelText(/nome completo/i), "Test User");
+    await userEvent.type(screen.getByLabelText(/nome de usuário/i), "testuser");
+    await userEvent.type(screen.getByLabelText(/email/i), "test@example.com");
+    await userEvent.type(screen.getByLabelText(/senha/i), "123456");
+    await userEvent.type(
+      screen.getByLabelText(/url da foto de perfil/i),
+      "https://img.com/user.png",
+    );
 
-    expect(nameInput).toHaveValue("Iara");
+    expect(screen.getByLabelText(/nome completo/i)).toHaveValue("Test User");
+    expect(screen.getByLabelText(/nome de usuário/i)).toHaveValue("testuser");
+    expect(screen.getByLabelText(/email/i)).toHaveValue("test@example.com");
+    expect(screen.getByLabelText(/senha/i)).toHaveValue("123456");
+    expect(screen.getByLabelText(/url da foto de perfil/i)).toHaveValue(
+      "https://img.com/user.png",
+    );
   });
 
-  it("should call onSubmit with correct data", () => {
+  it("should call onSubmit with correct data", async () => {
     const onSubmit = vi.fn();
 
     render(<RegisterForm loading={false} error={null} onSubmit={onSubmit} />);
@@ -55,63 +60,45 @@ describe("RegisterForm", () => {
       imageUrl: "https://img.com/user.png",
     };
 
-    fireEvent.change(screen.getByLabelText(/nome$/i), {
-      target: { value: registerData.name },
-    });
-    fireEvent.change(screen.getByLabelText(/nome de usuário/i), {
-      target: { value: registerData.userName },
-    });
-    fireEvent.change(screen.getByLabelText(/email/i), {
-      target: { value: registerData.email },
-    });
-    fireEvent.change(screen.getByLabelText(/senha/i), {
-      target: { value: registerData.password },
-    });
-    fireEvent.change(screen.getByLabelText(/foto de perfil/i), {
-      target: { value: registerData.imageUrl },
-    });
+    await userEvent.type(
+      screen.getByLabelText(/nome completo/i),
+      registerData.name,
+    );
+    await userEvent.type(
+      screen.getByLabelText(/nome de usuário/i),
+      registerData.userName,
+    );
+    await userEvent.type(screen.getByLabelText(/email/i), registerData.email);
+    await userEvent.type(
+      screen.getByLabelText(/senha/i),
+      registerData.password,
+    );
+    await userEvent.type(
+      screen.getByLabelText(/url da foto de perfil/i),
+      registerData.imageUrl!,
+    );
 
-    fireEvent.click(screen.getByRole("button", { name: /criar conta/i }));
+    await userEvent.click(screen.getByRole("button", { name: /criar conta/i }));
 
-    expect(onSubmit).toHaveBeenCalledOnce();
+    expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(onSubmit).toHaveBeenCalledWith(registerData);
   });
 
   it("should disable all inputs and button when loading is true", () => {
-    render(
-      <RegisterForm
-        loading={true}
-        error={null}
-        onSubmit={vi.fn()}
-        onSwitchMode={vi.fn()}
-      />,
-    );
+    render(<RegisterForm {...defaultProps} loading={true} />);
 
-    const button = screen.getByRole("button", { name: /criando.../i });
+    const button = screen.getByRole("button", { name: /criando/i });
     expect(button).toBeDisabled();
 
-    const inputs = [
-      "Nome",
-      "Nome de usuário",
-      "Email",
-      "Senha",
-      "URL da Foto de perfil (opcional)",
-    ];
-
-    inputs.forEach((label) => {
-      expect(screen.getByLabelText(label)).toBeDisabled();
-    });
+    expect(screen.getByLabelText(/nome completo/i)).toBeDisabled();
+    expect(screen.getByLabelText(/nome de usuário/i)).toBeDisabled();
+    expect(screen.getByLabelText(/email/i)).toBeDisabled();
+    expect(screen.getByLabelText(/senha/i)).toBeDisabled();
+    expect(screen.getByLabelText(/url da foto de perfil/i)).toBeDisabled();
   });
 
   it("should display error message when error exists", () => {
-    render(
-      <RegisterForm
-        loading={false}
-        error="Erro ao criar conta"
-        onSubmit={vi.fn()}
-      />,
-    );
-
+    render(<RegisterForm {...defaultProps} error="Erro ao criar conta" />);
     expect(screen.getByText(/erro ao criar conta/i)).toBeInTheDocument();
   });
 });
