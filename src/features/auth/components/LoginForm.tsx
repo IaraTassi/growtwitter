@@ -3,6 +3,7 @@ import { useState } from "react";
 import { SubmitButton } from "./SubmitButton";
 import { AuthError } from "./AuthError";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { validateLoginData } from "../validators/loginValidator";
 
 export function LoginForm({
   loading,
@@ -23,59 +24,18 @@ export function LoginForm({
 
   const isEmail = identifierMode === "email";
 
-  function validateField(field: keyof LoginDto, value: string): string {
-    switch (field) {
-      case "identifier":
-        if (!value.trim()) return "Campo obrigatório.";
-
-        if (isEmail) {
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-            return "Email inválido.";
-        } else {
-          if (!/^[a-zA-Z][a-zA-Z0-9._]{2,19}$/.test(value))
-            return "Nome de usuário inválido.";
-        }
-        return "";
-
-      case "password":
-        if (!value.trim()) return "A senha é obrigatória.";
-        if (value.length < 6) return "A senha deve ter ao menos 6 caracteres.";
-        return "";
-
-      default:
-        return "";
-    }
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setLoginData((prev) => ({ ...prev, [name]: value }));
-
-    const errorMessage = validateField(name as keyof LoginDto, value);
-
-    setErrors((prev) => ({ ...prev, [name]: errorMessage }));
+    setLoginData((prev) => ({ ...prev, [name as keyof LoginDto]: value }));
   };
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newErrors: Record<keyof LoginDto, string> = {
-      identifier: "",
-      password: "",
-    };
-
-    (Object.keys(loginData) as (keyof LoginDto)[]).forEach((key) => {
-      const errorMessage = validateField(key, loginData[key] || "");
-      if (errorMessage) {
-        newErrors[key] = errorMessage;
-      }
-    });
-
+    const newErrors = validateLoginData(loginData, isEmail);
     setErrors(newErrors);
 
-    const hasError = Object.values(newErrors).some(Boolean);
-    if (hasError) return;
+    if (Object.values(newErrors).some(Boolean)) return;
 
     onSubmit(loginData);
   };
