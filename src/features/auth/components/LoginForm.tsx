@@ -2,8 +2,9 @@ import type { LoginFormProps, LoginDto, IdentifierMode } from "../types";
 import { useState } from "react";
 import { SubmitButton } from "./SubmitButton";
 import { AuthError } from "./AuthError";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { validateLoginData } from "../validators/loginValidator";
+import { AuthTextField } from "./AuthTextField";
 
 export function LoginForm({
   loading,
@@ -71,7 +72,7 @@ export function LoginForm({
         sx={{ display: "flex", flexDirection: "column" }}
       >
         <Box sx={{ width: "100%", fontSize: "0.875rem" }}>
-          <TextField
+          <AuthTextField
             name="identifier"
             label={isEmail ? "Email" : "Nome de usuário"}
             type={isEmail ? "email" : "text"}
@@ -79,9 +80,7 @@ export function LoginForm({
             onChange={handleChange}
             disabled={loading}
             required
-            error={!!errors.identifier}
-            size="small"
-            fullWidth
+            errorMessage={errors.identifier}
           />
 
           <Box
@@ -121,7 +120,7 @@ export function LoginForm({
           </Box>
         </Box>
 
-        <TextField
+        <AuthTextField
           name="password"
           label="Senha"
           type="password"
@@ -129,10 +128,7 @@ export function LoginForm({
           onChange={handleChange}
           disabled={loading}
           required
-          error={!!errors.password}
-          helperText={errors.password || " "}
-          size="small"
-          fullWidth
+          errorMessage={errors.password}
         />
 
         <SubmitButton label="Entrar" loading={loading} disabled={loading} />

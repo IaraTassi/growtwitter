@@ -2,8 +2,9 @@ import type { RegisterFormProps, CreateAccountDto } from "../types";
 import { useState } from "react";
 import { SubmitButton } from "./SubmitButton";
 import { AuthError } from "./AuthError";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { validateRegisterData } from "../validators/registerValidator";
+import { AuthTextField } from "./AuthTextField";
 
 export function RegisterForm({
   loading,
@@ -80,7 +81,7 @@ export function RegisterForm({
           flexDirection: "column",
         }}
       >
-        <TextField
+        <AuthTextField
           name="name"
           label="Nome completo"
           type="text"
@@ -88,16 +89,13 @@ export function RegisterForm({
           onChange={handleChange}
           disabled={loading}
           required
-          error={!!errors.name}
-          helperText={errors.name || " "}
-          size="small"
-          fullWidth
+          errorMessage={errors.name}
           slotProps={{
             htmlInput: { maxLength: 50 },
           }}
         />
 
-        <TextField
+        <AuthTextField
           name="userName"
           label="Nome de usuário"
           type="text"
@@ -105,13 +103,10 @@ export function RegisterForm({
           onChange={handleChange}
           disabled={loading}
           required
-          error={!!errors.userName}
-          helperText={errors.userName || " "}
-          size="small"
-          fullWidth
+          errorMessage={errors.userName}
         />
 
-        <TextField
+        <AuthTextField
           name="email"
           label="Email"
           type="email"
@@ -119,13 +114,21 @@ export function RegisterForm({
           onChange={handleChange}
           disabled={loading}
           required
-          error={!!errors.email}
-          helperText={errors.email || " "}
-          size="small"
+          errorMessage={errors.email}
+        />
+
+        <AuthTextField
+          name="imageUrl"
+          label="URL da foto de perfil (opcional)"
+          type="url"
+          value={registerData.imageUrl}
+          onChange={handleChange}
+          disabled={loading}
+          errorMessage={errors.imageUrl}
           fullWidth
         />
 
-        <TextField
+        <AuthTextField
           name="password"
           label="Senha"
           type="password"
@@ -133,23 +136,19 @@ export function RegisterForm({
           onChange={handleChange}
           disabled={loading}
           required
-          error={!!errors.password}
-          helperText={errors.password || " "}
+          errorMessage={errors.password}
           size="small"
           fullWidth
         />
 
-        <TextField
+        <AuthTextField
           name="imageUrl"
           label="URL da foto de perfil (opcional)"
           type="url"
           value={registerData.imageUrl}
           onChange={handleChange}
           disabled={loading}
-          error={!!errors.imageUrl}
-          helperText={errors.imageUrl || " "}
-          size="small"
-          fullWidth
+          errorMessage={errors.imageUrl}
         />
 
         <SubmitButton
