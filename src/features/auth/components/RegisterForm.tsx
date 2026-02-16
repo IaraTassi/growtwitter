@@ -141,16 +141,6 @@ export function RegisterForm({
           fullWidth
         />
 
-        <AuthTextField
-          name="imageUrl"
-          label="URL da foto de perfil (opcional)"
-          type="url"
-          value={registerData.imageUrl}
-          onChange={handleChange}
-          disabled={loading}
-          errorMessage={errors.imageUrl}
-        />
-
         <SubmitButton
           label={loading ? "Criando..." : "Criar conta"}
           disabled={loading}
