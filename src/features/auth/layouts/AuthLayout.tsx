@@ -7,7 +7,7 @@ export function AuthLayout({ left, right, reverse = false }: AuthLayoutProps) {
       sx={{
         width: "100%",
         maxWidth: 1150,
-        height: { xs: "auto", sm: 300 },
+        height: { xs: "auto", sm: 500 },
         display: "flex",
         flexDirection: { xs: "column", sm: reverse ? "row-reverse" : "row" },
         borderRadius: 2,

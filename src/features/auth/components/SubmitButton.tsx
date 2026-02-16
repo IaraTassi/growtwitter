@@ -16,13 +16,13 @@ export function SubmitButton({
       aria-busy={loading || undefined}
     >
       {loading ? (
-  <>
-    <CircularProgress size={20} sx={{ mr: 1 }} />
-    Carregando...
-  </>
-) : (
-  label
-)}
+        <>
+          <CircularProgress size={20} sx={{ mr: 1 }} />
+          Carregando...
+        </>
+      ) : (
+        label
+      )}
     </Button>
   );
 }
