@@ -47,6 +47,28 @@ export function RegisterForm({
     onSubmit(registerData);
   };
 
+  const fields: Array<{
+    name: keyof CreateAccountDto;
+    label: string;
+    type: string;
+    required?: boolean;
+  }> = [
+    { name: "name", label: "Nome completo", type: "text", required: true },
+    {
+      name: "userName",
+      label: "Nome de usuário",
+      type: "text",
+      required: true,
+    },
+    { name: "email", label: "Email", type: "email", required: true },
+    { name: "password", label: "Senha", type: "password", required: true },
+    {
+      name: "imageUrl",
+      label: "URL da foto de perfil (opcional)",
+      type: "url",
+    },
+  ];
+
   return (
     <Box
       component="section"
@@ -81,65 +103,20 @@ export function RegisterForm({
           flexDirection: "column",
         }}
       >
-        <AuthTextField
-          name="name"
-          label="Nome completo"
-          type="text"
-          value={registerData.name}
-          onChange={handleChange}
-          disabled={loading}
-          required
-          errorMessage={errors.name}
-          slotProps={{
-            htmlInput: { maxLength: 50 },
-          }}
-        />
-
-        <AuthTextField
-          name="userName"
-          label="Nome de usuário"
-          type="text"
-          value={registerData.userName}
-          onChange={handleChange}
-          disabled={loading}
-          required
-          errorMessage={errors.userName}
-        />
-
-        <AuthTextField
-          name="email"
-          label="Email"
-          type="email"
-          value={registerData.email}
-          onChange={handleChange}
-          disabled={loading}
-          required
-          errorMessage={errors.email}
-        />
-
-        <AuthTextField
-          name="imageUrl"
-          label="URL da foto de perfil (opcional)"
-          type="url"
-          value={registerData.imageUrl}
-          onChange={handleChange}
-          disabled={loading}
-          errorMessage={errors.imageUrl}
-          fullWidth
-        />
-
-        <AuthTextField
-          name="password"
-          label="Senha"
-          type="password"
-          value={registerData.password}
-          onChange={handleChange}
-          disabled={loading}
-          required
-          errorMessage={errors.password}
-          size="small"
-          fullWidth
-        />
+        {fields.map(({ name, label, type, required }) => (
+          <AuthTextField
+            key={name}
+            name={name}
+            label={label}
+            type={type}
+            value={registerData[name]}
+            onChange={handleChange}
+            disabled={loading}
+            required={required}
+            errorMessage={errors[name]}
+            {...(name === "name" ? { inputProps: { maxLength: 50 } } : {})}
+          />
+        ))}
 
         <SubmitButton
           label={loading ? "Criando..." : "Criar conta"}
