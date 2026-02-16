@@ -13,46 +13,63 @@ describe("RegisterForm", () => {
     onSwitchMode: vi.fn(),
   };
 
-  it("should render all form fields", () => {
+  it("should render all form fields and button", () => {
     render(<RegisterForm {...defaultProps} />);
 
-    expect(screen.getByLabelText(/nome completo/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/nome de usuário/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /nome completo/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /nome de usuário/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/url da foto de perfil/i)).toBeInTheDocument();
+
+    const imageUrlInputs = screen.getAllByRole("textbox", {
+      name: /url da foto de perfil/i,
+    });
+    expect(imageUrlInputs[0]).toBeInTheDocument();
+
     expect(
       screen.getByRole("button", { name: /criar conta/i }),
     ).toBeInTheDocument();
   });
 
   it("should allow typing into inputs", async () => {
+    const user = userEvent.setup();
     render(<RegisterForm {...defaultProps} />);
 
-    await userEvent.type(screen.getByLabelText(/nome completo/i), "Test User");
-    await userEvent.type(screen.getByLabelText(/nome de usuário/i), "testuser");
-    await userEvent.type(screen.getByLabelText(/email/i), "test@example.com");
-    await userEvent.type(screen.getByLabelText(/senha/i), "123456");
-    await userEvent.type(
-      screen.getByLabelText(/url da foto de perfil/i),
-      "https://img.com/user.png",
-    );
+    const nameInput = screen.getByRole("textbox", { name: /nome completo/i });
+    const userNameInput = screen.getByRole("textbox", {
+      name: /nome de usuário/i,
+    });
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
+    const passwordInput = screen.getByLabelText(/senha/i);
 
-    expect(screen.getByLabelText(/nome completo/i)).toHaveValue("Test User");
-    expect(screen.getByLabelText(/nome de usuário/i)).toHaveValue("testuser");
-    expect(screen.getByLabelText(/email/i)).toHaveValue("test@example.com");
-    expect(screen.getByLabelText(/senha/i)).toHaveValue("123456");
-    expect(screen.getByLabelText(/url da foto de perfil/i)).toHaveValue(
-      "https://img.com/user.png",
-    );
+    const imageUrlInputs = screen.getAllByRole("textbox", {
+      name: /url da foto de perfil/i,
+    });
+    const imageUrlInput = imageUrlInputs[0];
+
+    await user.type(nameInput, "Test User");
+    await user.type(userNameInput, "testuser");
+    await user.type(emailInput, "test@example.com");
+    await user.type(passwordInput, "123456");
+    await user.type(imageUrlInput, "https://img.com/user.png");
+
+    expect(nameInput).toHaveValue("Test User");
+    expect(userNameInput).toHaveValue("testuser");
+    expect(emailInput).toHaveValue("test@example.com");
+    expect(passwordInput).toHaveValue("123456");
+    expect(imageUrlInput).toHaveValue("https://img.com/user.png");
   });
 
   it("should call onSubmit with correct data", async () => {
+    const user = userEvent.setup();
     const onSubmit = vi.fn();
+    render(<RegisterForm {...defaultProps} onSubmit={onSubmit} />);
 
-    render(<RegisterForm loading={false} error={null} onSubmit={onSubmit} />);
-
-    const registerData: CreateAccountDto = {
+    const data: CreateAccountDto = {
       name: "Test User",
       userName: "testuser",
       email: "test@example.com",
@@ -60,44 +77,49 @@ describe("RegisterForm", () => {
       imageUrl: "https://img.com/user.png",
     };
 
-    await userEvent.type(
-      screen.getByLabelText(/nome completo/i),
-      registerData.name,
-    );
-    await userEvent.type(
-      screen.getByLabelText(/nome de usuário/i),
-      registerData.userName,
-    );
-    await userEvent.type(screen.getByLabelText(/email/i), registerData.email);
-    await userEvent.type(
-      screen.getByLabelText(/senha/i),
-      registerData.password,
-    );
-    await userEvent.type(
-      screen.getByLabelText(/url da foto de perfil/i),
-      registerData.imageUrl!,
-    );
+    const nameInput = screen.getByRole("textbox", { name: /nome completo/i });
+    const userNameInput = screen.getByRole("textbox", {
+      name: /nome de usuário/i,
+    });
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
+    const passwordInput = screen.getByLabelText(/senha/i);
+    const imageUrlInput = screen.getAllByRole("textbox", {
+      name: /url da foto de perfil/i,
+    })[0];
 
-    await userEvent.click(screen.getByRole("button", { name: /criar conta/i }));
+    await user.type(nameInput, data.name);
+    await user.type(userNameInput, data.userName);
+    await user.type(emailInput, data.email);
+    await user.type(passwordInput, data.password);
+    await user.type(imageUrlInput, data.imageUrl || "");
+
+    await user.click(screen.getByRole("button", { name: /criar conta/i }));
 
     expect(onSubmit).toHaveBeenCalledTimes(1);
-    expect(onSubmit).toHaveBeenCalledWith(registerData);
+    expect(onSubmit).toHaveBeenCalledWith(data);
   });
 
   it("should disable all inputs and button when loading is true", () => {
     render(<RegisterForm {...defaultProps} loading={true} />);
 
-    const button = screen.getByRole("button", { name: /criando/i });
-    expect(button).toBeDisabled();
-
-    expect(screen.getByLabelText(/nome completo/i)).toBeDisabled();
-    expect(screen.getByLabelText(/nome de usuário/i)).toBeDisabled();
-    expect(screen.getByLabelText(/email/i)).toBeDisabled();
+    expect(
+      screen.getByRole("textbox", { name: /nome completo/i }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole("textbox", { name: /nome de usuário/i }),
+    ).toBeDisabled();
+    expect(screen.getByRole("textbox", { name: /email/i })).toBeDisabled();
     expect(screen.getByLabelText(/senha/i)).toBeDisabled();
-    expect(screen.getByLabelText(/url da foto de perfil/i)).toBeDisabled();
+
+    const imageUrlInput = screen.getAllByRole("textbox", {
+      name: /url da foto de perfil/i,
+    })[0];
+    expect(imageUrlInput).toBeDisabled();
+
+    expect(screen.getByRole("button", { name: /criando.../i })).toBeDisabled();
   });
 
-  it("should display error message when error exists", () => {
+  it("displays error message when error exists", () => {
     render(<RegisterForm {...defaultProps} error="Erro ao criar conta" />);
     expect(screen.getByText(/erro ao criar conta/i)).toBeInTheDocument();
   });
