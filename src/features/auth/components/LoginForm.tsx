@@ -183,7 +183,11 @@ export function LoginForm({
           }
         />
 
-        <SubmitButton label="Entrar" loading={loading} disabled={loading} />
+        <SubmitButton
+          label="Entrar"
+          loading={loading}
+          loadingLabel="Entrando..."
+        />
 
         <AuthError error={apiError} />
 

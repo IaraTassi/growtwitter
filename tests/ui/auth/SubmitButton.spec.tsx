@@ -9,13 +9,13 @@ describe("SubmitButton", () => {
 
     expect(screen.getByRole("button", { name: /entrar/i })).toBeInTheDocument();
   });
-
-  it("should render loading text when loading is true", () => {
+  it("renders spinner and disables button when loading", () => {
     render(<SubmitButton label="Entrar" loading />);
 
-    expect(
-      screen.getByRole("button", { name: /carregando/i }),
-    ).toBeInTheDocument();
+    const button = screen.getByRole("button");
+    expect(button).toBeDisabled();
+
+    expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
 
   it("should be disabled when loading", () => {

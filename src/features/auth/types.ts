@@ -61,6 +61,7 @@ export type RegisterFormProps = {
 export type SubmitButtonProps = {
   label: string;
   loading?: boolean;
+  loadingLabel?: string;
   disabled?: boolean;
 };
 

@@ -1,5 +1,5 @@
 import { describe, vi, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
 import type { CreateAccountDto } from "../../../src/features/auth/types";
 import "@testing-library/jest-dom";
@@ -77,25 +77,21 @@ describe("RegisterForm", () => {
       imageUrl: "https://img.com/user.png",
     };
 
-    const nameInput = screen.getByRole("textbox", { name: /nome completo/i });
-    const userNameInput = screen.getByRole("textbox", {
-      name: /nome de usuário/i,
-    });
-    const emailInput = screen.getByRole("textbox", { name: /email/i });
-    const passwordInput = screen.getByLabelText(/senha/i);
-    const imageUrlInput = screen.getAllByRole("textbox", {
-      name: /url da foto de perfil/i,
-    })[0];
-
-    await user.type(nameInput, data.name);
-    await user.type(userNameInput, data.userName);
-    await user.type(emailInput, data.email);
-    await user.type(passwordInput, data.password);
-    await user.type(imageUrlInput, data.imageUrl || "");
+    await user.type(screen.getByLabelText(/nome completo/i), data.name);
+    await user.type(screen.getByLabelText(/nome de usuário/i), data.userName);
+    await user.type(screen.getByLabelText(/email/i), data.email);
+    await user.type(screen.getByLabelText(/senha/i), data.password);
+    await user.type(
+      screen.getByLabelText(/url da foto de perfil/i),
+      data.imageUrl || "",
+    );
 
     await user.click(screen.getByRole("button", { name: /criar conta/i }));
 
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+    });
+
     expect(onSubmit).toHaveBeenCalledWith(data);
   });
 

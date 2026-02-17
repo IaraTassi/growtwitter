@@ -159,8 +159,9 @@ export function RegisterForm({
         ))}
 
         <SubmitButton
-          label={loading ? "Criando..." : "Criar conta"}
-          disabled={loading}
+          label="Criar conta"
+          loading={loading}
+          loadingLabel="Criando conta..."
         />
 
         <AuthError error={apiError} />

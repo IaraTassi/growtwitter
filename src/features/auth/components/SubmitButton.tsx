@@ -1,9 +1,10 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import type { SubmitButtonProps } from "../types";
 
 export function SubmitButton({
   label,
   loading = false,
+  loadingLabel,
   disabled = false,
 }: SubmitButtonProps) {
   return (
@@ -14,12 +15,19 @@ export function SubmitButton({
       size="large"
       disabled={loading || disabled}
       aria-busy={loading || undefined}
+      aria-live="polite"
     >
       {loading ? (
-        <>
-          <CircularProgress size={20} sx={{ mr: 1 }} />
-          Carregando...
-        </>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <CircularProgress size={20} sx={{ mr: 1, color: "common.white" }} />
+          {loadingLabel ?? label}
+        </Box>
       ) : (
         label
       )}

@@ -58,7 +58,7 @@ describe("LoginForm", () => {
   it("disables inputs and button when loading is true", () => {
     render(<LoginForm {...defaultProps} loading={true} />);
 
-    const button = screen.getByRole("button", { name: /carregando/i });
+    const button = screen.getByRole("button", { name: /entrando.../i });
     expect(button).toBeDisabled();
 
     expect(screen.getByLabelText(/email/i)).toBeDisabled();
