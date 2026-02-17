@@ -2,9 +2,16 @@ import type { LoginFormProps, LoginDto, IdentifierMode } from "../types";
 import { useState } from "react";
 import { SubmitButton } from "./SubmitButton";
 import { AuthError } from "./AuthError";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from "@mui/material";
 import { validateLoginData } from "../validators/loginValidator";
 import { AuthTextField } from "./AuthTextField";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export function LoginForm({
   loading,
@@ -27,6 +34,12 @@ export function LoginForm({
     identifier: false,
     password: false,
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const isEmail = identifierMode === "email";
 
@@ -169,7 +182,7 @@ export function LoginForm({
         <AuthTextField
           name="password"
           label="Senha"
-          type="password"
+          type={showPassword ? "text" : "password"}
           value={loginData.password}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -181,6 +194,24 @@ export function LoginForm({
           helperText={
             touched.password && errors.password ? errors.password : " "
           }
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleTogglePassword}
+                    onMouseDown={(e) => e.preventDefault()}
+                    edge="end"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
         />
 
         <SubmitButton

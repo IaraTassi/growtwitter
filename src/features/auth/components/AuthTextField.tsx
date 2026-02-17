@@ -5,8 +5,12 @@ export function AuthTextField({
   errorMessage,
   helperContent,
   helperText,
+  slotProps,
   ...props
-}: AuthTextFieldProps) {
+}: AuthTextFieldProps & {
+  showPasswordToggle?: boolean;
+  onTogglePassword?: () => void;
+}) {
   const isCustomHelper = Boolean(helperContent);
 
   return (
@@ -27,6 +31,10 @@ export function AuthTextField({
             }),
           },
         },
+        input: {
+          ...(slotProps?.input ?? {}),
+        },
+        ...slotProps,
       }}
     />
   );

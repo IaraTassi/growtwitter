@@ -1,10 +1,17 @@
-import type { RegisterFormProps, CreateAccountDto } from "../types";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
-import { SubmitButton } from "./SubmitButton";
-import { AuthError } from "./AuthError";
-import { Box, Button, Typography } from "@mui/material";
+import type { CreateAccountDto, RegisterFormProps } from "../types";
 import { validateRegisterData } from "../validators/registerValidator";
+import { AuthError } from "./AuthError";
 import { AuthTextField } from "./AuthTextField";
+import { SubmitButton } from "./SubmitButton";
 
 export function RegisterForm({
   loading,
@@ -37,6 +44,12 @@ export function RegisterForm({
     password: false,
     imageUrl: false,
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name } = e.target;
@@ -143,20 +156,43 @@ export function RegisterForm({
           flexDirection: "column",
         }}
       >
-        {fields.map(({ name, label, type }) => (
-          <AuthTextField
-            key={name}
-            name={name}
-            label={label}
-            type={type}
-            value={registerData[name]}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            disabled={loading}
-            errorMessage={touched[name] && errors[name] ? errors[name] : ""}
-            helperText={touched[name] && errors[name] ? errors[name] : " "}
-          />
-        ))}
+        {fields.map(({ name, label, type }) => {
+          const isPasswordField = name === "password";
+          return (
+            <AuthTextField
+              key={name}
+              name={name}
+              label={label}
+              type={isPasswordField && showPassword ? "text" : type}
+              value={registerData[name]}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={loading}
+              errorMessage={touched[name] && errors[name] ? errors[name] : ""}
+              helperText={touched[name] && errors[name] ? errors[name] : " "}
+              slotProps={{
+                ...(isPasswordField && {
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleTogglePassword}
+                          onMouseDown={(e) => e.preventDefault()}
+                          edge="end"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }),
+              }}
+            />
+          );
+        })}
 
         <SubmitButton
           label="Criar conta"

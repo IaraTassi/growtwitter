@@ -81,4 +81,7 @@ export type AuthLayoutProps = {
 export type AuthTextFieldProps = TextFieldProps & {
   errorMessage?: string;
   helperContent?: React.ReactNode;
+  slotProps?: {
+    endAdornment?: React.ReactNode;
+  };
 };
