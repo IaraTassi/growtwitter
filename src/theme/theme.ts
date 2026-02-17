@@ -28,4 +28,17 @@ export const theme = createTheme({
     iconDefault: COLORS.iconDefault,
     textHighlight: COLORS.textHighlight,
   },
+  components: {
+    MuiOutlinedInput: {
+      styleOverrides: {
+        input: {
+          "&:-webkit-autofill": {
+            WebkitBoxShadow: "0 0 0 1000px #000 inset",
+            WebkitTextFillColor: "#fff",
+            caretColor: "#000",
+          },
+        },
+      },
+    },
+  },
 });
