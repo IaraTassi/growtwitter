@@ -1,3 +1,5 @@
+import type { TextFieldProps } from "@mui/material";
+
 export type CreateAccountDto = {
   name: string;
   userName: string;
@@ -73,4 +75,9 @@ export type AuthLayoutProps = {
   left: React.ReactNode;
   right: React.ReactNode;
   reverse?: boolean;
+};
+
+export type AuthTextFieldProps = TextFieldProps & {
+  errorMessage?: string;
+  helperContent?: React.ReactNode;
 };

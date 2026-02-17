@@ -8,7 +8,7 @@ import { AuthTextField } from "./AuthTextField";
 
 export function RegisterForm({
   loading,
-  error,
+  error: apiError,
   onSubmit,
   onSwitchMode,
 }: RegisterFormProps) {
@@ -28,12 +28,43 @@ export function RegisterForm({
     imageUrl: "",
   });
 
+  const [touched, setTouched] = useState<
+    Record<keyof CreateAccountDto, boolean>
+  >({
+    name: false,
+    userName: false,
+    email: false,
+    password: false,
+    imageUrl: false,
+  });
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name as keyof CreateAccountDto]: true }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name as keyof CreateAccountDto]:
+        validateRegisterData(registerData)[name as keyof CreateAccountDto],
+    }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRegisterData((prev) => ({
-      ...prev,
+    const updated = {
+      ...registerData,
       [name as keyof CreateAccountDto]: value,
-    }));
+    };
+
+    if (touched[name as keyof CreateAccountDto]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name as keyof CreateAccountDto]:
+          validateRegisterData(updated)[name as keyof CreateAccountDto],
+      }));
+    }
+
+    setRegisterData(updated);
   };
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -41,6 +72,15 @@ export function RegisterForm({
 
     const newErrors = validateRegisterData(registerData);
     setErrors(newErrors);
+    setTouched(
+      Object.keys(registerData).reduce(
+        (acc, key) => {
+          acc[key as keyof CreateAccountDto] = true;
+          return acc;
+        },
+        {} as Record<keyof CreateAccountDto, boolean>,
+      ),
+    );
 
     if (Object.values(newErrors).some(Boolean)) return;
 
@@ -80,8 +120,8 @@ export function RegisterForm({
         flexDirection: "column",
         justifyContent: "center",
         px: 3,
-        py: 3,
-        gap: 2,
+        py: 2,
+        gap: 1.5,
       }}
     >
       <Typography
@@ -103,7 +143,7 @@ export function RegisterForm({
           flexDirection: "column",
         }}
       >
-        {fields.map(({ name, label, type, required }) => (
+        {fields.map(({ name, label, type }) => (
           <AuthTextField
             key={name}
             name={name}
@@ -111,10 +151,10 @@ export function RegisterForm({
             type={type}
             value={registerData[name]}
             onChange={handleChange}
+            onBlur={handleBlur}
             disabled={loading}
-            required={required}
-            errorMessage={errors[name]}
-            {...(name === "name" ? { inputProps: { maxLength: 50 } } : {})}
+            errorMessage={touched[name] ? errors[name] : ""}
+            helperText={touched[name] ? errors[name] : " "}
           />
         ))}
 
@@ -123,7 +163,7 @@ export function RegisterForm({
           disabled={loading}
         />
 
-        <AuthError error={error} />
+        <AuthError error={apiError} />
 
         <Typography
           variant="body2"

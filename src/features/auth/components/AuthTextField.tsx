@@ -1,17 +1,33 @@
-import TextField, { type TextFieldProps } from "@mui/material/TextField";
+import { TextField } from "@mui/material";
+import type { AuthTextFieldProps } from "../types";
 
-type AuthTextFieldProps = TextFieldProps & {
-  errorMessage?: string;
-};
+export function AuthTextField({
+  errorMessage,
+  helperContent,
+  helperText,
+  ...props
+}: AuthTextFieldProps) {
+  const isCustomHelper = Boolean(helperContent);
 
-export function AuthTextField({ errorMessage, ...props }: AuthTextFieldProps) {
   return (
     <TextField
       {...props}
-      error={!!errorMessage}
-      helperText={errorMessage || " "}
+      error={props.error || !!errorMessage}
+      helperText={helperContent ?? helperText ?? errorMessage ?? " "}
       size="small"
       fullWidth
+      spellCheck={false}
+      slotProps={{
+        formHelperText: {
+          sx: {
+            ...(isCustomHelper && {
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }),
+          },
+        },
+      }}
     />
   );
 }

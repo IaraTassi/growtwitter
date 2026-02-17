@@ -3,7 +3,16 @@ import type { AuthErrorProps } from "../types";
 
 export function AuthError({ error }: AuthErrorProps) {
   if (!error) return null;
-  const message = typeof error === "string" ? error : error.message;
+
+  let message: string;
+
+  if (typeof error === "string") {
+    message = error;
+  } else if ("message" in error) {
+    message = error.message;
+  } else {
+    message = "Ocorreu um erro desconhecido";
+  }
 
   return (
     <Typography
@@ -11,7 +20,6 @@ export function AuthError({ error }: AuthErrorProps) {
       variant="body2"
       color="error"
       role="alert"
-      sx={{ mt: 1 }}
       data-testid="auth-error"
     >
       {message}

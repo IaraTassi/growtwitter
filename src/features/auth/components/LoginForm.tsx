@@ -8,7 +8,7 @@ import { AuthTextField } from "./AuthTextField";
 
 export function LoginForm({
   loading,
-  error,
+  error: apiError,
   onSubmit,
   onSwitchMode,
 }: LoginFormProps) {
@@ -23,11 +23,41 @@ export function LoginForm({
     password: "",
   });
 
+  const [touched, setTouched] = useState<Record<keyof LoginDto, boolean>>({
+    identifier: false,
+    password: false,
+  });
+
   const isEmail = identifierMode === "email";
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name as keyof LoginDto]: true }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name as keyof LoginDto]: validateLoginData(loginData, isEmail)[
+        name as keyof LoginDto
+      ],
+    }));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setLoginData((prev) => ({ ...prev, [name as keyof LoginDto]: value }));
+    const updated = {
+      ...loginData,
+      [name as keyof LoginDto]: value,
+    };
+
+    if (touched[name as keyof LoginDto]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name as keyof LoginDto]: validateLoginData(updated, isEmail)[
+          name as keyof LoginDto
+        ],
+      }));
+    }
+    setLoginData(updated);
   };
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -35,6 +65,15 @@ export function LoginForm({
 
     const newErrors = validateLoginData(loginData, isEmail);
     setErrors(newErrors);
+    setTouched(
+      Object.keys(loginData).reduce(
+        (acc, key) => {
+          acc[key as keyof LoginDto] = true;
+          return acc;
+        },
+        {} as Record<keyof LoginDto, boolean>,
+      ),
+    );
 
     if (Object.values(newErrors).some(Boolean)) return;
 
@@ -51,7 +90,7 @@ export function LoginForm({
         flexDirection: "column",
         justifyContent: "center",
         px: 3,
-        py: 3,
+        py: 2,
         gap: 2,
       }}
     >
@@ -69,7 +108,7 @@ export function LoginForm({
         onSubmit={handleSubmit}
         aria-busy={loading || undefined}
         data-testid="login-form"
-        sx={{ display: "flex", flexDirection: "column" }}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
       >
         <Box sx={{ width: "100%", fontSize: "0.875rem" }}>
           <AuthTextField
@@ -78,46 +117,40 @@ export function LoginForm({
             type={isEmail ? "email" : "text"}
             value={loginData.identifier}
             onChange={handleChange}
+            onBlur={handleBlur}
             disabled={loading}
-            required
-            errorMessage={errors.identifier}
+            spellCheck={false}
+            errorMessage={touched.identifier ? errors.identifier : ""}
+            helperContent={
+              <>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: errors.identifier ? "error.main" : "text.disabled",
+                  }}
+                >
+                  {touched.identifier ? errors.identifier : " "}
+                </Typography>
+
+                <Button
+                  type="button"
+                  onClick={() =>
+                    setIdentifierMode(isEmail ? "userName" : "email")
+                  }
+                  size="small"
+                  variant="text"
+                  sx={{
+                    textTransform: "none",
+                    fontSize: "0.75rem",
+                    minWidth: "auto",
+                    color: "text.secondary",
+                  }}
+                >
+                  {isEmail ? "Usar nome de usuário" : "Usar email"}
+                </Button>
+              </>
+            }
           />
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                color: errors.identifier ? "error.main" : "transparent",
-              }}
-            >
-              {errors.identifier || "placeholder"}
-            </Typography>
-
-            <Button
-              type="button"
-              onClick={() => setIdentifierMode(isEmail ? "userName" : "email")}
-              size="small"
-              variant="text"
-              sx={{
-                minWidth: "auto",
-                textTransform: "none",
-                fontSize: "0.75rem",
-                color: "text.secondary",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              {isEmail ? "Usar nome de usuário" : "Usar email"}
-            </Button>
-          </Box>
         </Box>
 
         <AuthTextField
@@ -126,14 +159,15 @@ export function LoginForm({
           type="password"
           value={loginData.password}
           onChange={handleChange}
+          onBlur={handleBlur}
           disabled={loading}
-          required
-          errorMessage={errors.password}
+          spellCheck={false}
+          errorMessage={touched.password ? errors.password : ""}
         />
 
         <SubmitButton label="Entrar" loading={loading} disabled={loading} />
 
-        <AuthError error={error} />
+        <AuthError error={apiError} />
 
         <Typography
           variant="body2"
