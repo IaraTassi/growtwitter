@@ -131,7 +131,9 @@ export function LoginForm({
             onBlur={handleBlur}
             disabled={loading}
             spellCheck={false}
-            errorMessage={touched.identifier ? errors.identifier : ""}
+            errorMessage={
+              touched.identifier && errors.identifier ? errors.identifier : ""
+            }
             helperContent={
               <>
                 <Typography
@@ -140,7 +142,9 @@ export function LoginForm({
                     color: errors.identifier ? "error.main" : "text.disabled",
                   }}
                 >
-                  {touched.identifier ? errors.identifier : " "}
+                  {touched.identifier && errors.identifier
+                    ? errors.identifier
+                    : " "}
                 </Typography>
 
                 <Button
@@ -171,7 +175,12 @@ export function LoginForm({
           onBlur={handleBlur}
           disabled={loading}
           spellCheck={false}
-          errorMessage={touched.password ? errors.password : ""}
+          errorMessage={
+            touched.password && errors.password ? errors.password : ""
+          }
+          helperText={
+            touched.password && errors.password ? errors.password : " "
+          }
         />
 
         <SubmitButton label="Entrar" loading={loading} disabled={loading} />

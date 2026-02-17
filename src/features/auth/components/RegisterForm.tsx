@@ -153,8 +153,8 @@ export function RegisterForm({
             onChange={handleChange}
             onBlur={handleBlur}
             disabled={loading}
-            errorMessage={touched[name] ? errors[name] : ""}
-            helperText={touched[name] ? errors[name] : " "}
+            errorMessage={touched[name] && errors[name] ? errors[name] : ""}
+            helperText={touched[name] && errors[name] ? errors[name] : " "}
           />
         ))}
 
