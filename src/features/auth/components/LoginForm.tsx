@@ -30,6 +30,17 @@ export function LoginForm({
 
   const isEmail = identifierMode === "email";
 
+  const handleSwitchMode = () => {
+    setIdentifierMode((prev) => {
+      const nextMode = prev === "email" ? "userName" : "email";
+
+      setErrors((e) => ({ ...e, identifier: "" }));
+      setTouched((t) => ({ ...t, identifier: false }));
+
+      return nextMode;
+    });
+  };
+
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name } = e.target;
     setTouched((prev) => ({ ...prev, [name as keyof LoginDto]: true }));
@@ -134,9 +145,7 @@ export function LoginForm({
 
                 <Button
                   type="button"
-                  onClick={() =>
-                    setIdentifierMode(isEmail ? "userName" : "email")
-                  }
+                  onClick={handleSwitchMode}
                   size="small"
                   variant="text"
                   sx={{
