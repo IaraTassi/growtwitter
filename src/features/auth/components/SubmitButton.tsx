@@ -16,6 +16,7 @@ export function SubmitButton({
       disabled={loading || disabled}
       aria-busy={loading || undefined}
       aria-live="polite"
+      sx={{ minHeight: 26, py: 0.5 }}
     >
       {loading ? (
         <Box

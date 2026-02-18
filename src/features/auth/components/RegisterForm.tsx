@@ -133,15 +133,18 @@ export function RegisterForm({
         flexDirection: "column",
         justifyContent: "center",
         px: 3,
-        py: 2,
+        py: 1.5,
         gap: 1.5,
       }}
     >
       <Typography
-        variant="h6"
         component="h2"
+        variant="h5"
         textAlign="center"
-        fontWeight={500}
+        fontWeight={600}
+        sx={{
+          mb: 0.5,
+        }}
       >
         Criar sua conta
       </Typography>
@@ -190,22 +193,30 @@ export function RegisterForm({
                   },
                 }),
               }}
+              sx={{
+                "& .MuiOutlinedInput-input": {
+                  padding: "0.5rem 0.75rem",
+                  fontSize: "0.75rem",
+                },
+              }}
             />
           );
         })}
 
-        <SubmitButton
-          label="Criar conta"
-          loading={loading}
-          loadingLabel="Criando conta..."
-        />
+        <Box>
+          <SubmitButton
+            label="Criar conta"
+            loading={loading}
+            loadingLabel="Criando conta..."
+          />
+        </Box>
 
         <AuthError error={apiError} />
 
         <Typography
           variant="body2"
           textAlign="center"
-          sx={{ color: "text.secondary", pt: 1.5, fontSize: "1rem" }}
+          sx={{ color: "text.secondary", pt: 0.5, fontSize: "1rem" }}
         >
           Já tem conta?{" "}
           <Button
