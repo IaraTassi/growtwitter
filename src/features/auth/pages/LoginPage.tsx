@@ -56,7 +56,24 @@ export function LoginPage() {
         px: { xs: 3, sm: 4 },
       }}
     >
-      <AuthLayout left={content.left} right={content.right} />
+      <Box
+        key={isLogin ? "login" : "register"}
+        sx={{
+          "@keyframes fadeSlide": {
+            from: {
+              opacity: 0,
+              transform: `translateX(${isLogin ? "12px" : "-12px"})`,
+            },
+            to: {
+              opacity: 1,
+              transform: "translateX(0)",
+            },
+          },
+          animation: "fadeSlide 240ms cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <AuthLayout left={content.left} right={content.right} />
+      </Box>
     </Box>
   );
 }
