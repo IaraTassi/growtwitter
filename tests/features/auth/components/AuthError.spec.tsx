@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { AuthError } from "../../../src/features/auth/components/AuthError";
+import { AuthError } from "../../../../src/features/auth/components/AuthError";
 import "@testing-library/jest-dom";
 
 describe("AuthError", () => {

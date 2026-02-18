@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { describe, vi, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { AuthTextField } from "../../../src/features/auth/components/AuthTextField";
+import { AuthTextField } from "../../../../src/features/auth/components/AuthTextField";
 import userEvent from "@testing-library/user-event";
 
 describe("AuthTextField", () => {

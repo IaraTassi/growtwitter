@@ -2,8 +2,8 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { LoginForm } from "../../../src/features/auth/components/LoginForm";
-import type { LoginDto } from "../../../src/features/auth/types";
+import { LoginForm } from "../../../../src/features/auth/components/LoginForm";
+import type { LoginDto } from "../../../../src/features/auth/types";
 
 describe("LoginForm", () => {
   const defaultProps = {

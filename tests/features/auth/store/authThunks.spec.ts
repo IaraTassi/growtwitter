@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import {
   loginThunk,
   registerThunk,
-} from "../../../src/features/auth/store/authThunks";
-import * as authService from "../../../src/features/auth/services/authServices";
+} from "../../../../src/features/auth/store/authThunks";
+import * as authService from "../../../../src/features/auth/services/authServices";
 
 describe("authThunks", () => {
   describe("authThunk - registerThunk", () => {

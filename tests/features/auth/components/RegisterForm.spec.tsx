@@ -1,7 +1,7 @@
 import { describe, vi, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
-import type { CreateAccountDto } from "../../../src/features/auth/types";
+import { RegisterForm } from "../../../../src/features/auth/components/RegisterForm";
+import type { CreateAccountDto } from "../../../../src/features/auth/types";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 

@@ -2,10 +2,10 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createAccount,
   login,
-} from "../../../src/features/auth/services/authServices";
+} from "../../../../src/features/auth/services/authServices";
 
 describe("authService", () => {
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
   describe("authService - createAccount", () => {
     it("should must successfully create an account", async () => {

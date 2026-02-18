@@ -1,11 +1,11 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { LoginTextContent } from "../../../src/features/auth/layouts/LoginTextContent";
+import { RegisterTextContent } from "../../../../src/features/auth/components/RegisterTextContent";
 
-describe("LoginTextContent", () => {
-  it("renders static text and login form", () => {
-    render(<LoginTextContent />);
+describe("RegisterTextContent", () => {
+  it("renders static register text content", () => {
+    render(<RegisterTextContent />);
 
     expect(
       screen.getByRole("heading", { level: 2, name: /growtwitter/i }),
@@ -16,7 +16,7 @@ describe("LoginTextContent", () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText(/plataforma definitiva para todos os apaixonados/i),
+      screen.getByText(/crie sua conta e faça parte do growtwitter/i),
     ).toBeInTheDocument();
   });
 });
