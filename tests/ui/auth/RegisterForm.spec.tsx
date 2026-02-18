@@ -1,5 +1,5 @@
 import { describe, vi, it, expect } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { RegisterForm } from "../../../src/features/auth/components/RegisterForm";
 import type { CreateAccountDto } from "../../../src/features/auth/types";
 import "@testing-library/jest-dom";
@@ -13,22 +13,14 @@ describe("RegisterForm", () => {
     onSwitchMode: vi.fn(),
   };
 
-  it("should render all form fields and button", () => {
+  it("should render all form fields and submit button", () => {
     render(<RegisterForm {...defaultProps} />);
 
-    expect(
-      screen.getByRole("textbox", { name: /nome completo/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("textbox", { name: /nome de usuário/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/nome completo/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/nome de usuário/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();
-
-    const imageUrlInputs = screen.getAllByRole("textbox", {
-      name: /url da foto de perfil/i,
-    });
-    expect(imageUrlInputs[0]).toBeInTheDocument();
+    expect(screen.getByLabelText(/url da foto de perfil/i)).toBeInTheDocument();
 
     expect(
       screen.getByRole("button", { name: /criar conta/i }),
@@ -36,37 +28,31 @@ describe("RegisterForm", () => {
   });
 
   it("should allow typing into inputs", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     render(<RegisterForm {...defaultProps} />);
 
-    const nameInput = screen.getByRole("textbox", { name: /nome completo/i });
-    const userNameInput = screen.getByRole("textbox", {
-      name: /nome de usuário/i,
-    });
-    const emailInput = screen.getByRole("textbox", { name: /email/i });
-    const passwordInput = screen.getByLabelText(/senha/i);
+    await user.type(screen.getByLabelText(/nome completo/i), "Test User");
+    await user.type(screen.getByLabelText(/nome de usuário/i), "testuser");
+    await user.type(screen.getByLabelText(/email/i), "test@example.com");
+    await user.type(screen.getByLabelText(/senha/i), "123456");
+    await user.type(
+      screen.getByLabelText(/url da foto de perfil/i),
+      "https://img.com/user.png",
+    );
 
-    const imageUrlInputs = screen.getAllByRole("textbox", {
-      name: /url da foto de perfil/i,
-    });
-    const imageUrlInput = imageUrlInputs[0];
-
-    await user.type(nameInput, "Test User");
-    await user.type(userNameInput, "testuser");
-    await user.type(emailInput, "test@example.com");
-    await user.type(passwordInput, "123456");
-    await user.type(imageUrlInput, "https://img.com/user.png");
-
-    expect(nameInput).toHaveValue("Test User");
-    expect(userNameInput).toHaveValue("testuser");
-    expect(emailInput).toHaveValue("test@example.com");
-    expect(passwordInput).toHaveValue("123456");
-    expect(imageUrlInput).toHaveValue("https://img.com/user.png");
+    expect(screen.getByLabelText(/nome completo/i)).toHaveValue("Test User");
+    expect(screen.getByLabelText(/nome de usuário/i)).toHaveValue("testuser");
+    expect(screen.getByLabelText(/email/i)).toHaveValue("test@example.com");
+    expect(screen.getByLabelText(/senha/i)).toHaveValue("123456");
+    expect(screen.getByLabelText(/url da foto de perfil/i)).toHaveValue(
+      "https://img.com/user.png",
+    );
   });
 
   it("should call onSubmit with correct data", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     const onSubmit = vi.fn();
+
     render(<RegisterForm {...defaultProps} onSubmit={onSubmit} />);
 
     const data: CreateAccountDto = {
@@ -83,15 +69,12 @@ describe("RegisterForm", () => {
     await user.type(screen.getByLabelText(/senha/i), data.password);
     await user.type(
       screen.getByLabelText(/url da foto de perfil/i),
-      data.imageUrl || "",
+      data.imageUrl?.toString() || "",
     );
 
     await user.click(screen.getByRole("button", { name: /criar conta/i }));
 
-    await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledTimes(1);
-    });
-
+    expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(onSubmit).toHaveBeenCalledWith(data);
   });
 
@@ -118,5 +101,31 @@ describe("RegisterForm", () => {
   it("displays error message when error exists", () => {
     render(<RegisterForm {...defaultProps} error="Erro ao criar conta" />);
     expect(screen.getByText(/erro ao criar conta/i)).toBeInTheDocument();
+  });
+
+  it("should not submit if required fields are empty", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+
+    render(<RegisterForm {...defaultProps} onSubmit={onSubmit} />);
+
+    await user.click(screen.getByRole("button", { name: /criar conta/i }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("should call onSwitchMode when switch button is clicked", async () => {
+    const user = userEvent.setup();
+    const onSwitchMode = vi.fn();
+
+    render(<RegisterForm {...defaultProps} onSwitchMode={onSwitchMode} />);
+
+    const switchButton = screen.getByRole("button", {
+      name: /já tem conta|entrar/i,
+    });
+
+    await user.click(switchButton);
+
+    expect(onSwitchMode).toHaveBeenCalledTimes(1);
   });
 });

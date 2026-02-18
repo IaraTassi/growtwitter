@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 
 import react from "@vitejs/plugin-react";
+import path from "path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -15,6 +16,14 @@ export default defineConfig({
     setupFiles: "./tests/setup.ts",
     coverage: {
       provider: "v8",
+    },
+    pool: "forks",
+    maxWorkers: 1,
+    alias: {
+      "@mui/icons-material": path.resolve(
+        __dirname,
+        "tests/mocks/mui-icons.ts",
+      ),
     },
   },
 });

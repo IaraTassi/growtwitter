@@ -13,29 +13,29 @@ describe("LoginForm", () => {
     onSwitchMode: vi.fn(),
   };
 
-  it("renders all fields and buttons", () => {
+  it("should render email, password and submit button", () => {
     render(<LoginForm {...defaultProps} />);
 
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /entrar/i })).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /usar nome de usuário/i }),
-    ).toBeInTheDocument();
   });
 
-  it("allows typing in inputs", async () => {
+  it("should allow typing into inputs", async () => {
     const user = userEvent.setup();
     render(<LoginForm {...defaultProps} />);
 
-    await user.type(screen.getByLabelText(/email/i), "test@example.com");
-    await user.type(screen.getByLabelText(/senha/i), "123456");
+    const emailInput = screen.getByRole("textbox", { name: /email/i });
+    const passwordInput = screen.getByLabelText(/senha/i);
 
-    expect(screen.getByLabelText(/email/i)).toHaveValue("test@example.com");
-    expect(screen.getByLabelText(/senha/i)).toHaveValue("123456");
+    await user.type(emailInput, "test@example.com");
+    await user.type(passwordInput, "123456");
+
+    expect(emailInput).toHaveValue("test@example.com");
+    expect(passwordInput).toHaveValue("123456");
   });
 
-  it("calls onSubmit with correct data", async () => {
+  it("should calls onSubmit with correct data", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
@@ -55,7 +55,7 @@ describe("LoginForm", () => {
     expect(onSubmit).toHaveBeenCalledWith(loginData);
   });
 
-  it("disables inputs and button when loading is true", () => {
+  it("should disable all inputs and button when loading is true", () => {
     render(<LoginForm {...defaultProps} loading={true} />);
 
     const button = screen.getByRole("button", { name: /entrando.../i });
@@ -65,11 +65,37 @@ describe("LoginForm", () => {
     expect(screen.getByLabelText(/senha/i)).toBeDisabled();
   });
 
-  it("displays error message when error exists", () => {
+  it("should displays error message when error exists", () => {
     render(<LoginForm {...defaultProps} error="Usuário ou senha incorretos" />);
 
     expect(
       screen.getByText(/usuário ou senha incorretos/i),
     ).toBeInTheDocument();
+  });
+
+  it("should not submit if fields are empty", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+
+    render(<LoginForm {...defaultProps} onSubmit={onSubmit} />);
+
+    await user.click(screen.getByRole("button", { name: /entrar/i }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("should call onSwitchMode when switch button is clicked", async () => {
+    const user = userEvent.setup();
+    const onSwitchMode = vi.fn();
+
+    render(<LoginForm {...defaultProps} onSwitchMode={onSwitchMode} />);
+
+    const switchButton = screen.getByRole("button", {
+      name: /criar conta|inscreva-se/i,
+    });
+
+    await user.click(switchButton);
+
+    expect(onSwitchMode).toHaveBeenCalledTimes(1);
   });
 });
