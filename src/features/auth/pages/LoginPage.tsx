@@ -9,15 +9,22 @@ import { RegisterTextContent } from "../components/RegisterTextContent";
 import { Box } from "@mui/material";
 import { COLORS } from "../../../theme/colors";
 import { AuthLayout } from "../layouts/AuthLayout";
+import { useNavigate } from "react-router-dom";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.auth);
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
 
   const handleRegister = (data: CreateAccountDto) =>
     dispatch(registerThunk(data));
-  const handleLogin = (data: LoginDto) => dispatch(loginThunk(data));
+
+  const handleLogin = async (data: LoginDto) => {
+    await dispatch(loginThunk(data)).unwrap();
+    navigate("/app");
+  };
+
   const toggleMode = () => setIsLogin((prev) => !prev);
 
   const content = isLogin
