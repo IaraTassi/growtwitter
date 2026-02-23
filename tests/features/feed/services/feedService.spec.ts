@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { FeedTweet } from "../../../../src/features/feed/types";
+import { FeedTweetResponse } from "../../../../src/features/feed/types";
 import { getFeed } from "../../../../src/features/feed/services/feedService";
 
 describe("feedService - getFeed", () => {
@@ -7,7 +7,7 @@ describe("feedService - getFeed", () => {
   const token = "fake-token";
 
   it("should return tweets successfully", async () => {
-    const mockResponse: FeedTweet[] = [
+    const mockResponse: FeedTweetResponse[] = [
       {
         id: "1",
         content: "Tweet de teste",
@@ -22,6 +22,8 @@ describe("feedService - getFeed", () => {
           createdAt: "2026-02-19T10:00:00Z",
           updatedAt: "2026-02-19T10:00:00Z",
         },
+        likes: [],
+        replies: [],
       },
     ];
 

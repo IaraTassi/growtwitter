@@ -31,3 +31,16 @@ export interface FeedContentProps {
   loggedUserId: string | null;
   loading: boolean;
 }
+
+export interface FeedTweetResponse {
+  id: string;
+  content: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+
+  user: FeedUser;
+
+  likes?: unknown[];
+  replies?: unknown[];
+}
