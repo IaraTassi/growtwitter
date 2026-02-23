@@ -15,6 +15,19 @@ export interface FeedTweet {
   updatedAt: string;
 
   user: FeedUser;
-  likesCount?: number;
-  repliesCount?: number;
+  likesCount: number;
+  repliesCount: number;
+}
+
+export type TabType = "foryou" | "following";
+
+export interface FeedTweetApi extends FeedTweet {
+  likes?: unknown[];
+  replies?: unknown[];
+}
+
+export interface FeedContentProps {
+  feed: FeedTweet[];
+  loggedUserId: string | null;
+  loading: boolean;
 }

@@ -11,11 +11,15 @@ export const clearAuth = () => {
 };
 
 export const loadAuth = () => {
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("user");
+  try {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
 
-  return {
-    token: token ?? null,
-    user: user ? JSON.parse(user) : null,
-  };
+    return {
+      token: token ?? null,
+      user: user ? JSON.parse(user) : null,
+    };
+  } catch {
+    return { token: null, user: null };
+  }
 };
