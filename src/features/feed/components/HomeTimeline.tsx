@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { FeedContentProps, TabType } from "../types";
+import { FeedTabs } from "./FeedTabs";
 
 export function HomeTimeline({
   feed,
@@ -23,69 +24,55 @@ export function HomeTimeline({
   }, [feed, tab, loggedUserId]);
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto" }}>
-      <h2>Página Inicial</h2>
-
-      <div style={{ display: "flex", gap: 16, marginBottom: 20 }}>
-        <button
-          onClick={() => setTab("foryou")}
-          style={{
-            fontWeight: tab === "foryou" ? "bold" : "normal",
-          }}
-        >
-          Para você
-        </button>
-
-        <button
-          onClick={() => setTab("following")}
-          style={{
-            fontWeight: tab === "following" ? "bold" : "normal",
-          }}
-        >
-          Seguindo
-        </button>
-      </div>
+    <section
+      aria-labelledby="home-timeline-heading"
+      style={{ maxWidth: 600, margin: "0 auto" }}
+    >
+      <header>
+        <h2 id="home-timeline-heading">Página Inicial</h2>
+        <FeedTabs tab={tab} setTab={setTab} />
+      </header>
 
       {loading ? (
         <p>Carregando...</p>
       ) : processedFeed.length === 0 ? (
         <p>Nenhum tweet encontrado</p>
       ) : (
-        processedFeed.map((t) => (
-          <div
-            key={t.id}
-            style={{
-              borderBottom: "1px solid #ccc",
-              padding: "12px 0",
-            }}
-          >
-            <img
-              src={t.user.imageUrl ?? ""}
-              alt={t.user.name}
-              width={40}
-              height={40}
-            />
-
-            <div style={{ display: "flex", gap: 8 }}>
-              <strong>{t.user.name}</strong>
-              <span style={{ color: "#555" }}>@{t.user.userName}</span>
-            </div>
-
-            <p>{t.content}</p>
-
-            <div
+        <section aria-label="Lista de tweets">
+          {processedFeed.map((tweet) => (
+            <article
+              key={tweet.id}
               style={{
+                borderBottom: "1px solid #ccc",
+                padding: "12px 0",
                 display: "flex",
-                gap: 16,
-                fontSize: 14,
+                flexDirection: "column",
+                gap: 8,
               }}
             >
-              <span>💬 {t.repliesCount ?? 0}</span>
-              <span>❤️ {t.likesCount ?? 0}</span>
-            </div>
-          </div>
-        ))
+              <img
+                src={tweet.user.imageUrl ?? ""}
+                alt={`Foto de ${tweet.user.name}`}
+                width={40}
+                height={40}
+                style={{ borderRadius: "50%" }}
+              />
+
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <strong>{tweet.user.name}</strong>
+                <span style={{ color: "#555" }}>@{tweet.user.userName}</span>
+              </div>
+
+              <p>{tweet.content}</p>
+
+              <footer style={{ display: "flex", gap: 16, fontSize: 14 }}>
+                <span>💬 {tweet.repliesCount ?? 0}</span>
+                <span>❤️ {tweet.likesCount ?? 0}</span>
+              </footer>
+            </article>
+          ))}
+        </section>
       )}
-    </div>
+    </section>
   );
 }

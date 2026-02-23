@@ -40,5 +40,19 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          color: COLORS.textTertiary,
+          "&.Mui-selected": {
+            color: COLORS.textPrimary,
+          },
+          "&:hover": {
+            backgroundColor: "profileContainerBg",
+          },
+        },
+      },
+    },
   },
 });

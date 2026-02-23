@@ -32,6 +32,11 @@ export interface FeedContentProps {
   loading: boolean;
 }
 
+export interface FeedTabsProps {
+  tab: TabType;
+  setTab: (tab: TabType) => void;
+}
+
 export interface FeedTweetResponse {
   id: string;
   content: string;
