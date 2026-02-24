@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import type { FeedContentProps, TabType } from "../types";
 import { FeedTabs } from "./FeedTabs";
+import { FeedCardContent } from "./FeedCardContent";
+import { Box } from "@mui/material";
 
 export function HomeTimeline({
   feed,
@@ -24,7 +26,8 @@ export function HomeTimeline({
   }, [feed, tab, loggedUserId]);
 
   return (
-    <section
+    <Box
+      component="section"
       aria-labelledby="home-timeline-heading"
       style={{ maxWidth: 600, margin: "0 auto" }}
     >
@@ -38,41 +41,10 @@ export function HomeTimeline({
       ) : processedFeed.length === 0 ? (
         <p>Nenhum tweet encontrado</p>
       ) : (
-        <section aria-label="Lista de tweets">
-          {processedFeed.map((tweet) => (
-            <article
-              key={tweet.id}
-              style={{
-                borderBottom: "1px solid #ccc",
-                padding: "12px 0",
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
-              <img
-                src={tweet.user.imageUrl ?? ""}
-                alt={`Foto de ${tweet.user.name}`}
-                width={40}
-                height={40}
-                style={{ borderRadius: "50%" }}
-              />
-
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <strong>{tweet.user.name}</strong>
-                <span style={{ color: "#555" }}>@{tweet.user.userName}</span>
-              </div>
-
-              <p>{tweet.content}</p>
-
-              <footer style={{ display: "flex", gap: 16, fontSize: 14 }}>
-                <span>💬 {tweet.repliesCount ?? 0}</span>
-                <span>❤️ {tweet.likesCount ?? 0}</span>
-              </footer>
-            </article>
-          ))}
-        </section>
+        processedFeed.map((tweet) => (
+          <FeedCardContent key={tweet.id} tweet={tweet} />
+        ))
       )}
-    </section>
+    </Box>
   );
 }

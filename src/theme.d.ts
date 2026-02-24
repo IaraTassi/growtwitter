@@ -19,6 +19,7 @@ declare module "@mui/material/styles" {
       tweetLogo?: string;
       cardExplorer?: string;
       iconDefault?: string;
+      iconEllipse?: string;
       textHighlight?: string;
     };
   }

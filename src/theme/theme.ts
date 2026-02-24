@@ -25,6 +25,7 @@ export const theme = createTheme({
     modalBackground: COLORS.modalBackground,
     tweetLogo: COLORS.tweetLogo,
     cardExplorer: COLORS.cardExplorer,
+    iconEllipse: COLORS.iconEllipse,
     iconDefault: COLORS.iconDefault,
     textHighlight: COLORS.textHighlight,
   },
@@ -33,9 +34,9 @@ export const theme = createTheme({
       styleOverrides: {
         input: {
           "&:-webkit-autofill": {
-            WebkitBoxShadow: "0 0 0 1000px #000 inset",
+            WebkitBoxShadow: "0 0 0 1000px #0B0707 inset",
             WebkitTextFillColor: "#fff",
-            caretColor: "#000",
+            caretColor: "#0B0707",
           },
         },
       },

@@ -1,3 +1,5 @@
+import type { SvgIconProps } from "@mui/material";
+
 export interface FeedUser {
   id: string;
   name: string;
@@ -36,6 +38,18 @@ export interface FeedTabsProps {
   tab: TabType;
   setTab: (tab: TabType) => void;
 }
+
+export interface FeedCardContentProps {
+  tweet: FeedTweet;
+}
+
+export type VerifyIconProps = SvgIconProps & {
+  variant?: "primary" | "secondary";
+};
+
+export type CustomAvatarProps = {
+  imageUrl?: string | null;
+} & Omit<SvgIconProps, "children">;
 
 export interface FeedTweetResponse {
   id: string;
