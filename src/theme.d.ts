@@ -20,6 +20,8 @@ declare module "@mui/material/styles" {
       cardExplorer?: string;
       iconDefault?: string;
       iconEllipse?: string;
+      iconFooter?: string;
+      iconLike?: string;
       textHighlight?: string;
     };
   }

@@ -8,6 +8,8 @@ export const COLORS = {
   textTertiary: "#626161",
   iconEllipse: "#D9D9D9",
   iconDefault: "#AFAFAF",
+  iconFooter: "#626161",
+  iconLike: "#df122d",
   textHighlight: "#1D9BF0",
   cardExplorer: "#16181C",
   profileContainerBg: "#1F2227",

@@ -19,13 +19,13 @@ export interface FeedTweet {
   user: FeedUser;
   likesCount: number;
   repliesCount: number;
+  isLiked?: boolean;
 }
 
 export type TabType = "foryou" | "following";
-
-export interface FeedTweetApi extends FeedTweet {
-  likes?: unknown[];
-  replies?: unknown[];
+export interface FeedTabsProps {
+  tab: TabType;
+  setTab: (tab: TabType) => void;
 }
 
 export interface FeedContentProps {
@@ -34,13 +34,9 @@ export interface FeedContentProps {
   loading: boolean;
 }
 
-export interface FeedTabsProps {
-  tab: TabType;
-  setTab: (tab: TabType) => void;
-}
-
 export interface FeedCardContentProps {
   tweet: FeedTweet;
+  onLike: (tweetId: string) => void;
 }
 
 export type VerifyIconProps = SvgIconProps & {
@@ -50,6 +46,15 @@ export type VerifyIconProps = SvgIconProps & {
 export type CustomAvatarProps = {
   imageUrl?: string | null;
 } & Omit<SvgIconProps, "children">;
+
+export interface ReplyIconProps {
+  onClick?: () => void;
+}
+
+export interface LikeIconProps {
+  isLiked?: boolean;
+  onClick?: () => void;
+}
 
 export interface FeedTweetResponse {
   id: string;

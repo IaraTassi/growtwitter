@@ -27,6 +27,8 @@ export const theme = createTheme({
     cardExplorer: COLORS.cardExplorer,
     iconEllipse: COLORS.iconEllipse,
     iconDefault: COLORS.iconDefault,
+    iconFooter: COLORS.iconFooter,
+    iconLike: COLORS.iconLike,
     textHighlight: COLORS.textHighlight,
   },
   components: {
