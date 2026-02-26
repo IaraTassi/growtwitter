@@ -1,69 +1,46 @@
-import { useEffect, useMemo, useState } from "react";
-import type { FeedContentProps, FeedTweet, TabType } from "../types";
+import type { FeedContentProps } from "../types";
 import { FeedTabs } from "./FeedTabs";
 import { FeedCardContent } from "./FeedCardContent";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { ThreadItem } from "./TheadItem";
 
 export function HomeTimeline({
   feed,
-  loggedUserId,
   loading,
+  tab,
+  setTab,
+  onLike,
 }: FeedContentProps) {
-  const [tab, setTab] = useState<TabType>("foryou");
-  const [localFeed, setLocalFeed] = useState<FeedTweet[]>([]);
-
-  useEffect(() => {
-    setLocalFeed(feed);
-  }, [feed]);
-
-  const handleLike = (tweetId: string) => {
-    setLocalFeed((prev) =>
-      prev.map((tweet) => {
-        if (tweet.id !== tweetId) return tweet;
-
-        const newIsLiked = !tweet.isLiked;
-
-        return {
-          ...tweet,
-          isLiked: newIsLiked,
-          likesCount: newIsLiked ? tweet.likesCount + 1 : tweet.likesCount - 1,
-        };
-      }),
-    );
-  };
-
-  const processedFeed = useMemo(() => {
-    if (tab === "foryou") {
-      return localFeed;
-    }
-
-    if (!loggedUserId) {
-      return [];
-    }
-
-    return [...localFeed]
-      .filter((tweet) => tweet.user.id !== loggedUserId)
-      .sort((a, b) => Number(b.likesCount ?? 0) - Number(a.likesCount ?? 0));
-  }, [localFeed, tab, loggedUserId]);
-
   return (
     <Box
       component="section"
       aria-labelledby="home-timeline-heading"
-      style={{ maxWidth: 600, margin: "0 auto" }}
+      sx={{ maxWidth: 600, margin: "0 auto" }}
     >
-      <header>
-        <h2 id="home-timeline-heading">Página Inicial</h2>
+      <Box component="header">
+        <Typography component="h2" id="home-timeline-heading">
+          Página Inicial
+        </Typography>
         <FeedTabs tab={tab} setTab={setTab} />
-      </header>
+      </Box>
 
       {loading ? (
         <p>Carregando...</p>
-      ) : processedFeed.length === 0 ? (
+      ) : feed.length === 0 ? (
         <p>Nenhum tweet encontrado</p>
       ) : (
-        processedFeed.map((tweet) => (
-          <FeedCardContent key={tweet.id} tweet={tweet} onLike={handleLike} />
+        feed.map((tweet) => (
+          <Box key={tweet.id}>
+            <FeedCardContent
+              tweet={tweet}
+              onLike={onLike}
+              showReplyLabel={tab === "foryou"}
+            />
+
+            {tab === "foryou" && tweet.replies.length > 0 && (
+              <ThreadItem tweet={tweet} level={0} onLike={onLike} />
+            )}
+          </Box>
         ))
       )}
     </Box>

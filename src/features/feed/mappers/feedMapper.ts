@@ -10,6 +10,9 @@ export function mapFeedTweet(tweet: FeedTweetResponse): FeedTweet {
     user: tweet.user,
     likesCount: tweet.likes?.length ?? 0,
     repliesCount: tweet.replies?.length ?? 0,
+    replyToId: tweet.parentId ?? null,
+    replyToUser: tweet.parent?.user ?? null,
+    replies: tweet.replies?.map(mapFeedTweet) ?? [],
   };
 }
 

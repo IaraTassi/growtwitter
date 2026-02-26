@@ -3,12 +3,19 @@ import type { FeedCardContentProps } from "../types";
 import { timeAgo } from "../utils/timeAgo";
 import { VerifyIcon } from "../utils/icons/VerifyIcon";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
-import { ReplyIcon } from "../utils/icons/replyIcon";
+import { ReplyIcon } from "../utils/icons/ReplyIcon";
 import { LikeIcon } from "../utils/icons/LikeIcon";
 import { GraphIcon } from "../utils/icons/GraphIcon";
 
-export function FeedCardContent({ tweet, onLike }: FeedCardContentProps) {
+export function FeedCardContent({
+  tweet,
+  onLike,
+  showReplyLabel,
+}: FeedCardContentProps) {
   const variant = tweet.user.imageUrl ? "primary" : "secondary";
+  const handleLikeClick = () => {
+    onLike(tweet.id);
+  };
 
   return (
     <Box
@@ -64,6 +71,7 @@ export function FeedCardContent({ tweet, onLike }: FeedCardContentProps) {
               }}
             >
               <VerifyIcon variant={variant} sx={{ width: 12, height: 12 }} />
+
               <Typography
                 variant="caption"
                 color="text.disabled"
@@ -72,9 +80,22 @@ export function FeedCardContent({ tweet, onLike }: FeedCardContentProps) {
                   fontWeight: 500,
                 }}
               >
-                @{tweet.user.userName} • {timeAgo(tweet.createdAt)}
+                • {timeAgo(tweet.createdAt)}
               </Typography>
             </Box>
+            {showReplyLabel && tweet.replyToUser && (
+              <Typography
+                variant="caption"
+                color="text.disabled"
+                sx={{
+                  fontSize: "0.7rem",
+                  fontWeight: 500,
+                  marginTop: 0.3,
+                }}
+              >
+                Em resposta a @{tweet.replyToUser.userName}
+              </Typography>
+            )}
           </Box>
         </Box>
         <Box component="main" color="text.secondary">
@@ -101,10 +122,7 @@ export function FeedCardContent({ tweet, onLike }: FeedCardContentProps) {
           </Box>
 
           <Box display="flex" alignItems="center" gap={1}>
-            <LikeIcon
-              isLiked={tweet.isLiked}
-              onClick={() => onLike(tweet.id)}
-            />
+            <LikeIcon isLiked={tweet.isLiked} onClick={handleLikeClick} />
             <Typography
               variant="caption"
               sx={{
