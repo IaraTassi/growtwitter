@@ -5,15 +5,16 @@ import { HomeTimeline } from "../components/HomeTimeline";
 import { mapFeed } from "../mappers/feedMapper";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
+import { toggleLike } from "../services/likeService";
 
 export function FeedPage() {
   const { token, user } = useSelector((state: RootState) => state.auth);
-
   const loggedUserId = user?.id;
 
   const [feed, setFeed] = useState<FeedTweet[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<TabType>("foryou");
+  const [likeError, setLikeError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchFeed() {
@@ -22,7 +23,7 @@ export function FeedPage() {
       try {
         setLoading(true);
         const data = await getFeed(token);
-        setFeed(mapFeed(data));
+        setFeed(mapFeed(data, loggedUserId));
       } catch (error) {
         console.error("Erro ao buscar feed:", error);
       } finally {
@@ -31,7 +32,7 @@ export function FeedPage() {
     }
 
     fetchFeed();
-  }, [token]);
+  }, [token, loggedUserId]);
 
   const processedFeed = useMemo(() => {
     if (tab === "foryou") return feed;
@@ -68,14 +69,25 @@ export function FeedPage() {
     });
   };
 
-  const handleLike = (tweetId: string) => {
+  const handleLike = async (tweetId: string) => {
+    if (!token) return;
+
+    setLikeError(null);
     setFeed((prev) => updateLikeRecursively(prev, tweetId));
+
+    try {
+      await toggleLike(token, tweetId);
+    } catch {
+      setFeed((prev) => updateLikeRecursively(prev, tweetId));
+      setLikeError("Não foi possível curtir o tweet.");
+    }
   };
 
   return (
     <>
       <main>
         <section>
+          {likeError && <div className="feed-error">{likeError}</div>}
           <HomeTimeline
             feed={processedFeed}
             loading={loading}

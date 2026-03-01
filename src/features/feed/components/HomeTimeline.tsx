@@ -34,7 +34,7 @@ export function HomeTimeline({
             <FeedCardContent
               tweet={tweet}
               onLike={onLike}
-              showReplyLabel={tab === "foryou"}
+              showReplyLabel={!!tweet.replyToUser}
             />
 
             {tab === "foryou" && tweet.replies.length > 0 && (

@@ -1,4 +1,5 @@
 import type { FeedTweet } from "../types";
+import { authFetch } from "./authService";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
@@ -8,7 +9,7 @@ export async function getFeed(token: string): Promise<FeedTweet[]> {
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const response = await fetch(`${BASE_URL}/api/tweets/feed`, {
+  const response = await authFetch(`${BASE_URL}/api/tweets/feed`, {
     method: "GET",
     headers,
   });

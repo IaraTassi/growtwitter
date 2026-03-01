@@ -25,6 +25,14 @@ export interface FeedTweet {
   replyToUser?: FeedUser | null;
   replies: FeedTweet[];
 }
+
+export interface Like {
+  userId: string;
+  tweetId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface FeedTweetResponse {
   id: string;
   content: string;
@@ -34,7 +42,7 @@ export interface FeedTweetResponse {
   createdAt: string;
   updatedAt: string;
   user: FeedUser;
-  likes?: unknown[];
+  likes?: Like[];
   replies?: FeedTweetResponse[];
 }
 
