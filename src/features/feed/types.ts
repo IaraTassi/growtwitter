@@ -50,6 +50,7 @@ export interface ThreadItemProps {
   tweet: FeedTweet;
   level: number;
   onLike: (tweetId: string) => void;
+  rootRepliesCount: number;
 }
 
 export type TabType = "foryou" | "following";

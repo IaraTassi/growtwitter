@@ -38,7 +38,12 @@ export function HomeTimeline({
             />
 
             {tab === "foryou" && tweet.replies.length > 0 && (
-              <ThreadItem tweet={tweet} level={0} onLike={onLike} />
+              <ThreadItem
+                tweet={tweet}
+                level={0}
+                onLike={onLike}
+                rootRepliesCount={tweet.replies.length}
+              />
             )}
           </Box>
         ))

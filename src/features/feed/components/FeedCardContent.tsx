@@ -80,23 +80,23 @@ export function FeedCardContent({
                   fontWeight: 500,
                 }}
               >
-                • {timeAgo(tweet.createdAt)}
+                @{tweet.user.userName} • {timeAgo(tweet.createdAt)}
               </Typography>
             </Box>
-            {showReplyLabel && tweet.replyToUser && (
-              <Typography
-                variant="caption"
-                color="text.disabled"
-                sx={{
-                  fontSize: "0.7rem",
-                  fontWeight: 500,
-                  marginTop: 0.3,
-                }}
-              >
-                Em resposta a @{tweet.replyToUser.userName}
-              </Typography>
-            )}
           </Box>
+          {showReplyLabel && tweet.replyToUser && (
+            <Typography
+              variant="caption"
+              color="text.disabled"
+              sx={{
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                marginTop: 0.3,
+              }}
+            >
+              Em resposta a @{tweet.replyToUser.userName}
+            </Typography>
+          )}
         </Box>
         <Box component="main" color="text.secondary">
           <Typography sx={{ fontSize: "0.75rem", fontWeight: 400 }}>
