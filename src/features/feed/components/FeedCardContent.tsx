@@ -11,8 +11,11 @@ export function FeedCardContent({
   tweet,
   onLike,
   showReplyLabel,
+  isThreadReply = false,
+  isLastReply = false,
 }: FeedCardContentProps) {
   const variant = tweet.user.imageUrl ? "primary" : "secondary";
+  const isVerified = !!tweet.user.imageUrl;
   const handleLikeClick = () => {
     onLike(tweet.id);
   };
@@ -23,12 +26,19 @@ export function FeedCardContent({
       display="grid"
       gridTemplateColumns="56px 1fr"
       sx={{
-        borderBottom: 1,
+        borderBottom: isThreadReply ? 0 : 1,
         borderColor: "divider",
-        padding: "0.75rem ",
+        padding: isThreadReply ? "0.5rem 0.75rem" : "0.75rem",
+        paddingBottom: isLastReply ? "1rem" : undefined,
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Box
           component="div"
           display="flex"
@@ -87,14 +97,22 @@ export function FeedCardContent({
           {showReplyLabel && tweet.replyToUser && (
             <Typography
               variant="caption"
-              color="text.disabled"
               sx={{
                 fontSize: "0.75rem",
                 fontWeight: 500,
                 marginTop: 0.3,
+                color: "text.disabled",
               }}
             >
-              Em resposta a @{tweet.replyToUser.userName}
+              Em resposta a{" "}
+              <Box
+                component="span"
+                sx={{
+                  color: isVerified ? "primary.main" : "text.disabled",
+                }}
+              >
+                @{tweet.replyToUser.userName}
+              </Box>
             </Typography>
           )}
         </Box>

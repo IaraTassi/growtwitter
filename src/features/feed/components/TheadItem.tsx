@@ -1,37 +1,55 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { ThreadItemProps } from "../types";
 import { FeedCardContent } from "./FeedCardContent";
 
 export function ThreadItem({
-  tweet,
-  level,
+  root,
+  replies,
+  hasNestedReplies,
   onLike,
-  rootRepliesCount,
 }: ThreadItemProps) {
-  const MAX_THREAD_LEVEL = 3;
-  if (level > MAX_THREAD_LEVEL) return null;
-  const isSingleReply =
-    level === 1 && rootRepliesCount === 1 && tweet.replies.length === 0;
-
   return (
-    <Box sx={{ marginLeft: level * 2 }}>
-      {level > 0 && (
-        <FeedCardContent
-          tweet={tweet}
-          onLike={onLike}
-          showReplyLabel={isSingleReply}
-        />
-      )}
+    <Box>
+      <FeedCardContent tweet={root} onLike={onLike} />
 
-      {tweet.replies.map((reply) => (
-        <ThreadItem
-          key={reply.id}
-          tweet={reply}
-          level={level + 1}
-          onLike={onLike}
-          rootRepliesCount={rootRepliesCount}
-        />
-      ))}
+      <Box sx={{ position: "relative" }}>
+        {replies.map((reply, index) => (
+          <Box
+            key={reply.id}
+            sx={{
+              position: "relative",
+              pl: 4,
+            }}
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                left: 16,
+                top: 0,
+                bottom: 0,
+                width: "2px",
+                bgcolor: "divider",
+              }}
+            />
+
+            <FeedCardContent
+              tweet={reply}
+              onLike={onLike}
+              showReplyLabel
+              isThreadReply
+              isLastReply={index === replies.length - 1}
+            />
+
+            {hasNestedReplies && reply.replies && reply.replies.length > 0 && (
+              <Box sx={{ pl: 2, py: 1 }}>
+                <Typography variant="body2" color="primary">
+                  Ver mais respostas
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }
