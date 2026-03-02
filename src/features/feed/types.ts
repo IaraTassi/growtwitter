@@ -46,21 +46,15 @@ export interface FeedTweetResponse {
   replies?: FeedTweetResponse[];
 }
 
-export interface ThreadItemProps {
-  tweet: FeedTweet;
-  level: number;
-  onLike: (tweetId: string) => void;
-  rootRepliesCount: number;
-}
-
 export type TabType = "foryou" | "following";
+
 export interface FeedTabsProps {
   tab: TabType;
   setTab: (tab: TabType) => void;
 }
 
 export interface FeedContentProps {
-  feed: FeedTweet[];
+  items: TimelineItem[];
   loading: boolean;
   tab: TabType;
   setTab: (tab: TabType) => void;
@@ -71,7 +65,33 @@ export interface FeedCardContentProps {
   tweet: FeedTweet;
   onLike: (tweetId: string) => void;
   showReplyLabel?: boolean;
+  isThreadReply?: boolean;
+  isLastReply?: boolean;
 }
+
+export interface ThreadItemProps {
+  root: FeedTweet;
+  replies: FeedTweet[];
+  hasNestedReplies: boolean;
+  onLike: (tweetId: string) => void;
+}
+
+export type TimelineItem =
+  | {
+      kind: "following";
+      root: FeedTweet;
+    }
+  | {
+      kind: "foryou-simple";
+      root: FeedTweet;
+      replies: FeedTweet[];
+    }
+  | {
+      kind: "foryou-thread";
+      root: FeedTweet;
+      replies: FeedTweet[];
+      hasNestedReplies: boolean;
+    };
 
 export type VerifyIconProps = SvgIconProps & {
   variant?: "primary" | "secondary";
