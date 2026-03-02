@@ -93,6 +93,12 @@ export type TimelineItem =
       hasNestedReplies: boolean;
     };
 
+export interface FeedState {
+  tweets: FeedTweet[];
+  loading: boolean;
+  error: string | null;
+}
+
 export type VerifyIconProps = SvgIconProps & {
   variant?: "primary" | "secondary";
 };
