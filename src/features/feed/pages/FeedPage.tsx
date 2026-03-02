@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getFeed } from "../services/feedService";
 import type { FeedTweet, TabType } from "../types";
 import { HomeTimeline } from "../components/HomeTimeline";
@@ -6,6 +6,7 @@ import { mapFeed } from "../mappers/feedMapper";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { toggleLike } from "../services/likeService";
+import { useTimeline } from "../hooks/useTimeline";
 
 export function FeedPage() {
   const { token, user } = useSelector((state: RootState) => state.auth);
@@ -34,14 +35,7 @@ export function FeedPage() {
     fetchFeed();
   }, [token, loggedUserId]);
 
-  const processedFeed = useMemo(() => {
-    if (tab === "foryou") return feed;
-    if (!loggedUserId) return [];
-
-    return [...feed]
-      .filter((tweet) => tweet.user.id !== loggedUserId)
-      .sort((a, b) => b.likesCount - a.likesCount);
-  }, [feed, tab, loggedUserId]);
+  const timelineItems = useTimeline(feed, tab, loggedUserId);
 
   const updateLikeRecursively = (
     tweets: FeedTweet[],
@@ -84,19 +78,17 @@ export function FeedPage() {
   };
 
   return (
-    <>
-      <main>
-        <section>
-          {likeError && <div className="feed-error">{likeError}</div>}
-          <HomeTimeline
-            feed={processedFeed}
-            loading={loading}
-            tab={tab}
-            setTab={setTab}
-            onLike={handleLike}
-          />
-        </section>
-      </main>
-    </>
+    <main>
+      <section>
+        {likeError && <div className="feed-error">{likeError}</div>}
+        <HomeTimeline
+          items={timelineItems}
+          loading={loading}
+          tab={tab}
+          setTab={setTab}
+          onLike={handleLike}
+        />
+      </section>
+    </main>
   );
 }

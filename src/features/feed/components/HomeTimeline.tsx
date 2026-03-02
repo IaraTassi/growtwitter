@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 import { ThreadItem } from "./TheadItem";
 
 export function HomeTimeline({
-  feed,
+  items,
   loading,
   tab,
   setTab,
@@ -26,27 +26,51 @@ export function HomeTimeline({
 
       {loading ? (
         <p>Carregando...</p>
-      ) : feed.length === 0 ? (
+      ) : items.length === 0 ? (
         <p>Nenhum tweet encontrado</p>
       ) : (
-        feed.map((tweet) => (
-          <Box key={tweet.id}>
-            <FeedCardContent
-              tweet={tweet}
-              onLike={onLike}
-              showReplyLabel={!!tweet.replyToUser}
-            />
+        items.map((item) => {
+          switch (item.kind) {
+            case "following":
+              return (
+                <FeedCardContent
+                  key={item.root.id}
+                  tweet={item.root}
+                  onLike={onLike}
+                />
+              );
 
-            {tab === "foryou" && tweet.replies.length > 0 && (
-              <ThreadItem
-                tweet={tweet}
-                level={0}
-                onLike={onLike}
-                rootRepliesCount={tweet.replies.length}
-              />
-            )}
-          </Box>
-        ))
+            case "foryou-simple":
+              return (
+                <Box key={item.root.id}>
+                  <FeedCardContent tweet={item.root} onLike={onLike} />
+
+                  {item.replies.map((reply) => (
+                    <FeedCardContent
+                      key={reply.id}
+                      tweet={reply}
+                      onLike={onLike}
+                      showReplyLabel
+                    />
+                  ))}
+                </Box>
+              );
+
+            case "foryou-thread":
+              return (
+                <ThreadItem
+                  key={item.root.id}
+                  root={item.root}
+                  replies={item.replies}
+                  hasNestedReplies={item.hasNestedReplies}
+                  onLike={onLike}
+                />
+              );
+
+            default:
+              return null;
+          }
+        })
       )}
     </Box>
   );
