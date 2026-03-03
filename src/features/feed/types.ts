@@ -87,6 +87,11 @@ export type TimelineItem =
       replies: FeedTweet[];
     }
   | {
+      kind: "foryou-single-reply";
+      root: FeedTweet;
+      reply: FeedTweet;
+    }
+  | {
       kind: "foryou-thread";
       root: FeedTweet;
       replies: FeedTweet[];

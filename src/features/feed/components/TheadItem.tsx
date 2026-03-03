@@ -12,26 +12,9 @@ export function ThreadItem({
     <Box>
       <FeedCardContent tweet={root} onLike={onLike} />
 
-      <Box sx={{ position: "relative" }}>
+      <Box>
         {replies.map((reply, index) => (
-          <Box
-            key={reply.id}
-            sx={{
-              position: "relative",
-              pl: 4,
-            }}
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                left: 16,
-                top: 0,
-                bottom: 0,
-                width: "2px",
-                bgcolor: "divider",
-              }}
-            />
-
+          <Box key={reply.id}>
             <FeedCardContent
               tweet={reply}
               onLike={onLike}
@@ -41,7 +24,7 @@ export function ThreadItem({
             />
 
             {hasNestedReplies && reply.replies && reply.replies.length > 0 && (
-              <Box sx={{ pl: 2, py: 1 }}>
+              <Box sx={{ pl: 12 }}>
                 <Typography variant="body2" color="primary">
                   Ver mais respostas
                 </Typography>

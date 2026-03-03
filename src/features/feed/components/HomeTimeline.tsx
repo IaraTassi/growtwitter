@@ -44,27 +44,31 @@ export function HomeTimeline({
               return (
                 <Box key={item.root.id}>
                   <FeedCardContent tweet={item.root} onLike={onLike} />
+                </Box>
+              );
 
-                  {item.replies.map((reply) => (
-                    <FeedCardContent
-                      key={reply.id}
-                      tweet={reply}
-                      onLike={onLike}
-                      showReplyLabel
-                    />
-                  ))}
+            case "foryou-single-reply":
+              return (
+                <Box key={item.root.id}>
+                  <FeedCardContent tweet={item.root} onLike={onLike} />
+                  <FeedCardContent
+                    tweet={item.reply}
+                    onLike={onLike}
+                    showReplyLabel
+                  />
                 </Box>
               );
 
             case "foryou-thread":
               return (
-                <ThreadItem
-                  key={item.root.id}
-                  root={item.root}
-                  replies={item.replies}
-                  hasNestedReplies={item.hasNestedReplies}
-                  onLike={onLike}
-                />
+                <Box key={item.root.id}>
+                  <ThreadItem
+                    root={item.root}
+                    replies={item.replies}
+                    hasNestedReplies={item.hasNestedReplies}
+                    onLike={onLike}
+                  />
+                </Box>
               );
 
             default:

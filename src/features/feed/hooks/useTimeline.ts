@@ -10,34 +10,39 @@ export function useTimeline(
     if (tab === "following") {
       if (!loggedUserId) return [];
 
-      return feed
+      return [...feed]
         .filter((tweet) => tweet.user.id !== loggedUserId)
         .sort((a, b) => b.likesCount - a.likesCount)
-        .map<TimelineItem>((tweet) => ({
-          kind: "following",
-          root: tweet,
-        }));
+        .map<TimelineItem>((tweet) => ({ kind: "following", root: tweet }));
     }
 
-    return feed.map<TimelineItem>((root) => {
-      const directReplies = root.replies || [];
+    return [...feed]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
+      .map<TimelineItem>((root) => {
+        const directReplies = root.replies || [];
 
-      if (directReplies.length < 2) {
+        if (directReplies.length === 0) {
+          return { kind: "foryou-simple", root, replies: [] };
+        }
+
+        if (
+          directReplies.length === 1 &&
+          (!directReplies[0].replies || directReplies[0].replies.length === 0)
+        ) {
+          return { kind: "foryou-single-reply", root, reply: directReplies[0] };
+        }
+
         return {
-          kind: "foryou-simple",
+          kind: "foryou-thread",
           root,
           replies: directReplies,
+          hasNestedReplies: directReplies.some(
+            (r) => r.replies && r.replies.length > 0,
+          ),
         };
-      }
-
-      return {
-        kind: "foryou-thread",
-        root,
-        replies: directReplies,
-        hasNestedReplies: directReplies.some(
-          (r) => r.replies && r.replies.length > 0,
-        ),
-      };
-    });
+      });
   }, [feed, tab, loggedUserId]);
 }
