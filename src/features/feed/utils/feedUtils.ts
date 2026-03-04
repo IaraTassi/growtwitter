@@ -16,3 +16,21 @@ export function updateLikeRecursive(tweet: FeedTweet, id: string): FeedTweet {
     replies: tweet.replies.map((reply) => updateLikeRecursive(reply, id)),
   };
 }
+
+export function insertReplyRecursive(
+  tweet: FeedTweet,
+  reply: FeedTweet,
+): FeedTweet {
+  if (tweet.id === reply.replyToId) {
+    return {
+      ...tweet,
+      replies: [...tweet.replies, reply],
+      repliesCount: tweet.repliesCount + 1,
+    };
+  }
+
+  return {
+    ...tweet,
+    replies: tweet.replies.map((r) => insertReplyRecursive(r, reply)),
+  };
+}
