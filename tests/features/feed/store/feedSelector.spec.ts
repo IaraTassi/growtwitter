@@ -4,6 +4,7 @@ import {
   selectFeedLoading,
   selectFeedError,
   selectLikedTweets,
+  selectReplys,
 } from "../../../../src/features/feed/store/feedSelectors";
 import type { FeedTweet } from "../../../../src/features/feed/types";
 import { RootState } from "../../../../src/store/store";
@@ -19,6 +20,7 @@ function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
       id: "user1",
       name: "User 1",
       userName: "user1",
+      email: "",
       createdAt: "",
       updatedAt: "",
     },
@@ -76,5 +78,35 @@ describe("feedSelectors", () => {
     const liked = selectLikedTweets(mockState);
     expect(liked.length).toBe(1);
     expect(liked[0].id).toBe("2");
+  });
+
+  it("selectFeedReplies should return replies for a tweet", () => {
+    const tweetWithReplies = createMockTweet({
+      id: "3",
+      replies: [
+        createMockTweet({ id: "3-1", replyToId: "3" }),
+        createMockTweet({ id: "3-2", replyToId: "3" }),
+      ],
+    });
+
+    const stateWithReplies: RootState = {
+      ...mockState,
+      feed: {
+        tweets: [...mockState.feed.tweets, tweetWithReplies],
+        loading: false,
+        error: null,
+      },
+    };
+
+    const allReplies = selectReplys(stateWithReplies);
+    const repliesForTweet3 = allReplies.filter(
+      (r: FeedTweet) => r.replyToId === "3",
+    );
+
+    expect(repliesForTweet3.length).toBe(2);
+    expect(repliesForTweet3.map((r: FeedTweet) => r.id)).toEqual([
+      "3-1",
+      "3-2",
+    ]);
   });
 });
