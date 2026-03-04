@@ -1,4 +1,4 @@
-import type { FeedTweet } from "../types";
+import type { CreateReplyApiResponse, FeedTweetResponse } from "../types";
 import { authFetch } from "./authService";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
@@ -6,7 +6,8 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 export async function createReply(
   token: string,
   parentId: string,
-): Promise<FeedTweet[]> {
+  content: string,
+): Promise<FeedTweetResponse> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
@@ -18,18 +19,19 @@ export async function createReply(
   const response = await authFetch(`${BASE_URL}/api/tweets/${parentId}/reply`, {
     method: "POST",
     headers,
-    body: JSON.stringify({}),
+    body: JSON.stringify({ content }),
   });
 
-  const data = await response.json();
-
   if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch reply");
+    const error = await response.json();
+    throw new Error(error.message ?? "Failed to fetch reply");
   }
 
-  if (!Array.isArray(data.feed)) {
+  const data: CreateReplyApiResponse = await response.json();
+
+  if (!response.ok || !data.ok || !data.reply) {
     throw new Error(data.message || "Não foi possível criar uma resposta");
   }
 
-  return data.feed;
+  return data.reply;
 }

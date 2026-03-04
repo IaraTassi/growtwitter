@@ -2,27 +2,29 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { FeedTweetResponse } from "../../../../src/features/feed/types";
 import { createReply } from "../../../../src/features/feed/services/replyService";
 
-describe("tweetService - createReply", () => {
+describe("replyService - createReply", () => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
   const token = "fake-token";
   const parentId = "123";
+  const content = "Teste reply";
 
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  it("should call fetch with correct URL and headers", async () => {
+  it("should call fetch with correct URL, headers, and body", async () => {
     const mockResponse: FeedTweetResponse[] = [
       {
         id: "1",
-        content: "reply",
-        userId: "",
+        content: content,
+        userId: "u1",
         createdAt: "",
         updatedAt: "",
         user: {
           id: "u1",
           name: "User Teste",
           userName: "teste",
+          email: "",
           imageUrl: "",
           createdAt: "2026-02-19T10:00:00Z",
           updatedAt: "2026-02-19T10:00:00Z",
@@ -35,14 +37,14 @@ describe("tweetService - createReply", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        feed: mockResponse,
+        ok: true,
+        message: "Resposta criada com sucesso.",
+        reply: mockResponse,
       }),
     } as Response);
-
-    const result = await createReply(token, parentId);
+    const result = await createReply(token, parentId, content);
 
     expect(result).toEqual(mockResponse);
-
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch).toHaveBeenCalledWith(
       `${BASE_URL}/api/tweets/${parentId}/reply`,
@@ -52,35 +54,56 @@ describe("tweetService - createReply", () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ content }),
       },
     );
   });
 
   it("should return feed when response is ok", async () => {
-    const mockFeed = [{ id: "1", content: "reply" }];
+    const mockResponse: FeedTweetResponse[] = [
+      {
+        id: "1",
+        content: content,
+        userId: "u1",
+        createdAt: "",
+        updatedAt: "",
+        user: {
+          id: "u1",
+          name: "User Teste",
+          userName: "teste",
+          email: "",
+          imageUrl: "",
+          createdAt: "",
+          updatedAt: "",
+        },
+        likes: [],
+        replies: [],
+      },
+    ];
 
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        feed: mockFeed,
+        ok: true,
+        message: "Resposta criada com sucesso.",
+        reply: mockResponse,
       }),
     } as Response);
 
-    const result = await createReply(token, parentId);
+    const result = await createReply(token, parentId, content);
 
-    expect(result).toEqual(mockFeed);
+    expect(result).toEqual(mockResponse);
   });
 
   it("should throw error when response is not ok", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: false,
-      json: async () => ({
-        message: "Unauthorized",
-      }),
+      json: async () => ({ message: "Unauthorized" }),
     } as Response);
 
-    await expect(createReply(token, parentId)).rejects.toThrow("Unauthorized");
+    await expect(createReply(token, parentId, content)).rejects.toThrow(
+      "Unauthorized",
+    );
   });
 
   it("should throw default error when response is not ok and no message", async () => {
@@ -89,7 +112,7 @@ describe("tweetService - createReply", () => {
       json: async () => ({}),
     } as Response);
 
-    await expect(createReply(token, parentId)).rejects.toThrow(
+    await expect(createReply(token, parentId, content)).rejects.toThrow(
       "Failed to fetch reply",
     );
   });
@@ -97,24 +120,25 @@ describe("tweetService - createReply", () => {
   it("should throw error when feed is not an array", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
-      json: async () => ({
-        feed: null,
-        message: "Invalid data",
-      }),
+      json: async () => ({ feed: null, message: "Invalid data" }),
     } as Response);
 
-    await expect(createReply(token, parentId)).rejects.toThrow("Invalid data");
+    await expect(createReply(token, parentId, content)).rejects.toThrow(
+      "Invalid data",
+    );
   });
 
   it("should throw default error when feed is invalid and no message", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        feed: null,
+        ok: true,
+        message: undefined,
+        reply: undefined,
       }),
     } as Response);
 
-    await expect(createReply(token, parentId)).rejects.toThrow(
+    await expect(createReply(token, parentId, content)).rejects.toThrow(
       "Não foi possível criar uma resposta",
     );
   });
