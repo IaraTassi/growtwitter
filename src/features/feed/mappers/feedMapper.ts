@@ -31,8 +31,9 @@ export function mapFeedTweet(
 }
 
 export function mapFeed(
-  tweets: FeedTweetResponse[],
+  tweets: FeedTweetResponse[] | null | undefined,
   loggedUserId?: string,
 ): FeedTweet[] {
+  if (!Array.isArray(tweets)) return [];
   return tweets.map((tweet) => mapFeedTweet(tweet, loggedUserId));
 }
