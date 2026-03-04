@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  createReplyThunk,
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
 import reducer from "../../../../src/features/feed/store/feedSlice";
 import type { FeedState, FeedTweet } from "../../../../src/features/feed/types";
+import { insertReplyRecursive } from "../../../../src/features/feed/utils/feedUtils";
 
 function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
   return {
@@ -17,6 +19,7 @@ function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
       id: "user1",
       name: "User 1",
       userName: "user1",
+      email: "",
       createdAt: "",
       updatedAt: "",
     },
@@ -145,6 +148,78 @@ describe("feedSlice", () => {
 
       expect(newState.tweets[0].replies[0].likesCount).toBe(1);
       expect(newState.tweets[0].replies[0].isLiked).toBe(true);
+    });
+  });
+
+  describe("feedSlice - createReplyThunk", () => {
+    const parentTweet = createMockTweet({ id: "1", content: "Tweet pai" });
+
+    it("should handle pending state", () => {
+      const action = { type: createReplyThunk.pending.type };
+      const state = reducer(
+        { tweets: [parentTweet], loading: false, error: null },
+        action,
+      );
+      expect(state.loading).toBe(true);
+      expect(state.error).toBeNull();
+    });
+
+    it("should handle fulfilled state and insert reply", () => {
+      const reply = createMockTweet({
+        id: "2",
+        replyToId: "1",
+        content: "Essa é uma reply",
+        userId: "user2",
+      });
+
+      const action = {
+        type: createReplyThunk.fulfilled.type,
+        payload: reply,
+      };
+
+      const state = reducer(
+        { tweets: [parentTweet], loading: false, error: null },
+        action,
+      );
+
+      expect(state.loading).toBe(false);
+      expect(state.tweets[0].replies).toHaveLength(1);
+      expect(state.tweets[0].replies[0]).toEqual(reply);
+      expect(state.tweets[0].repliesCount).toBe(1);
+    });
+
+    it("should handle rejected state", () => {
+      const action = {
+        type: createReplyThunk.rejected.type,
+        payload: "Erro ao criar reply",
+      };
+      const state = reducer(
+        { tweets: [parentTweet], loading: false, error: null },
+        action,
+      );
+      expect(state.loading).toBe(false);
+      expect(state.error).toBe("Erro ao criar reply");
+    });
+
+    it("insertReplyRecursive should insert reply deeply", () => {
+      const nestedTweet = createMockTweet({
+        id: "3",
+        replies: [createMockTweet({ id: "4", replyToId: "3" })],
+        repliesCount: 1,
+      });
+
+      const reply = createMockTweet({
+        id: "5",
+        replyToId: "4",
+        content: "nested reply",
+      });
+
+      const updated = insertReplyRecursive(nestedTweet, reply);
+
+      expect(updated.replies[0].replies).toHaveLength(1);
+      expect(updated.replies[0].replies[0]).toEqual(reply);
+      expect(updated.replies[0].repliesCount).toBe(1);
+      expect(updated.repliesCount).toBe(1);
     });
   });
 });

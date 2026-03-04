@@ -3,7 +3,8 @@ import type { RootState } from "../../../store/store";
 import { getFeed } from "../services/feedService";
 import type { FeedTweet } from "../types";
 import { toggleLike } from "../services/likeService";
-import { mapFeed } from "../mappers/feedMapper";
+import { mapFeed, mapFeedTweet } from "../mappers/feedMapper";
+import { createReply } from "../services/replyService";
 
 export const fetchFeed = createAsyncThunk<
   FeedTweet[],
@@ -54,3 +55,31 @@ export const toggleLikeThunk = createAsyncThunk<
     return rejectWithValue("Erro ao alternar like");
   }
 });
+
+export const createReplyThunk = createAsyncThunk<
+  FeedTweet,
+  { parentId: string; content: string },
+  { state: RootState; rejectValue: string }
+>(
+  "feed/createReply",
+  async ({ parentId, content }, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const token = auth.token;
+      const loggedUserId = auth.user?.id;
+
+      if (!token) return rejectWithValue("Token não encontrado");
+
+      const replyResponse = await createReply(token, parentId, content);
+
+      if (!replyResponse) {
+        return rejectWithValue("Não foi possível criar uma resposta");
+      }
+
+      return mapFeedTweet(replyResponse, loggedUserId);
+    } catch (error: unknown) {
+      if (error instanceof Error) return rejectWithValue(error.message);
+      return rejectWithValue("Erro ao criar resposta");
+    }
+  },
+);

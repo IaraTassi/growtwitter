@@ -1,14 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  createReplyThunk,
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
 import * as feedService from "../../../../src/features/feed/services/feedService";
 import * as likeService from "../../../../src/features/feed/services/likeService";
 import { FeedTweetResponse } from "../../../../src/features/feed/types";
+import * as replyService from "../../../../src/features/feed/services/replyService";
+import { mapFeedTweet } from "../../../../src/features/feed/mappers/feedMapper";
 
 vi.mock("../../../../src/features/feed/services/feedService");
 vi.mock("../../../../src/features/feed/services/likeService");
+vi.mock("../../../../src/features/feed/services/replyService");
 
 function createMockFeedResponse(
   overrides?: Partial<FeedTweetResponse>,
@@ -23,6 +27,7 @@ function createMockFeedResponse(
       id: "user1",
       name: "User 1",
       userName: "user1",
+      email: "",
       createdAt: "",
       updatedAt: "",
     },
@@ -104,6 +109,106 @@ describe("feedThunks", () => {
       expect(likeService.toggleLike).toHaveBeenCalledWith("token123", "1");
       expect(result.type).toBe("feed/toggleLike/fulfilled");
       expect(result.payload).toBe("1");
+    });
+  });
+
+  describe("feedThunks - createReplyThunk", () => {
+    const mockDispatch = vi.fn();
+    const mockGetState = vi.fn();
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should reject if no token", async () => {
+      mockGetState.mockReturnValue({
+        auth: { token: null, user: null },
+      });
+
+      const result = await createReplyThunk({
+        parentId: "1",
+        content: "Reply",
+      })(mockDispatch, mockGetState, undefined);
+
+      expect(result.payload).toBe("Token não encontrado");
+    });
+
+    it("should call createReply service and return fulfilled", async () => {
+      const mockReplyResponse: FeedTweetResponse = {
+        id: "2",
+        content: "Reply",
+        parentId: "1",
+        userId: "user1",
+        createdAt: "",
+        updatedAt: "",
+        user: {
+          id: "user1",
+          name: "User 1",
+          userName: "user1",
+          email: "",
+          createdAt: "",
+          updatedAt: "",
+          imageUrl: "",
+        },
+        likes: [],
+        replies: [],
+      };
+
+      mockGetState.mockReturnValue({
+        auth: { token: "token123", user: { id: "user1" } },
+      });
+
+      vi.mocked(replyService.createReply).mockResolvedValue(mockReplyResponse);
+
+      const result = await createReplyThunk({
+        parentId: "1",
+        content: "Reply",
+      })(mockDispatch, mockGetState, undefined);
+
+      const expectedPayload = mapFeedTweet(mockReplyResponse, "user1");
+
+      expect(result.type).toBe("feed/createReply/fulfilled");
+      expect(result.payload).toEqual(expectedPayload);
+
+      expect(replyService.createReply).toHaveBeenCalledWith(
+        "token123",
+        "1",
+        "Reply",
+      );
+    });
+
+    it("should reject if createReply service throws", async () => {
+      mockGetState.mockReturnValue({
+        auth: { token: "token123" },
+      });
+
+      vi.mocked(replyService.createReply).mockRejectedValue(new Error("Erro"));
+
+      const result = await createReplyThunk({
+        parentId: "1",
+        content: "Reply",
+      })(mockDispatch, mockGetState, undefined);
+
+      expect(result.type).toBe("feed/createReply/rejected");
+      expect(result.payload).toBe("Erro");
+    });
+
+    it("should reject if createReply returns undefined", async () => {
+      mockGetState.mockReturnValue({
+        auth: { token: "token123" },
+      });
+
+      vi.mocked(replyService.createReply).mockImplementationOnce(async () => {
+        return undefined as unknown as FeedTweetResponse;
+      });
+
+      const result = await createReplyThunk({
+        parentId: "1",
+        content: "Reply",
+      })(mockDispatch, mockGetState, undefined);
+
+      expect(result.type).toBe("feed/createReply/rejected");
+      expect(result.payload).toBe("Não foi possível criar uma resposta");
     });
   });
 });
