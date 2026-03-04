@@ -4,6 +4,7 @@ export interface FeedUser {
   id: string;
   name: string;
   userName: string;
+  email: string;
   imageUrl?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -46,6 +47,12 @@ export interface FeedTweetResponse {
   replies?: FeedTweetResponse[];
 }
 
+export type CreateReplyApiResponse = {
+  ok: boolean;
+  message: string;
+  reply: FeedTweetResponse;
+};
+
 export type TabType = "foryou" | "following";
 
 export interface FeedTabsProps {
@@ -59,6 +66,7 @@ export interface FeedContentProps {
   tab: TabType;
   setTab: (tab: TabType) => void;
   onLike: (tweetId: string) => void;
+  onReply: (parentId: string, content: string) => void;
 }
 
 export interface FeedCardContentProps {

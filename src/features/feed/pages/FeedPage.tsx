@@ -10,7 +10,11 @@ import {
   selectFeedTweets,
 } from "../store/feedSelectors";
 import type { TabType } from "../types";
-import { fetchFeed, toggleLikeThunk } from "../store/feedThunks";
+import {
+  createReplyThunk,
+  fetchFeed,
+  toggleLikeThunk,
+} from "../store/feedThunks";
 
 export function FeedPage() {
   const dispatch = useAppDispatch();
@@ -35,6 +39,17 @@ export function FeedPage() {
     dispatch(toggleLikeThunk(tweetId));
   };
 
+  const handleReply = (parentId: string, content: string) => {
+    if (!token) return;
+
+    dispatch(
+      createReplyThunk({
+        parentId,
+        content,
+      }),
+    );
+  };
+
   return (
     <main>
       <section>
@@ -45,6 +60,7 @@ export function FeedPage() {
           tab={tab}
           setTab={setTab}
           onLike={handleLike}
+          onReply={handleReply}
         />
       </section>
     </main>
