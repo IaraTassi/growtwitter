@@ -65,15 +65,20 @@ export interface FeedCardContentProps {
   tweet: FeedTweet;
   onLike: (tweetId: string) => void;
   showReplyLabel?: boolean;
-  isThreadReply?: boolean;
-  isLastReply?: boolean;
+  showThreadLine?: boolean;
+  isLastInThread?: boolean;
+}
+
+export interface FeedBlockProps {
+  variant: "isolated" | "thread";
+  showTopDivider?: boolean;
+  showBottomDivider?: boolean;
+  children: React.ReactNode;
 }
 
 export interface ThreadItemProps {
   root: FeedTweet;
-  replies: FeedTweet[];
-  hasNestedReplies: boolean;
-  onLike: (tweetId: string) => void;
+  onLike: (id: string) => void;
 }
 
 export type TimelineItem =

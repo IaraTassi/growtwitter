@@ -11,8 +11,8 @@ export function FeedCardContent({
   tweet,
   onLike,
   showReplyLabel,
-  isThreadReply = false,
-  isLastReply = false,
+  showThreadLine,
+  isLastInThread,
 }: FeedCardContentProps) {
   const variant = tweet.user.imageUrl ? "primary" : "secondary";
   const isVerified = !!tweet.user.imageUrl;
@@ -26,29 +26,31 @@ export function FeedCardContent({
       display="grid"
       gridTemplateColumns="56px 1fr"
       sx={{
-        borderBottom: isThreadReply ? 0 : 1,
-        borderColor: "divider",
-        padding: isThreadReply ? "0.5rem 0.75rem" : "0.75rem",
-        paddingBottom: isLastReply ? "1rem" : undefined,
+        padding: "0.75rem",
       }}
     >
       <Box
         sx={{
-          position: "relative",
+          width: 56,
           display: "flex",
           justifyContent: "center",
+          position: "relative",
         }}
       >
-        <Box
-          component="div"
-          display="flex"
-          justifyContent="center"
-          alignContent="flex-start"
-        >
-          <CustomAvatar imageUrl={tweet.user.imageUrl} />
-        </Box>
-      </Box>
+        <CustomAvatar imageUrl={tweet.user.imageUrl} />
 
+        {showThreadLine && !isLastInThread && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 56,
+              bottom: 0,
+              width: 2,
+              bgcolor: "divider",
+            }}
+          />
+        )}
+      </Box>
       <Box
         sx={{
           display: "flex",

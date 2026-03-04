@@ -3,6 +3,7 @@ import { FeedTabs } from "./FeedTabs";
 import { FeedCardContent } from "./FeedCardContent";
 import { Box, Typography } from "@mui/material";
 import { ThreadItem } from "./TheadItem";
+import { FeedBlock } from "./FeedBlock";
 
 export function HomeTimeline({
   items,
@@ -33,42 +34,45 @@ export function HomeTimeline({
           switch (item.kind) {
             case "following":
               return (
-                <FeedCardContent
-                  key={item.root.id}
-                  tweet={item.root}
-                  onLike={onLike}
-                />
+                <FeedBlock variant="isolated" showTopDivider key={item.root.id}>
+                  <FeedCardContent tweet={item.root} onLike={onLike} />
+                </FeedBlock>
               );
 
             case "foryou-simple":
               return (
-                <Box key={item.root.id}>
+                <FeedBlock variant="isolated" showTopDivider key={item.root.id}>
                   <FeedCardContent tweet={item.root} onLike={onLike} />
-                </Box>
+                </FeedBlock>
               );
 
             case "foryou-single-reply":
               return (
-                <Box key={item.root.id}>
+                <FeedBlock
+                  variant="isolated"
+                  showTopDivider
+                  showBottomDivider
+                  key={item.root.id}
+                >
                   <FeedCardContent tweet={item.root} onLike={onLike} />
                   <FeedCardContent
                     tweet={item.reply}
                     onLike={onLike}
                     showReplyLabel
                   />
-                </Box>
+                </FeedBlock>
               );
 
             case "foryou-thread":
               return (
-                <Box key={item.root.id}>
-                  <ThreadItem
-                    root={item.root}
-                    replies={item.replies}
-                    hasNestedReplies={item.hasNestedReplies}
-                    onLike={onLike}
-                  />
-                </Box>
+                <FeedBlock
+                  variant="thread"
+                  showTopDivider
+                  showBottomDivider
+                  key={item.root.id}
+                >
+                  <ThreadItem root={item.root} onLike={onLike} />
+                </FeedBlock>
               );
 
             default:
