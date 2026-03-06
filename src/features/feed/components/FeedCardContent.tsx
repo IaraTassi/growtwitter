@@ -13,11 +13,15 @@ export function FeedCardContent({
   showReplyLabel,
   showThreadLine,
   isLastInThread,
+  onReplyClick,
 }: FeedCardContentProps) {
   const variant = tweet.user.imageUrl ? "primary" : "secondary";
   const isVerified = !!tweet.user.imageUrl;
   const handleLikeClick = () => {
     onLike(tweet.id);
+  };
+  const handleReplyClick = () => {
+    onReplyClick?.(tweet.id);
   };
 
   return (
@@ -135,7 +139,7 @@ export function FeedCardContent({
           }}
         >
           <Box display="flex" alignItems="center" gap={1}>
-            <ReplyIcon />
+            <ReplyIcon onClick={handleReplyClick} />
             <Typography variant="caption" sx={{ paddingTop: "0.2rem" }}>
               {tweet.repliesCount}
             </Typography>

@@ -4,6 +4,8 @@ import { FeedCardContent } from "./FeedCardContent";
 import { Box, Typography } from "@mui/material";
 import { ThreadItem } from "./TheadItem";
 import { FeedBlock } from "./FeedBlock";
+import { useState } from "react";
+import { ComposerModal } from "./ComposerModal";
 
 export function HomeTimeline({
   items,
@@ -11,7 +13,31 @@ export function HomeTimeline({
   tab,
   setTab,
   onLike,
+  onReply,
+  userImageUrl,
 }: FeedContentProps) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [replyParentId, setReplyParentId] = useState<string | null>(null);
+
+  const handleOpenReply = (tweetId: string) => {
+    setReplyParentId(tweetId);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setReplyParentId(null);
+  };
+
+  const handleSubmitReply = (content: string) => {
+    if (!replyParentId) return;
+
+    onReply(replyParentId, content);
+
+    setModalOpen(false);
+    setReplyParentId(null);
+  };
+
   return (
     <Box
       component="section"
@@ -35,14 +61,22 @@ export function HomeTimeline({
             case "following":
               return (
                 <FeedBlock variant="isolated" showTopDivider key={item.root.id}>
-                  <FeedCardContent tweet={item.root} onLike={onLike} />
+                  <FeedCardContent
+                    tweet={item.root}
+                    onLike={onLike}
+                    onReplyClick={handleOpenReply}
+                  />
                 </FeedBlock>
               );
 
             case "foryou-simple":
               return (
                 <FeedBlock variant="isolated" showTopDivider key={item.root.id}>
-                  <FeedCardContent tweet={item.root} onLike={onLike} />
+                  <FeedCardContent
+                    tweet={item.root}
+                    onLike={onLike}
+                    onReplyClick={handleOpenReply}
+                  />
                 </FeedBlock>
               );
 
@@ -54,10 +88,15 @@ export function HomeTimeline({
                   showBottomDivider
                   key={item.root.id}
                 >
-                  <FeedCardContent tweet={item.root} onLike={onLike} />
+                  <FeedCardContent
+                    tweet={item.root}
+                    onLike={onLike}
+                    onReplyClick={handleOpenReply}
+                  />
                   <FeedCardContent
                     tweet={item.reply}
                     onLike={onLike}
+                    onReplyClick={handleOpenReply}
                     showReplyLabel
                   />
                 </FeedBlock>
@@ -71,7 +110,11 @@ export function HomeTimeline({
                   showBottomDivider
                   key={item.root.id}
                 >
-                  <ThreadItem root={item.root} onLike={onLike} />
+                  <ThreadItem
+                    root={item.root}
+                    onLike={onLike}
+                    onReplyClick={handleOpenReply}
+                  />
                 </FeedBlock>
               );
 
@@ -80,6 +123,13 @@ export function HomeTimeline({
           }
         })
       )}
+      <ComposerModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        userImageUrl={userImageUrl}
+        submitLabel="Tweetar"
+        onSubmit={handleSubmitReply}
+      />
     </Box>
   );
 }

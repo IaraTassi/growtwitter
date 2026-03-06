@@ -29,6 +29,7 @@ export const theme = createTheme({
     iconDefault: COLORS.iconDefault,
     iconFooter: COLORS.iconFooter,
     iconLike: COLORS.iconLike,
+    iconClose: COLORS.iconClose,
     textHighlight: COLORS.textHighlight,
   },
   components: {

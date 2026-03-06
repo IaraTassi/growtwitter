@@ -61,6 +61,7 @@ export function FeedPage() {
           setTab={setTab}
           onLike={handleLike}
           onReply={handleReply}
+          userImageUrl={user?.imageUrl}
         />
       </section>
     </main>

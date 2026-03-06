@@ -6,7 +6,7 @@ import { useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
-export function ThreadItem({ root, onLike }: ThreadItemProps) {
+export function ThreadItem({ root, onLike, onReplyClick }: ThreadItemProps) {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   const toggleExpand = (id: string) =>
@@ -26,6 +26,7 @@ export function ThreadItem({ root, onLike }: ThreadItemProps) {
           <FeedCardContent
             tweet={reply}
             onLike={onLike}
+            onReplyClick={onReplyClick}
             showThreadLine
             isLastInThread={!shouldContinueLine}
           />
@@ -78,6 +79,7 @@ export function ThreadItem({ root, onLike }: ThreadItemProps) {
       <FeedCardContent
         tweet={root}
         onLike={onLike}
+        onReplyClick={onReplyClick}
         showThreadLine={root.replies.length > 0}
         isLastInThread={false}
       />

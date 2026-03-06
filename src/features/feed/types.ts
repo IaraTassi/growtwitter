@@ -67,11 +67,13 @@ export interface FeedContentProps {
   setTab: (tab: TabType) => void;
   onLike: (tweetId: string) => void;
   onReply: (parentId: string, content: string) => void;
+  userImageUrl?: string | null;
 }
 
 export interface FeedCardContentProps {
   tweet: FeedTweet;
   onLike: (tweetId: string) => void;
+  onReplyClick?: (tweetId: string) => void;
   showReplyLabel?: boolean;
   showThreadLine?: boolean;
   isLastInThread?: boolean;
@@ -87,6 +89,30 @@ export interface FeedBlockProps {
 export interface ThreadItemProps {
   root: FeedTweet;
   onLike: (id: string) => void;
+  onReplyClick?: (tweetId: string) => void;
+}
+
+export interface AppModalProps {
+  open: boolean;
+  onClose: () => void;
+  width?: number;
+  children: React.ReactNode;
+}
+
+export interface ComposerModalProps {
+  open: boolean;
+  onClose: () => void;
+  userImageUrl?: string | null;
+  onSubmit: (content: string) => void;
+  submitLabel?: string;
+}
+
+export interface PrimaryButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  type?: "button" | "submit";
 }
 
 export type TimelineItem =

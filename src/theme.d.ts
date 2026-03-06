@@ -22,6 +22,7 @@ declare module "@mui/material/styles" {
       iconEllipse?: string;
       iconFooter?: string;
       iconLike?: string;
+      iconClose?: string;
       textHighlight?: string;
     };
   }
