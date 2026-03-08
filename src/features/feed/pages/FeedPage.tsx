@@ -51,19 +51,17 @@ export function FeedPage() {
   };
 
   return (
-    <main>
-      <section>
-        {error && <div className="feed-error">{error}</div>}
-        <HomeTimeline
-          items={timelineItems}
-          loading={loading}
-          tab={tab}
-          setTab={setTab}
-          onLike={handleLike}
-          onReply={handleReply}
-          userImageUrl={user?.imageUrl}
-        />
-      </section>
-    </main>
+    <section>
+      {error && <div className="feed-error">{error}</div>}
+      <HomeTimeline
+        items={timelineItems}
+        loading={loading}
+        tab={tab}
+        setTab={setTab}
+        onLike={handleLike}
+        onReply={handleReply}
+        userImageUrl={user?.imageUrl}
+      />
+    </section>
   );
 }

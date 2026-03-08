@@ -113,6 +113,9 @@ export interface PrimaryButtonProps {
   disabled?: boolean;
   loading?: boolean;
   type?: "button" | "submit";
+  variant?: "contained" | "outlined";
+  fullWidth?: boolean;
+  sx?: object;
 }
 
 export type TimelineItem =
@@ -143,6 +146,19 @@ export interface FeedState {
   error: string | null;
 }
 
+export interface SidebarNavItemProps {
+  icon: React.ReactNode;
+  label: string;
+  to: string;
+}
+
+export type SidebarUserProps = {
+  name: string;
+  userName: string;
+  avatarUrl?: string;
+  onLogout: () => void;
+};
+
 export type VerifyIconProps = SvgIconProps & {
   variant?: "primary" | "secondary";
 };
@@ -158,4 +174,8 @@ export interface ReplyIconProps {
 export interface LikeIconProps {
   isLiked?: boolean;
   onClick?: () => void;
+}
+
+export interface IconProps {
+  color?: string;
 }
