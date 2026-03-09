@@ -12,6 +12,7 @@ import type { RootState } from "../../../store/store";
 import { ComposerModal } from "./ComposerModal";
 import { useState } from "react";
 import { createTweetThunk } from "../store/feedThunks";
+import { logout } from "../../auth/store/authSlice";
 
 export function Sidebar() {
   const dispatch = useAppDispatch();
@@ -29,6 +30,11 @@ export function Sidebar() {
 
   const handleCloseComposer = () => {
     setOpenComposer(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logout());
   };
 
   return (
@@ -78,14 +84,13 @@ export function Sidebar() {
       <SidebarUser
         name={user?.name ?? ""}
         userName={user?.userName ?? ""}
-        onLogout={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        imageUrl={user?.imageUrl}
+        onLogout={handleLogout}
       />
       <ComposerModal
         open={openComposer}
         onClose={handleCloseComposer}
-        userImageUrl={user?.imageUrl ?? ""}
+        userImageUrl={user?.imageUrl}
         onSubmit={handleCreateTweet}
         submitLabel="Tweetar"
       />

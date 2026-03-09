@@ -173,7 +173,7 @@ export interface SidebarNavItemProps {
 export type SidebarUserProps = {
   name: string;
   userName: string;
-  avatarUrl?: string;
+  imageUrl?: string;
   onLogout: () => void;
 };
 

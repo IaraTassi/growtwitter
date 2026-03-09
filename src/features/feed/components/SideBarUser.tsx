@@ -3,7 +3,12 @@ import type { SidebarUserProps } from "../types";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
 import { PrimaryButton } from "./PrimaryButton";
 
-export function SidebarUser({ name, userName, onLogout }: SidebarUserProps) {
+export function SidebarUser({
+  name,
+  userName,
+  imageUrl,
+  onLogout,
+}: SidebarUserProps) {
   return (
     <Box display="flex" flexDirection="column" gap={1}>
       <Box
@@ -24,7 +29,7 @@ export function SidebarUser({ name, userName, onLogout }: SidebarUserProps) {
           },
         }}
       >
-        <CustomAvatar />
+        <CustomAvatar imageUrl={imageUrl} />
 
         <Box>
           <Typography
