@@ -19,6 +19,7 @@ describe("feedService - getFeed", () => {
           name: "User Teste",
           userName: "teste",
           imageUrl: "",
+          email: "",
           createdAt: "2026-02-19T10:00:00Z",
           updatedAt: "2026-02-19T10:00:00Z",
         },

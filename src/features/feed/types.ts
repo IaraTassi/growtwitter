@@ -47,10 +47,28 @@ export interface FeedTweetResponse {
   replies?: FeedTweetResponse[];
 }
 
+export interface TweetResponse {
+  id: string;
+  content: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  user: FeedUser;
+  likesCount: number;
+  repliesCount: number;
+  isLiked: boolean;
+}
+
 export type CreateReplyApiResponse = {
   ok: boolean;
   message: string;
   reply: FeedTweetResponse;
+};
+
+export type CreateTweetApiResponse = {
+  ok: boolean;
+  message: string;
+  tweet: TweetResponse;
 };
 
 export type TabType = "foryou" | "following";
@@ -103,7 +121,7 @@ export interface ComposerModalProps {
   open: boolean;
   onClose: () => void;
   userImageUrl?: string | null;
-  onSubmit: (content: string) => void;
+  onSubmit: (content: string) => Promise<void> | void;
   submitLabel?: string;
 }
 

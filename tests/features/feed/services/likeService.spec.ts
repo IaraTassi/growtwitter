@@ -39,6 +39,7 @@ describe("likeService - toggleLike", () => {
   it("should throw error when api fails", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: false,
+      json: async () => ({ message: "Erro ao alternar like" }),
     } as Response);
 
     await expect(toggleLike(token, tweetId)).rejects.toThrow(

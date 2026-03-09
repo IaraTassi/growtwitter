@@ -120,7 +120,7 @@ describe("replyService - createReply", () => {
   it("should throw error when feed is not an array", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ feed: null, message: "Invalid data" }),
+      json: async () => ({ reply: null, message: "Invalid data" }),
     } as Response);
 
     await expect(createReply(token, parentId, content)).rejects.toThrow(
