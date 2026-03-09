@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createReplyThunk,
+  createTweetThunk,
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
@@ -9,10 +10,12 @@ import * as likeService from "../../../../src/features/feed/services/likeService
 import { FeedTweetResponse } from "../../../../src/features/feed/types";
 import * as replyService from "../../../../src/features/feed/services/replyService";
 import { mapFeedTweet } from "../../../../src/features/feed/mappers/feedMapper";
+import * as tweetService from "../../../../src/features/feed/services/tweetService";
 
 vi.mock("../../../../src/features/feed/services/feedService");
 vi.mock("../../../../src/features/feed/services/likeService");
 vi.mock("../../../../src/features/feed/services/replyService");
+vi.mock("../../../../src/features/feed/services/tweetService");
 
 function createMockFeedResponse(
   overrides?: Partial<FeedTweetResponse>,
@@ -209,6 +212,90 @@ describe("feedThunks", () => {
 
       expect(result.type).toBe("feed/createReply/rejected");
       expect(result.payload).toBe("Não foi possível criar uma resposta");
+    });
+  });
+
+  describe("feedThunks - createTweet", () => {
+    it("should reject if no token", async () => {
+      mockGetState.mockReturnValue({
+        auth: { token: null, user: null },
+      });
+
+      const result = await createTweetThunk("Novo tweet")(
+        mockDispatch,
+        mockGetState,
+        undefined,
+      );
+
+      expect(result.payload).toBe("Token não encontrado");
+      expect(result.type).toBe("feed/createTweet/rejected");
+    });
+
+    it("should call createTweet and return fulfilled", async () => {
+      const mockTweet = createMockFeedResponse({
+        id: "tweet1",
+        content: "Novo tweet",
+      });
+
+      mockGetState.mockReturnValue({
+        auth: { token: "token123", user: { id: "user1" } },
+      });
+
+      const mockedCreateTweet = vi.mocked(tweetService.createTweet);
+
+      mockedCreateTweet.mockResolvedValue(
+        mockTweet as Awaited<ReturnType<typeof tweetService.createTweet>>,
+      );
+
+      const result = await createTweetThunk("Novo tweet")(
+        mockDispatch,
+        mockGetState,
+        undefined,
+      );
+
+      expect(tweetService.createTweet).toHaveBeenCalledWith(
+        "token123",
+        "Novo tweet",
+      );
+
+      expect(result.type).toBe("feed/createTweet/fulfilled");
+    });
+
+    it("should reject if service throws error", async () => {
+      mockGetState.mockReturnValue({
+        auth: { token: "token123", user: { id: "user1" } },
+      });
+
+      const mockedCreateTweet = vi.mocked(tweetService.createTweet);
+
+      mockedCreateTweet.mockRejectedValue(new Error("Erro API"));
+
+      const result = await createTweetThunk("Novo tweet")(
+        mockDispatch,
+        mockGetState,
+        undefined,
+      );
+
+      expect(result.payload).toBe("Erro API");
+      expect(result.type).toBe("feed/createTweet/rejected");
+    });
+
+    it("should reject with default error if unknown error occurs", async () => {
+      mockGetState.mockReturnValue({
+        auth: { token: "token123", user: { id: "user1" } },
+      });
+
+      const mockedCreateTweet = vi.mocked(tweetService.createTweet);
+
+      mockedCreateTweet.mockRejectedValue("unexpected");
+
+      const result = await createTweetThunk("Novo tweet")(
+        mockDispatch,
+        mockGetState,
+        undefined,
+      );
+
+      expect(result.payload).toBe("Erro ao criar tweet");
     });
   });
 });

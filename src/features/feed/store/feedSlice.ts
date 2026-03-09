@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { FeedState } from "../types";
-import { createReplyThunk, fetchFeed, toggleLikeThunk } from "./feedThunks";
+import {
+  createReplyThunk,
+  createTweetThunk,
+  fetchFeed,
+  toggleLikeThunk,
+} from "./feedThunks";
 import { insertReplyRecursive, updateLikeRecursive } from "../utils/feedUtils";
 
 const initialState: FeedState = {
@@ -53,6 +58,21 @@ const feedSlice = createSlice({
         );
       })
       .addCase(createReplyThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(createTweetThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createTweetThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tweets.unshift({
+          ...action.payload,
+          replies: [],
+        });
+      })
+      .addCase(createTweetThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

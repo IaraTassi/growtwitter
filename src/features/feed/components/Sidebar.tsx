@@ -6,8 +6,31 @@ import { ProfileIcon } from "../utils/icons/ProfileIcon";
 import { PrimaryButton } from "./PrimaryButton";
 import { Logo } from "../utils/icons/Logo";
 import { SidebarUser } from "./SideBarUser";
+import { useAppDispatch } from "../../../hooks/redux";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../store/store";
+import { ComposerModal } from "./ComposerModal";
+import { useState } from "react";
+import { createTweetThunk } from "../store/feedThunks";
 
 export function Sidebar() {
+  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [openComposer, setOpenComposer] = useState(false);
+
+  const handleCreateTweet = async (content: string) => {
+    await dispatch(createTweetThunk(content));
+    handleCloseComposer();
+  };
+
+  const handleOpenComposer = () => {
+    setOpenComposer(true);
+  };
+
+  const handleCloseComposer = () => {
+    setOpenComposer(false);
+  };
+
   return (
     <Box
       component="aside"
@@ -43,16 +66,28 @@ export function Sidebar() {
         />
 
         <Box>
-          <PrimaryButton sx={{ width: 162, height: 28 }}>Tweetar</PrimaryButton>
+          <PrimaryButton
+            onClick={handleOpenComposer}
+            sx={{ width: 162, height: 28 }}
+          >
+            Tweetar
+          </PrimaryButton>
         </Box>
       </Box>
 
       <SidebarUser
-        name={"User Teste"}
-        userName={"user.teste"}
+        name={user?.name ?? ""}
+        userName={user?.userName ?? ""}
         onLogout={function (): void {
           throw new Error("Function not implemented.");
         }}
+      />
+      <ComposerModal
+        open={openComposer}
+        onClose={handleCloseComposer}
+        userImageUrl={user?.imageUrl ?? ""}
+        onSubmit={handleCreateTweet}
+        submitLabel="Tweetar"
       />
     </Box>
   );

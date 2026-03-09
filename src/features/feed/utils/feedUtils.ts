@@ -29,6 +29,8 @@ export function insertReplyRecursive(
     };
   }
 
+  if (tweet.replies.length === 0) return tweet;
+
   return {
     ...tweet,
     replies: tweet.replies.map((r) => insertReplyRecursive(r, reply)),

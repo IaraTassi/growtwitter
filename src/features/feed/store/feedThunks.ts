@@ -5,6 +5,7 @@ import type { FeedTweet } from "../types";
 import { toggleLike } from "../services/likeService";
 import { mapFeed, mapFeedTweet } from "../mappers/feedMapper";
 import { createReply } from "../services/replyService";
+import { createTweet } from "../services/tweetService";
 
 export const fetchFeed = createAsyncThunk<
   FeedTweet[],
@@ -83,3 +84,24 @@ export const createReplyThunk = createAsyncThunk<
     }
   },
 );
+
+export const createTweetThunk = createAsyncThunk<
+  FeedTweet,
+  string,
+  { state: RootState; rejectValue: string }
+>("feed/createTweet", async (content, { getState, rejectWithValue }) => {
+  try {
+    const { auth } = getState();
+    const token = auth.token;
+    const loggedUserId = auth.user?.id;
+
+    if (!token) return rejectWithValue("Token não encontrado");
+
+    const tweet = await createTweet(token, content);
+
+    return mapFeedTweet(tweet, loggedUserId);
+  } catch (error: unknown) {
+    if (error instanceof Error) return rejectWithValue(error.message);
+    return rejectWithValue("Erro ao criar tweet");
+  }
+});

@@ -7,6 +7,5 @@ export const selectFeedError = (state: RootState) => state.feed.error;
 export const selectLikedTweets = (state: RootState) =>
   state.feed.tweets.filter((tweet) => tweet.isLiked);
 
-export const selectReplys = (state: RootState) => {
-  return state.feed.tweets.flatMap((tweet) => tweet.replies);
-};
+export const selectReplies = (state: RootState) =>
+  state.feed.tweets.flatMap((tweet) => tweet.replies);

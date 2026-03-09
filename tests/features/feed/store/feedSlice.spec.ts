@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createReplyThunk,
+  createTweetThunk,
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
@@ -220,6 +221,60 @@ describe("feedSlice", () => {
       expect(updated.replies[0].replies[0]).toEqual(reply);
       expect(updated.replies[0].repliesCount).toBe(1);
       expect(updated.repliesCount).toBe(1);
+    });
+  });
+
+  describe("feedSlice - createTweetThunk", () => {
+    it("should handle pending state", () => {
+      const action = { type: createTweetThunk.pending.type };
+
+      const state = reducer(initialState, action);
+
+      expect(state.loading).toBe(true);
+      expect(state.error).toBeNull();
+    });
+
+    it("should handle fulfilled state and insert tweet at beginning", () => {
+      const existingTweet = createMockTweet({ id: "1" });
+
+      const newTweet = createMockTweet({
+        id: "2",
+        content: "Novo tweet",
+      });
+
+      const action = {
+        type: createTweetThunk.fulfilled.type,
+        payload: newTweet,
+      };
+
+      const state = reducer(
+        {
+          tweets: [existingTweet],
+          loading: false,
+          error: null,
+        },
+        action,
+      );
+
+      expect(state.loading).toBe(false);
+      expect(state.tweets).toHaveLength(2);
+
+      expect(state.tweets[0].id).toBe("2");
+      expect(state.tweets[0].replies).toEqual([]);
+
+      expect(state.tweets[1].id).toBe("1");
+    });
+
+    it("should handle rejected state", () => {
+      const action = {
+        type: createTweetThunk.rejected.type,
+        payload: "Erro ao criar tweet",
+      };
+
+      const state = reducer(initialState, action);
+
+      expect(state.loading).toBe(false);
+      expect(state.error).toBe("Erro ao criar tweet");
     });
   });
 });

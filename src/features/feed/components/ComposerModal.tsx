@@ -11,7 +11,7 @@ export function ComposerModal({
   onClose,
   userImageUrl,
   onSubmit,
-  submitLabel = "Postar",
+  submitLabel = "Tweetar",
 }: ComposerModalProps) {
   const [content, setContent] = useState("");
   const MAX_LENGTH = 280;
@@ -29,10 +29,10 @@ export function ComposerModal({
     onClose();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!content.trim()) return;
 
-    onSubmit(content);
+    await onSubmit(content);
     setContent("");
     onClose();
   };

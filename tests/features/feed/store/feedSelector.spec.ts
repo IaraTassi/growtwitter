@@ -4,7 +4,7 @@ import {
   selectFeedLoading,
   selectFeedError,
   selectLikedTweets,
-  selectReplys,
+  selectReplies,
 } from "../../../../src/features/feed/store/feedSelectors";
 import type { FeedTweet } from "../../../../src/features/feed/types";
 import { RootState } from "../../../../src/store/store";
@@ -98,7 +98,7 @@ describe("feedSelectors", () => {
       },
     };
 
-    const allReplies = selectReplys(stateWithReplies);
+    const allReplies = selectReplies(stateWithReplies);
     const repliesForTweet3 = allReplies.filter(
       (r: FeedTweet) => r.replyToId === "3",
     );
