@@ -24,6 +24,7 @@ declare module "@mui/material/styles" {
       iconLike?: string;
       iconClose?: string;
       textHighlight?: string;
+      trendingTopicsBg?: string;
     };
   }
 }

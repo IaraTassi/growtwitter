@@ -23,6 +23,7 @@ export const theme = createTheme({
   custom: {
     profileContainerBg: COLORS.profileContainerBg,
     modalBackground: COLORS.modalBackground,
+    trendingTopicsBg: COLORS.trendingTopicsBg,
     tweetLogo: COLORS.tweetLogo,
     cardExplorer: COLORS.cardExplorer,
     iconEllipse: COLORS.iconEllipse,

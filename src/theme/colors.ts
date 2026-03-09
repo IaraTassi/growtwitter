@@ -18,5 +18,6 @@ export const COLORS = {
   verifyYelow: "#E7C12F",
   verifyBlue: "#1D9BF0",
   error: "#FF4D4F",
+  trendingTopicsBg: "#16181C",
   modalBackground: "rgba(35,35,35,0.85)",
 };

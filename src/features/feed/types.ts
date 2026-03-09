@@ -197,3 +197,12 @@ export interface LikeIconProps {
 export interface IconProps {
   color?: string;
 }
+
+export interface TrendingItemProps {
+  topic: {
+    category: string;
+    title: string;
+    description: string;
+    tweets: string;
+  };
+}
