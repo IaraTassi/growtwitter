@@ -220,3 +220,13 @@ export interface SuggestedUser extends FeedUser {
   }[];
   isFollowing?: boolean;
 }
+
+export interface SuggestedUsersContainerProps {
+  token: string;
+  currentUserId: string;
+}
+
+export interface SuggestedUsersListProps {
+  users: SuggestedUser[];
+  onToggleFollow: (userId: string) => void;
+}

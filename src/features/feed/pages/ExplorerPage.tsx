@@ -1,3 +1,5 @@
+import { ExplorerTimeline } from "../components/ExplorerTimeline";
+
 export function ExplorerPage() {
-  return <div>ExplorerPage</div>;
+  return <ExplorerTimeline />;
 }
