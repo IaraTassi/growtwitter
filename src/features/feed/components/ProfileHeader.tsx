@@ -33,7 +33,7 @@ export function ProfileHeader({ name, tweetsCount }: ProfileHeaderProps) {
             color: "text.disabled",
           }}
         >
-          {tweetsCount} growteets
+          {tweetsCount} growtweets
         </Typography>
       </Box>
     </Box>

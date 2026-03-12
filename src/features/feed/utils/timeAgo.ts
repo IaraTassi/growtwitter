@@ -19,3 +19,16 @@ export function timeAgo(createdAt: string | undefined): string {
 
   return criado.toLocaleDateString("pt-BR", options);
 }
+
+export function formatJoinDate(createdAt: string | undefined): string {
+  if (!createdAt) return "";
+
+  const date = new Date(createdAt);
+  const options: Intl.DateTimeFormatOptions = {
+    month: "long",
+    year: "numeric",
+  };
+  const formatted = date.toLocaleDateString("pt-BR", options);
+
+  return `Ingressou em ${formatted}`;
+}
