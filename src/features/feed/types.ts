@@ -206,3 +206,17 @@ export interface TrendingItemProps {
     tweets: string;
   };
 }
+
+export interface SuggestedUser extends FeedUser {
+  following: {
+    followerId: string;
+    followingId: string;
+    createdAt: string;
+  }[];
+  followers: {
+    followerId: string;
+    followingId: string;
+    createdAt: string;
+  }[];
+  isFollowing?: boolean;
+}
