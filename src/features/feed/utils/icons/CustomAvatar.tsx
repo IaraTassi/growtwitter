@@ -2,10 +2,19 @@ import { Box, SvgIcon } from "@mui/material";
 import type { CustomAvatarProps } from "../../types";
 import { COLORS } from "../../../../theme/colors";
 
-export function CustomAvatar({ imageUrl, ...props }: CustomAvatarProps) {
+export function CustomAvatar({
+  imageUrl,
+  width = 37,
+  height = 37,
+  ...props
+}: CustomAvatarProps) {
   return (
-    <Box position="relative" width={37} height={37}>
-      <SvgIcon {...props} viewBox="0 0 37 37" sx={{ width: 37, height: 37 }}>
+    <Box position="relative" sx={{ width, height }}>
+      <SvgIcon
+        {...props}
+        viewBox="0 0 37 37"
+        sx={{ width: "100%", height: "100%" }}
+      >
         <circle cx="18.5" cy="18.5" r="18.5" fill={COLORS.iconEllipse} />
       </SvgIcon>
 
@@ -16,8 +25,8 @@ export function CustomAvatar({ imageUrl, ...props }: CustomAvatarProps) {
           sx={{
             position: "absolute",
             inset: 0,
-            width: 37,
-            height: 37,
+            width: "100%",
+            height: "100%",
             borderRadius: "50%",
             objectFit: "cover",
           }}
@@ -30,8 +39,8 @@ export function CustomAvatar({ imageUrl, ...props }: CustomAvatarProps) {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 19,
-            height: 19,
+            width: "50%",
+            height: "50%",
           }}
         >
           <path

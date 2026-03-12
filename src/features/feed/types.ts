@@ -183,6 +183,8 @@ export type VerifyIconProps = SvgIconProps & {
 
 export type CustomAvatarProps = {
   imageUrl?: string | null;
+  width?: number | string;
+  height?: number | string;
 } & Omit<SvgIconProps, "children">;
 
 export interface ReplyIconProps {
@@ -251,4 +253,8 @@ export interface ProfileUser extends FeedUser {
     followingId: string;
     createdAt: string;
   }[];
+}
+
+export interface ProfileBannerProps extends CustomAvatarProps {
+  bannerHeight?: number;
 }

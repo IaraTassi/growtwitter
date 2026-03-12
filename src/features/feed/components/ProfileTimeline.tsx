@@ -5,6 +5,7 @@ import type { ProfileUser } from "../types";
 import { getUsers } from "../services/userService";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
+import { ProfileBanner } from "./ProfileBanner";
 
 export function ProfileTimeline() {
   const [user, setUser] = useState<ProfileUser | null>(null);
@@ -35,6 +36,7 @@ export function ProfileTimeline() {
           />
         )}
       </Box>
+      <ProfileBanner imageUrl={user?.imageUrl} />
     </Box>
   );
 }
