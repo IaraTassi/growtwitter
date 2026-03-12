@@ -74,7 +74,7 @@ export function Sidebar() {
         <Box>
           <PrimaryButton
             onClick={handleOpenComposer}
-            sx={{ width: 162, height: 28 }}
+            sx={{ width: 162, height: 28, mt: 1 }}
           >
             Tweetar
           </PrimaryButton>

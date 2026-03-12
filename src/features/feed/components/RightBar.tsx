@@ -12,6 +12,8 @@ export function RightBar() {
         py: 2,
         width: "100%",
         maxWidth: 300,
+        position: "sticky",
+        top: 0,
       }}
     >
       <TrendingTopicsCard />

@@ -24,7 +24,6 @@ export function PrimaryButton({
         fontSize: "0.75rem",
         fontWeight: 700,
         minWidth: 70,
-        mt: 1,
         ...sx,
       }}
     >
