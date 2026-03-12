@@ -1,3 +1,5 @@
+import { ProfileTimeline } from "../components/ProfileTimeline";
+
 export function ProfilePage() {
-  return <div>ProfilePage</div>;
+  return <ProfileTimeline />;
 }

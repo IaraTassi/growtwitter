@@ -196,6 +196,7 @@ export interface LikeIconProps {
 
 export interface IconProps {
   color?: string;
+  size?: number;
 }
 
 export interface TrendingItemProps {
@@ -229,4 +230,25 @@ export interface SuggestedUsersContainerProps {
 export interface SuggestedUsersListProps {
   users: SuggestedUser[];
   onToggleFollow: (userId: string) => void;
+}
+
+export interface ProfileHeaderProps {
+  name: string;
+  tweetsCount: number;
+  onClick?: () => void;
+}
+
+export interface ProfileUser extends FeedUser {
+  tweets: FeedTweetResponse[];
+  likes: Like[];
+  followers: {
+    followerId: string;
+    followingId: string;
+    createdAt: string;
+  }[];
+  following: {
+    followerId: string;
+    followingId: string;
+    createdAt: string;
+  }[];
 }
