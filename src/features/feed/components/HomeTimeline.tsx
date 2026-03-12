@@ -50,7 +50,7 @@ export function HomeTimeline({
       {loading ? (
         <Typography sx={{ px: 3, pt: 2 }}>Carregando...</Typography>
       ) : items.length === 0 ? (
-        <Typography>Nenhum tweet encontrado</Typography>
+        <Typography sx={{ px: 3, pt: 2 }}>Nenhum tweet encontrado</Typography>
       ) : (
         items.map((item) => {
           switch (item.kind) {
