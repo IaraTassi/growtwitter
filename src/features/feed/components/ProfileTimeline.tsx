@@ -50,16 +50,16 @@ export function ProfileTimeline() {
         <ProfileBanner imageUrl={user?.imageUrl} />
       </Box>
       <Box sx={{ mt: 6 }}>
-        <ProfileInfo />
+        <ProfileInfo user={user} />
       </Box>
 
       <Box>
         <ProfileTabs tab={tab} setTab={setTab} />
         <Box>
           {tab === "tweets" && <TweetsTab />}
-          {tab === "respostas" && <RepliesTab />}
-          {tab === "midia" && <MediaTab />}
-          {tab === "curtidas" && <LikesTab />}
+          {tab === "replies" && <RepliesTab />}
+          {tab === "media" && <MediaTab />}
+          {tab === "likes" && <LikesTab />}
         </Box>
       </Box>
     </Box>

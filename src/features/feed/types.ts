@@ -259,9 +259,13 @@ export interface ProfileBannerProps extends CustomAvatarProps {
   bannerHeight?: number;
 }
 
-export type ProfileTab = "tweets" | "respostas" | "midia" | "curtidas";
+export type ProfileTab = "tweets" | "replies" | "media" | "likes";
 
 export interface ProfileTabsProps {
   tab: ProfileTab;
   setTab: (tab: ProfileTab) => void;
+}
+
+export interface ProfileInfoProps {
+  user: ProfileUser;
 }

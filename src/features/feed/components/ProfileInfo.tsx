@@ -1,35 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import type { ProfileUser } from "../types";
+import type { ProfileInfoProps } from "../types";
 import { CalendarIcon } from "../utils/icons/CalendarIcon";
 import { formatJoinDate } from "../utils/timeAgo";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../../store/store";
-import { useEffect, useState } from "react";
-import { getUsers } from "../services/userService";
 
-export function ProfileInfo() {
-  const token = useSelector((state: RootState) => state.auth.token);
-  const currentUser = useSelector((state: RootState) => state.auth.user);
-
-  const [user, setUser] = useState<ProfileUser | null>(null);
-
-  useEffect(() => {
-    async function loadUser() {
-      if (!token || !currentUser) return;
-
-      const users = await getUsers(token);
-      const profileUser = users.find((u) => u.id === currentUser.id);
-
-      if (profileUser) {
-        setUser(profileUser as ProfileUser);
-      }
-    }
-
-    loadUser();
-  }, [token, currentUser]);
-
-  if (!user) return null;
-
+export function ProfileInfo({ user }: ProfileInfoProps) {
   const followersCount = user.followers?.length ?? 0;
   const followingCount = user.following?.length ?? 0;
 

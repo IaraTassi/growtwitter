@@ -3,9 +3,9 @@ import type { ProfileTab, ProfileTabsProps } from "../types";
 
 const tabs: { label: string; key: ProfileTab }[] = [
   { label: "Tweets", key: "tweets" },
-  { label: "Respostas", key: "respostas" },
-  { label: "Mídia", key: "midia" },
-  { label: "Curtidas", key: "curtidas" },
+  { label: "Respostas", key: "replies" },
+  { label: "Mídia", key: "media" },
+  { label: "Curtidas", key: "likes" },
 ];
 
 export function ProfileTabs({ tab, setTab }: ProfileTabsProps) {
