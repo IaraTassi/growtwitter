@@ -29,3 +29,23 @@ export async function createTweet(
 
   return data.tweet;
 }
+
+export async function deleteTweet(
+  token: string,
+  tweetId: string,
+): Promise<void> {
+  const response = await authFetch(
+    `${BASE_URL}/api/tweets/${tweetId}`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    },
+    token,
+  );
+
+  const data: { ok: boolean; message?: string } = await response.json();
+
+  if (!response.ok || !data.ok) {
+    throw new Error(data.message || "Não foi possível deletar o tweet");
+  }
+}
