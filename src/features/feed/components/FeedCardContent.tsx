@@ -9,6 +9,7 @@ import { GraphIcon } from "../utils/icons/GraphIcon";
 
 export function FeedCardContent({
   tweet,
+  parentTweet,
   onLike,
   showReplyLabel,
   showThreadLine,
@@ -100,7 +101,7 @@ export function FeedCardContent({
               </Typography>
             </Box>
           </Box>
-          {showReplyLabel && tweet.replyToUser && (
+          {showReplyLabel && parentTweet && (
             <Typography
               variant="caption"
               sx={{
@@ -117,7 +118,7 @@ export function FeedCardContent({
                   color: isVerified ? "primary.main" : "text.disabled",
                 }}
               >
-                @{tweet.replyToUser.userName}
+                @{parentTweet.user.userName}
               </Box>
             </Typography>
           )}

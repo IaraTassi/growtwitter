@@ -21,7 +21,7 @@ export function insertReplyRecursive(
   tweet: FeedTweet,
   reply: FeedTweet,
 ): FeedTweet {
-  if (tweet.id === reply.replyToId) {
+  if (tweet.id === reply.parentId) {
     return {
       ...tweet,
       replies: [...tweet.replies, reply],

@@ -1,17 +1,16 @@
-import type { FeedTweet, FeedTweetResponse, FeedUser } from "../types";
+import type { FeedTweet, FeedTweetResponse } from "../types";
 
 export function mapFeedTweet(
   tweet: FeedTweetResponse,
   loggedUserId?: string,
-  parentUser?: FeedUser | null,
 ): FeedTweet {
   const likes = tweet.likes ?? [];
-  const currentReplyToUser = tweet.parent?.user ?? parentUser ?? null;
 
   return {
     id: tweet.id,
     content: tweet.content,
     userId: tweet.userId,
+    parentId: tweet.parentId ?? null,
     createdAt: tweet.createdAt,
     updatedAt: tweet.updatedAt,
     user: tweet.user,
@@ -21,12 +20,8 @@ export function mapFeedTweet(
       : false,
 
     repliesCount: tweet.replies?.length ?? 0,
-    replyToId: tweet.parentId ?? null,
-    replyToUser: currentReplyToUser,
     replies:
-      tweet.replies?.map((reply) =>
-        mapFeedTweet(reply, loggedUserId, tweet.user),
-      ) ?? [],
+      tweet.replies?.map((reply) => mapFeedTweet(reply, loggedUserId)) ?? [],
   };
 }
 

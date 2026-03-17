@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import type { ProfileTabsProps } from "../types";
+import type { TweetTabProps } from "../types";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { useState } from "react";
@@ -15,11 +15,11 @@ import { removeTweet } from "../store/feedSlice";
 import { TrashIcon } from "../utils/icons/TrashIcon";
 import { ComposerModal } from "./ComposerModal";
 
-export function TweetsTab({ user }: ProfileTabsProps) {
+export function TweetsTab({ user }: TweetTabProps) {
   const allTweets = useSelector((state: RootState) => state.feed.tweets ?? []);
 
   const userTweets = allTweets.filter(
-    (t) => t.user.id === user.id && !t.replyToId,
+    (t) => t.user.id === user.id && !t.parentId,
   );
 
   const [replyParentId, setReplyParentId] = useState<string | null>(null);

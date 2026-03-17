@@ -14,6 +14,7 @@ export interface FeedTweet {
   id: string;
   content: string;
   userId: string;
+  parentId?: string | null;
   createdAt: string;
   updatedAt: string;
 
@@ -21,9 +22,6 @@ export interface FeedTweet {
   likesCount: number;
   repliesCount: number;
   isLiked?: boolean;
-
-  replyToId?: string | null;
-  replyToUser?: FeedUser | null;
   replies: FeedTweet[];
 }
 
@@ -39,7 +37,6 @@ export interface FeedTweetResponse {
   content: string;
   userId: string;
   parentId?: string | null;
-  parent?: FeedTweetResponse | null;
   createdAt: string;
   updatedAt: string;
   user: FeedUser;
@@ -90,6 +87,7 @@ export interface FeedContentProps {
 
 export interface FeedCardContentProps {
   tweet: FeedTweet;
+  parentTweet?: FeedTweet;
   onLike: (tweetId: string) => void;
   onReplyClick?: (tweetId: string) => void;
   showReplyLabel?: boolean;
@@ -262,12 +260,15 @@ export interface ProfileBannerProps extends CustomAvatarProps {
 export type ProfileTab = "tweets" | "replies" | "media" | "likes";
 
 export interface ProfileTabsProps {
-  tab?: ProfileTab;
-  setTab?: (tab: ProfileTab) => void;
-  user: FeedUser;
-  allTweets?: FeedTweet[];
+  tab: ProfileTab;
+  setTab: (tab: ProfileTab) => void;
 }
 
 export interface ProfileInfoProps {
   user: ProfileUser;
+}
+
+export interface TweetTabProps {
+  user: FeedUser;
+  allTweets?: FeedTweet[];
 }
