@@ -54,9 +54,9 @@ export function ProfileTimeline() {
       </Box>
 
       <Box>
-        <ProfileTabs tab={tab} setTab={setTab} />
+        <ProfileTabs tab={tab} setTab={setTab} user={user} />
         <Box>
-          {tab === "tweets" && <TweetsTab />}
+          {tab === "tweets" && <TweetsTab user={user} />}
           {tab === "replies" && <RepliesTab />}
           {tab === "media" && <MediaTab />}
           {tab === "likes" && <LikesTab />}

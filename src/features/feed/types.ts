@@ -262,8 +262,10 @@ export interface ProfileBannerProps extends CustomAvatarProps {
 export type ProfileTab = "tweets" | "replies" | "media" | "likes";
 
 export interface ProfileTabsProps {
-  tab: ProfileTab;
-  setTab: (tab: ProfileTab) => void;
+  tab?: ProfileTab;
+  setTab?: (tab: ProfileTab) => void;
+  user: FeedUser;
+  allTweets?: FeedTweet[];
 }
 
 export interface ProfileInfoProps {
