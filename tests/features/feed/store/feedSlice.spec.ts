@@ -5,7 +5,9 @@ import {
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
-import reducer from "../../../../src/features/feed/store/feedSlice";
+import reducer, {
+  removeTweet,
+} from "../../../../src/features/feed/store/feedSlice";
 import type { FeedState, FeedTweet } from "../../../../src/features/feed/types";
 import { insertReplyRecursive } from "../../../../src/features/feed/utils/feedUtils";
 
@@ -275,6 +277,48 @@ describe("feedSlice", () => {
 
       expect(state.loading).toBe(false);
       expect(state.error).toBe("Erro ao criar tweet");
+    });
+  });
+
+  describe("feedSlice - removeTweet", () => {
+    it("should remove a root tweet", () => {
+      const tweet = createMockTweet({ id: "1" });
+      const state: FeedState = { ...initialState, tweets: [tweet] };
+
+      const nextState = reducer(state, removeTweet("1"));
+
+      expect(nextState.tweets.length).toBe(0);
+    });
+
+    it("should remove a nested reply tweet", () => {
+      const reply = createMockTweet({ id: "2" });
+      const tweet = createMockTweet({ id: "1", replies: [reply] });
+      const state: FeedState = { ...initialState, tweets: [tweet] };
+
+      const nextState = reducer(state, removeTweet("2"));
+
+      expect(nextState.tweets.length).toBe(1);
+      expect(nextState.tweets[0].replies.length).toBe(0);
+    });
+
+    it("should do nothing if tweet id does not exist", () => {
+      const tweet = createMockTweet({ id: "1" });
+      const state: FeedState = { ...initialState, tweets: [tweet] };
+
+      const nextState = reducer(state, removeTweet("999"));
+
+      expect(nextState).toEqual(state);
+    });
+
+    it("should remove multiple nested replies recursively", () => {
+      const reply2 = createMockTweet({ id: "3" });
+      const reply1 = createMockTweet({ id: "2", replies: [reply2] });
+      const tweet = createMockTweet({ id: "1", replies: [reply1] });
+      const state: FeedState = { ...initialState, tweets: [tweet] };
+
+      const nextState = reducer(state, removeTweet("3"));
+
+      expect(nextState.tweets[0].replies[0].replies.length).toBe(0);
     });
   });
 });

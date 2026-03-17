@@ -7,6 +7,7 @@ import {
   toggleLikeThunk,
 } from "./feedThunks";
 import { insertReplyRecursive, updateLikeRecursive } from "../utils/feedUtils";
+import { removeTweetRecursive } from "../utils/tweetUtils";
 
 const initialState: FeedState = {
   tweets: [],
@@ -17,7 +18,15 @@ const initialState: FeedState = {
 const feedSlice = createSlice({
   name: "feed",
   initialState,
-  reducers: {},
+  reducers: {
+    removeTweet: (state, action) => {
+      const tweetId = action.payload;
+
+      state.tweets = state.tweets
+        .filter((tweet) => tweet.id !== tweetId)
+        .map((tweet) => removeTweetRecursive(tweet, tweetId));
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFeed.pending, (state) => {
@@ -78,5 +87,7 @@ const feedSlice = createSlice({
       });
   },
 });
+
+export const { removeTweet } = feedSlice.actions;
 
 export default feedSlice.reducer;
