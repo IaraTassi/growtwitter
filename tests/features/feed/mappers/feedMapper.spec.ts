@@ -34,7 +34,6 @@ function createMockTweetResponse(
     likes: [],
     replies: [],
     parentId: null,
-    parent: null,
     ...overrides,
   };
 }
@@ -57,50 +56,82 @@ describe("feedMapper", () => {
 
       const result = mapFeedTweet(tweetResponse, loggedUserId);
 
-      expect(result).toEqual({
-        id: "1",
-        content: "Tweet de teste",
-        userId: "u1",
-        createdAt: "2026-02-19T10:00:00Z",
-        updatedAt: "2026-02-19T10:00:00Z",
-        user: createMockUser(),
-        likesCount: 1,
-        isLiked: true,
-        repliesCount: 0,
-        replyToId: null,
-        replyToUser: null,
-        replies: [],
-      });
+      expect(result.id).toBe("1");
+      expect(result.content).toBe("Tweet de teste");
+      expect(result.userId).toBe("u1");
+      expect(result.parentId).toBeNull();
+      expect(result.likesCount).toBe(1);
+      expect(result.isLiked).toBe(true);
+      expect(result.repliesCount).toBe(0);
+      expect(result.replies).toEqual([]);
     });
 
-    it("should handle tweet with replies and nested replies", () => {
-      const reply1 = createMockTweetResponse({ id: "2", parentId: "1" });
-      const reply2 = createMockTweetResponse({ id: "3", parentId: "2" });
+    it("should map nested replies correctly", () => {
+      const reply2 = createMockTweetResponse({
+        id: "3",
+        parentId: "2",
+      });
+
+      const reply1 = createMockTweetResponse({
+        id: "2",
+        parentId: "1",
+        replies: [reply2],
+      });
 
       const tweetResponse = createMockTweetResponse({
+        id: "1",
         replies: [reply1],
       });
 
-      reply1.replies = [reply2];
-
       const result = mapFeedTweet(tweetResponse, "u2");
 
-      expect(result.replies.length).toBe(1);
+      expect(result.replies).toHaveLength(1);
       expect(result.replies[0].id).toBe("2");
+      expect(result.replies[0].parentId).toBe("1");
+
+      expect(result.replies[0].replies).toHaveLength(1);
       expect(result.replies[0].replies[0].id).toBe("3");
+      expect(result.replies[0].replies[0].parentId).toBe("2");
     });
 
-    it("should use parentUser if parent.user is not available", () => {
-      const parentUser = createMockUser({ id: "parent" });
-      const reply = createMockTweetResponse({
-        id: "2",
-        parent: null,
-        parentId: "1",
+    it("should preserve parentId for replies", () => {
+      const tweet = createMockTweetResponse({
+        parentId: "10",
       });
 
-      const result = mapFeedTweet(reply, "u2", parentUser);
+      const result = mapFeedTweet(tweet);
 
-      expect(result.replyToUser).toEqual(parentUser);
+      expect(result.parentId).toBe("10");
+    });
+
+    it("should set isLiked to false when no loggedUserId", () => {
+      const tweet = createMockTweetResponse({
+        likes: [
+          {
+            userId: "u1",
+            tweetId: "1",
+            createdAt: "",
+            updatedAt: "",
+          },
+        ],
+      });
+
+      const result = mapFeedTweet(tweet);
+
+      expect(result.isLiked).toBe(false);
+    });
+
+    it("should handle empty likes and replies safely", () => {
+      const tweet = createMockTweetResponse({
+        likes: undefined,
+        replies: undefined,
+      });
+
+      const result = mapFeedTweet(tweet);
+
+      expect(result.likesCount).toBe(0);
+      expect(result.repliesCount).toBe(0);
+      expect(result.replies).toEqual([]);
     });
   });
 

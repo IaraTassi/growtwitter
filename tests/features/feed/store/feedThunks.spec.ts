@@ -1,16 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mapFeedTweet } from "../../../../src/features/feed/mappers/feedMapper";
+import * as feedService from "../../../../src/features/feed/services/feedService";
+import * as likeService from "../../../../src/features/feed/services/likeService";
+import * as replyService from "../../../../src/features/feed/services/replyService";
+import * as tweetService from "../../../../src/features/feed/services/tweetService";
 import {
   createReplyThunk,
   createTweetThunk,
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
-import * as feedService from "../../../../src/features/feed/services/feedService";
-import * as likeService from "../../../../src/features/feed/services/likeService";
 import { FeedTweetResponse } from "../../../../src/features/feed/types";
-import * as replyService from "../../../../src/features/feed/services/replyService";
-import { mapFeedTweet } from "../../../../src/features/feed/mappers/feedMapper";
-import * as tweetService from "../../../../src/features/feed/services/tweetService";
 
 vi.mock("../../../../src/features/feed/services/feedService");
 vi.mock("../../../../src/features/feed/services/likeService");
@@ -35,8 +35,6 @@ function createMockFeedResponse(
       updatedAt: "",
     },
     likes: [],
-    replies: [],
-    parent: null,
     parentId: null,
     ...overrides,
   };

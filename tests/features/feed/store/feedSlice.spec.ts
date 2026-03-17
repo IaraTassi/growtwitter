@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
+import reducer, {
+  removeTweet,
+} from "../../../../src/features/feed/store/feedSlice";
 import {
   createReplyThunk,
   createTweetThunk,
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
-import reducer, {
-  removeTweet,
-} from "../../../../src/features/feed/store/feedSlice";
 import type { FeedState, FeedTweet } from "../../../../src/features/feed/types";
 import { insertReplyRecursive } from "../../../../src/features/feed/utils/feedUtils";
 
@@ -29,8 +29,6 @@ function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
     likesCount: 0,
     isLiked: false,
     repliesCount: 0,
-    replyToId: null,
-    replyToUser: null,
     replies: [],
     ...overrides,
   };
@@ -170,7 +168,7 @@ describe("feedSlice", () => {
     it("should handle fulfilled state and insert reply", () => {
       const reply = createMockTweet({
         id: "2",
-        replyToId: "1",
+        parentId: "1",
         content: "Essa é uma reply",
         userId: "user2",
       });
@@ -207,13 +205,13 @@ describe("feedSlice", () => {
     it("insertReplyRecursive should insert reply deeply", () => {
       const nestedTweet = createMockTweet({
         id: "3",
-        replies: [createMockTweet({ id: "4", replyToId: "3" })],
+        replies: [createMockTweet({ id: "4", parentId: "3" })],
         repliesCount: 1,
       });
 
       const reply = createMockTweet({
         id: "5",
-        replyToId: "4",
+        parentId: "4",
         content: "nested reply",
       });
 

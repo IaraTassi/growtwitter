@@ -27,8 +27,6 @@ function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
     likesCount: 0,
     isLiked: false,
     repliesCount: 0,
-    replyToId: null,
-    replyToUser: null,
     replies: [],
     ...overrides,
   };
@@ -84,8 +82,8 @@ describe("feedSelectors", () => {
     const tweetWithReplies = createMockTweet({
       id: "3",
       replies: [
-        createMockTweet({ id: "3-1", replyToId: "3" }),
-        createMockTweet({ id: "3-2", replyToId: "3" }),
+        createMockTweet({ id: "3-1", parentId: "3" }),
+        createMockTweet({ id: "3-2", parentId: "3" }),
       ],
     });
 
@@ -100,7 +98,7 @@ describe("feedSelectors", () => {
 
     const allReplies = selectReplies(stateWithReplies);
     const repliesForTweet3 = allReplies.filter(
-      (r: FeedTweet) => r.replyToId === "3",
+      (r: FeedTweet) => r.parentId === "3",
     );
 
     expect(repliesForTweet3.length).toBe(2);

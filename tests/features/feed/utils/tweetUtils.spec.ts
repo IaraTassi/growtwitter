@@ -20,8 +20,6 @@ function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
     likesCount: 0,
     isLiked: false,
     repliesCount: 0,
-    replyToId: null,
-    replyToUser: null,
     replies: [],
     ...overrides,
   };

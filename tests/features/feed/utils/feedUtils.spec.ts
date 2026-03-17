@@ -23,8 +23,6 @@ function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
     likesCount: 0,
     isLiked: false,
     repliesCount: 0,
-    replyToId: null,
-    replyToUser: null,
     replies: [],
     ...overrides,
   };
@@ -85,7 +83,7 @@ describe("feedUtils", () => {
       const reply = createMockTweet({
         id: "r1",
         content: "Nova reply",
-        replyToId: "1",
+        parentId: "1",
       });
 
       const updated = insertReplyRecursive(tweet, reply);
@@ -101,7 +99,7 @@ describe("feedUtils", () => {
       const reply = createMockTweet({
         id: "r2",
         content: "Reply na nested",
-        replyToId: "2",
+        parentId: "2",
       });
 
       const updated = insertReplyRecursive(tweet, reply);
@@ -113,7 +111,7 @@ describe("feedUtils", () => {
 
     it("should not modify tweet if parentId does not exist", () => {
       const tweet = createMockTweet({ id: "1" });
-      const reply = createMockTweet({ id: "r3", replyToId: "999" });
+      const reply = createMockTweet({ id: "r3", parentId: "999" });
 
       const updated = insertReplyRecursive(tweet, reply);
 
