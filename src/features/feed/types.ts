@@ -272,3 +272,9 @@ export interface TweetTabProps {
   user: FeedUser;
   allTweets?: FeedTweet[];
 }
+
+export type ReplyThreadProps = {
+  root: FeedTweet;
+  replies: FeedTweet[];
+  currentUserId: string;
+};
