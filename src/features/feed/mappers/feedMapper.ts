@@ -4,7 +4,7 @@ export function mapFeedTweet(
   tweet: FeedTweetResponse,
   loggedUserId?: string,
 ): FeedTweet {
-  const likes = tweet.likes ?? [];
+  const likes = Array.isArray(tweet.likes) ? tweet.likes : [];
 
   return {
     id: tweet.id,

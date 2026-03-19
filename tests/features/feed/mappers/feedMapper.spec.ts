@@ -39,7 +39,7 @@ function createMockTweetResponse(
 }
 
 describe("feedMapper", () => {
-  describe("mapFeedTweet", () => {
+  describe("feedMapper - mapFeedTweet", () => {
     const loggedUserId = "u1";
 
     it("should map a simple tweet correctly with like", () => {
@@ -66,7 +66,7 @@ describe("feedMapper", () => {
       expect(result.replies).toEqual([]);
     });
 
-    it("should map nested replies correctly", () => {
+    it("should map nested replies recursively", () => {
       const reply2 = createMockTweetResponse({
         id: "3",
         parentId: "2",
@@ -133,9 +133,33 @@ describe("feedMapper", () => {
       expect(result.repliesCount).toBe(0);
       expect(result.replies).toEqual([]);
     });
+
+    it("should correctly calculate likesCount with multiple likes", () => {
+      const tweet = createMockTweetResponse({
+        likes: [
+          { userId: "u1", tweetId: "1", createdAt: "", updatedAt: "" },
+          { userId: "u2", tweetId: "1", createdAt: "", updatedAt: "" },
+        ],
+      });
+
+      const result = mapFeedTweet(tweet, "u1");
+
+      expect(result.likesCount).toBe(2);
+      expect(result.isLiked).toBe(true);
+    });
+
+    it("should set isLiked to false when user did not like", () => {
+      const tweet = createMockTweetResponse({
+        likes: [{ userId: "u2", tweetId: "1", createdAt: "", updatedAt: "" }],
+      });
+
+      const result = mapFeedTweet(tweet, "u1");
+
+      expect(result.isLiked).toBe(false);
+    });
   });
 
-  describe("mapFeed", () => {
+  describe("feedMapper - mapFeed", () => {
     it("should map an array of tweets correctly", () => {
       const tweet1 = createMockTweetResponse({ id: "1" });
       const tweet2 = createMockTweetResponse({ id: "2" });
@@ -151,6 +175,16 @@ describe("feedMapper", () => {
     it("should return empty array if input is null or undefined", () => {
       expect(mapFeed(null)).toEqual([]);
       expect(mapFeed(undefined)).toEqual([]);
+    });
+
+    it("should pass loggedUserId correctly to all tweets", () => {
+      const tweet = createMockTweetResponse({
+        likes: [{ userId: "u1", tweetId: "1", createdAt: "", updatedAt: "" }],
+      });
+
+      const result = mapFeed([tweet], "u1");
+
+      expect(result[0].isLiked).toBe(true);
     });
   });
 });
