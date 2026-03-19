@@ -192,6 +192,8 @@ export interface ReplyIconProps {
 export interface LikeIconProps {
   isLiked?: boolean;
   onClick?: () => void;
+  clickable?: boolean;
+  forceColor?: string;
 }
 
 export interface IconProps {
@@ -277,4 +279,8 @@ export type ReplyThreadProps = {
   root: FeedTweet;
   replies: FeedTweet[];
   currentUserId: string;
+};
+
+export type LikeProps = {
+  tweet: FeedTweet;
 };
