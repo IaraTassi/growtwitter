@@ -272,7 +272,6 @@ export interface ProfileInfoProps {
 
 export interface TweetTabProps {
   user: FeedUser;
-  allTweets?: FeedTweet[];
 }
 
 export type ReplyThreadProps = {
@@ -283,4 +282,11 @@ export type ReplyThreadProps = {
 
 export type LikeProps = {
   tweet: FeedTweet;
+};
+
+export type TweetItemProps = {
+  tweet: FeedTweet;
+  avatarSize: number;
+  onReply: (tweetId: string) => void;
+  onDelete: (tweetId: string) => void;
 };
