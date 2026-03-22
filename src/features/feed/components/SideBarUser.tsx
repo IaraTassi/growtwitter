@@ -2,8 +2,10 @@ import { Box, Typography } from "@mui/material";
 import type { SidebarUserProps } from "../types";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
 import { PrimaryButton } from "./PrimaryButton";
+import { ProfileLink } from "./ProfileLink";
 
 export function SidebarUser({
+  userId,
   name,
   userName,
   imageUrl,
@@ -11,44 +13,45 @@ export function SidebarUser({
 }: SidebarUserProps) {
   return (
     <Box display="flex" flexDirection="column" gap={1}>
-      <Box
-        display="flex"
-        alignItems="center"
-        gap={1}
-        sx={{
-          width: 170,
-          height: 48,
-          borderRadius: "999px",
-          transition: "background 0.2s",
-          px: 1,
-          py: 1,
-          ml: -1,
-          mr: 1,
-          "&:hover": {
-            backgroundColor: "rgba(255,255,255,0.08)",
-          },
-        }}
-      >
-        <CustomAvatar imageUrl={imageUrl} />
+      <ProfileLink userId={userId}>
+        <Box
+          display="flex"
+          alignItems="center"
+          gap={1}
+          sx={{
+            width: 170,
+            height: 48,
+            borderRadius: "999px",
+            transition: "background 0.2s",
+            px: 1,
+            py: 1,
+            ml: -1,
+            mr: 1,
+            "&:hover": {
+              backgroundColor: "rgba(255,255,255,0.08)",
+            },
+          }}
+        >
+          <CustomAvatar imageUrl={imageUrl} />
 
-        <Box>
-          <Typography
-            sx={{
-              fontSize: 12,
-              fontWeight: 800,
-            }}
-          >
-            {name}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 12, fontWeight: 400 }}
-            color="text.disabled"
-          >
-            @{userName}
-          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: 12,
+                fontWeight: 800,
+              }}
+            >
+              {name}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 12, fontWeight: 400 }}
+              color="text.disabled"
+            >
+              @{userName}
+            </Typography>
+          </Box>
         </Box>
-      </Box>
-
+      </ProfileLink>
       <Box>
         <PrimaryButton
           variant="outlined"

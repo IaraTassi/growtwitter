@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import type { ReplyThreadProps } from "../types";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
+import { ProfileLink } from "./ProfileLink";
 
 export function ReplyThread({
   root,
@@ -16,21 +17,24 @@ export function ReplyThread({
       sx={{
         borderBottom: 1,
         borderColor: "divider",
-        cursor: "pointer",
+        cursor: "default",
         px: 3,
         py: 2,
       }}
     >
       <Box component="header" display="flex" alignItems="center" gap={1}>
-        <CustomAvatar
-          imageUrl={root.user.imageUrl}
-          width={avatarSize}
-          height={avatarSize}
-        />
-
-        <Typography sx={{ fontSize: "0.75rem", fontWeight: 800 }}>
-          {root.user.name}
-        </Typography>
+        <ProfileLink userId={root.user.id}>
+          <CustomAvatar
+            imageUrl={root.user.imageUrl}
+            width={avatarSize}
+            height={avatarSize}
+          />
+        </ProfileLink>
+        <ProfileLink userId={root.user.id}>
+          <Typography sx={{ fontSize: "0.75rem", fontWeight: 800 }}>
+            {root.user.name}
+          </Typography>
+        </ProfileLink>
       </Box>
 
       <Box component="main">

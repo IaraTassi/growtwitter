@@ -6,6 +6,7 @@ import { CustomAvatar } from "../utils/icons/CustomAvatar";
 import { ReplyIcon } from "../utils/icons/ReplyIcon";
 import { LikeIcon } from "../utils/icons/LikeIcon";
 import { GraphIcon } from "../utils/icons/GraphIcon";
+import { ProfileLink } from "./ProfileLink";
 
 export function FeedCardContent({
   tweet,
@@ -42,7 +43,9 @@ export function FeedCardContent({
           position: "relative",
         }}
       >
-        <CustomAvatar imageUrl={tweet.user.imageUrl} />
+        <ProfileLink userId={tweet.user.id}>
+          <CustomAvatar imageUrl={tweet.user.imageUrl} />
+        </ProfileLink>
 
         {showThreadLine && !isLastInThread && (
           <Box
@@ -70,15 +73,17 @@ export function FeedCardContent({
           }}
         >
           <Box sx={{ display: "flex", flexDirection: "row" }}>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                fontSize: "0.75rem",
-                fontWeight: "800",
-              }}
-            >
-              {tweet.user.name}
-            </Typography>
+            <ProfileLink userId={tweet.user.id}>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontSize: "0.75rem",
+                  fontWeight: "800",
+                }}
+              >
+                {tweet.user.name}
+              </Typography>
+            </ProfileLink>
 
             <Box
               sx={{

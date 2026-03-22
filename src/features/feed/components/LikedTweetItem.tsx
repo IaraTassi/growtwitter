@@ -5,6 +5,7 @@ import { LikeIcon } from "../utils/icons/LikeIcon";
 import { CalendarIcon } from "../utils/icons/CalendarIcon";
 import { timeAgo } from "../utils/timeAgo";
 import { COLORS } from "../../../theme/colors";
+import { ProfileLink } from "./ProfileLink";
 
 export function LikedTweetItem({ tweet }: LikeProps) {
   return (
@@ -22,13 +23,17 @@ export function LikedTweetItem({ tweet }: LikeProps) {
         },
       }}
     >
-      <CustomAvatar imageUrl={tweet.user.imageUrl} />
+      <ProfileLink userId={tweet.user.id}>
+        <CustomAvatar imageUrl={tweet.user.imageUrl} />
+      </ProfileLink>
 
       <Box sx={{ flex: 1 }}>
         <Box component="header" display="flex" alignItems="center" gap={1}>
-          <Typography sx={{ fontSize: "0.75rem", fontWeight: 800 }}>
-            {tweet.user.name}
-          </Typography>
+          <ProfileLink userId={tweet.user.id}>
+            <Typography sx={{ fontSize: "0.75rem", fontWeight: 800 }}>
+              {tweet.user.name}
+            </Typography>
+          </ProfileLink>
         </Box>
 
         <Box component="main">

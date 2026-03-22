@@ -41,7 +41,7 @@ export function Sidebar() {
     <Box
       component="aside"
       sx={{
-        height: "100vh",
+        height: "98vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -68,7 +68,7 @@ export function Sidebar() {
         <SidebarNavItem
           icon={<ProfileIcon />}
           label="Perfil"
-          to="/app/profile"
+          to={`/app/profile/${user?.id}`}
         />
 
         <Box>
@@ -82,6 +82,7 @@ export function Sidebar() {
       </Box>
 
       <SidebarUser
+        userId={user?.id ?? ""}
         name={user?.name ?? ""}
         userName={user?.userName ?? ""}
         imageUrl={user?.imageUrl}

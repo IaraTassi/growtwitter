@@ -14,7 +14,7 @@ export const AppRoutes = () => (
         <Route path="/app" element={<App />}>
           <Route index element={<FeedPage />} />
           <Route path="explorer" element={<ExplorerPage />} />
-          <Route path="profile" element={<ProfilePage />} />
+          <Route path="profile/:id" element={<ProfilePage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />

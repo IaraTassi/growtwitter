@@ -3,6 +3,7 @@ import type { SuggestedUsersListProps } from "../types";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
 import { VerifyIcon } from "../utils/icons/VerifyIcon";
 import { PrimaryButton } from "./PrimaryButton";
+import { ProfileLink } from "./ProfileLink";
 
 export function SuggestedUsersList({
   users,
@@ -29,12 +30,16 @@ export function SuggestedUsersList({
               }}
             >
               <Box display="flex" alignItems="center" gap={1}>
-                <CustomAvatar imageUrl={user.imageUrl} />
+                <ProfileLink userId={user.id}>
+                  <CustomAvatar imageUrl={user.imageUrl} />
+                </ProfileLink>
                 <Box>
                   <Box display="flex" alignItems="center" gap={0.5}>
-                    <Typography sx={{ fontWeight: 700, fontSize: 12 }}>
-                      {user.name}
-                    </Typography>
+                    <ProfileLink userId={user.id}>
+                      <Typography sx={{ fontWeight: 700, fontSize: 12 }}>
+                        {user.name}
+                      </Typography>
+                    </ProfileLink>
                     <VerifyIcon
                       variant={variant}
                       sx={{

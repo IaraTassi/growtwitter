@@ -6,6 +6,7 @@ import { timeAgo } from "../utils/timeAgo";
 import { ReplyIcon } from "../utils/icons/ReplyIcon";
 import { COLORS } from "../../../theme/colors";
 import { TrashIcon } from "../utils/icons/TrashIcon";
+import { ProfileLink } from "./ProfileLink";
 
 export function TweetItem({
   tweet,
@@ -30,11 +31,13 @@ export function TweetItem({
         },
       }}
     >
-      <CustomAvatar
-        imageUrl={tweet.user.imageUrl}
-        width={avatarSize}
-        height={avatarSize}
-      />
+      <ProfileLink userId={tweet.user.id}>
+        <CustomAvatar
+          imageUrl={tweet.user.imageUrl}
+          width={avatarSize}
+          height={avatarSize}
+        />
+      </ProfileLink>
 
       <Box component="main" sx={{ flex: 1 }}>
         <Typography sx={{ fontSize: "0.75rem", fontWeight: 400 }}>

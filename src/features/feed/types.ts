@@ -1,4 +1,4 @@
-import type { SvgIconProps } from "@mui/material";
+import type { SvgIconProps, SxProps } from "@mui/material";
 
 export interface FeedUser {
   id: string;
@@ -169,6 +169,7 @@ export interface SidebarNavItemProps {
 }
 
 export type SidebarUserProps = {
+  userId: string;
   name: string;
   userName: string;
   imageUrl?: string;
@@ -289,4 +290,10 @@ export type TweetItemProps = {
   avatarSize: number;
   onReply: (tweetId: string) => void;
   onDelete: (tweetId: string) => void;
+};
+
+export type ProfileLinkProps = {
+  userId: string;
+  children: React.ReactNode;
+  sx?: SxProps;
 };

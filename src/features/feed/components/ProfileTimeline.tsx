@@ -12,19 +12,21 @@ import { TweetsTab } from "./TweetsTab";
 import { RepliesTab } from "./RepliesTab";
 import { MediaTab } from "./MediaTab";
 import { LikesTab } from "./LikesTab";
+import { useParams } from "react-router-dom";
 
 export function ProfileTimeline() {
+  const { id } = useParams();
   const [user, setUser] = useState<ProfileUser | null>(null);
   const [tab, setTab] = useState<ProfileTab>("tweets");
   const token = useSelector((state: RootState) => state.auth.token);
-  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     async function loadUser() {
-      if (!token || !currentUser) return;
+      if (!token || !id) return;
 
       const users = await getUsers(token);
-      const profileUser = users.find((user) => user.id === currentUser.id);
+
+      const profileUser = users.find((u) => u.id === id);
 
       if (profileUser) {
         setUser(profileUser as ProfileUser);
@@ -32,7 +34,7 @@ export function ProfileTimeline() {
     }
 
     loadUser();
-  }, [token, currentUser]);
+  }, [token, id]);
 
   if (!user) return null;
 
