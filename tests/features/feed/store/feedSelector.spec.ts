@@ -93,14 +93,14 @@ describe("feedSelectors", () => {
   });
 
   describe("feedSelectors - selectLikedTweets", () => {
-    it("should return only tweets with likes from the user", () => {
+    it("should return only tweets with isLiked true", () => {
       const state = {
         ...mockState,
         feed: {
           ...mockState.feed,
           tweets: [
-            createMockTweet({ id: "1", userId: "user1", likesCount: 0 }),
-            createMockTweet({ id: "2", userId: "user1", likesCount: 3 }),
+            createMockTweet({ id: "1", isLiked: false }),
+            createMockTweet({ id: "2", isLiked: true }),
           ],
         },
       };
@@ -111,14 +111,12 @@ describe("feedSelectors", () => {
       expect(liked[0].id).toBe("2");
     });
 
-    it("should ignore tweets from other users", () => {
+    it("should return empty array when no tweets are liked", () => {
       const state = {
         ...mockState,
         feed: {
           ...mockState.feed,
-          tweets: [
-            createMockTweet({ id: "1", userId: "user2", likesCount: 10 }),
-          ],
+          tweets: [createMockTweet({ id: "1", isLiked: false })],
         },
       };
 
@@ -127,66 +125,41 @@ describe("feedSelectors", () => {
       expect(liked).toHaveLength(0);
     });
 
-    it("should ignore tweets with zero likes", () => {
+    it("should return multiple liked tweets", () => {
       const state = {
         ...mockState,
         feed: {
           ...mockState.feed,
           tweets: [
-            createMockTweet({ id: "1", userId: "user1", likesCount: 0 }),
+            createMockTweet({ id: "1", isLiked: true }),
+            createMockTweet({ id: "2", isLiked: true }),
+            createMockTweet({ id: "3", isLiked: false }),
           ],
         },
       };
 
       const liked = selectLikedTweets(state);
 
-      expect(liked).toHaveLength(0);
+      expect(liked).toHaveLength(2);
+      expect(liked.map((t) => t.id)).toEqual(["1", "2"]);
     });
 
-    it("should sort tweets by likesCount descending", () => {
+    it("should not sort tweets (keeps original order)", () => {
       const state = {
         ...mockState,
         feed: {
           ...mockState.feed,
           tweets: [
-            createMockTweet({ id: "1", userId: "user1", likesCount: 2 }),
-            createMockTweet({ id: "2", userId: "user1", likesCount: 10 }),
+            createMockTweet({ id: "1", isLiked: true }),
+            createMockTweet({ id: "2", isLiked: true }),
           ],
         },
       };
 
       const liked = selectLikedTweets(state);
 
-      expect(liked[0].id).toBe("2");
-      expect(liked[1].id).toBe("1");
-    });
-
-    it("should include liked replies (nested)", () => {
-      const state = {
-        ...mockState,
-        feed: {
-          ...mockState.feed,
-          tweets: [
-            createMockTweet({
-              id: "1",
-              userId: "user1",
-              replies: [
-                createMockTweet({
-                  id: "1-1",
-                  userId: "user1",
-                  likesCount: 5,
-                  parentId: "1",
-                }),
-              ],
-            }),
-          ],
-        },
-      };
-
-      const liked = selectLikedTweets(state);
-
-      expect(liked).toHaveLength(1);
-      expect(liked[0].id).toBe("1-1");
+      expect(liked[0].id).toBe("1");
+      expect(liked[1].id).toBe("2");
     });
   });
 
