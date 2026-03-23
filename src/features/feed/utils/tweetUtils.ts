@@ -48,13 +48,30 @@ export function mapThreads(feed: FeedTweet[], userId: string) {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
     .forEach((tweet) => {
-      if (hasUserReply(tweet, userId)) {
+      const allReplies = collectReplies(tweet);
+      if (allReplies.length > 0 && hasUserReply(tweet, userId)) {
         threadMap.set(tweet.id, {
           root: tweet,
-          replies: collectReplies(tweet),
+          replies: allReplies,
         });
       }
     });
 
   return threadMap;
+}
+
+export function flattenTweets(tweets: FeedTweet[]): FeedTweet[] {
+  const result: FeedTweet[] = [];
+
+  const traverse = (tweet: FeedTweet) => {
+    result.push(tweet);
+
+    if (tweet.replies && tweet.replies.length > 0) {
+      tweet.replies.forEach(traverse);
+    }
+  };
+
+  tweets.forEach(traverse);
+
+  return result;
 }
