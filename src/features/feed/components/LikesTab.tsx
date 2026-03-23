@@ -1,10 +1,15 @@
 import { Box, Typography } from "@mui/material";
 import { useAppSelector } from "../../../hooks/redux";
-import { selectLikedTweets } from "../store/feedSelectors";
 import { LikedTweetItem } from "./LikedTweetItem";
+import { flattenTweets } from "../utils/tweetUtils";
+import { useMemo } from "react";
 
 export function LikesTab() {
-  const likedTweets = useAppSelector(selectLikedTweets);
+  const allTweets = useAppSelector((state) => state.feed.tweets ?? []);
+
+  const likedTweets = useMemo(() => {
+    return flattenTweets(allTweets).filter((tweet) => tweet.isLiked);
+  }, [allTweets]);
 
   if (likedTweets.length === 0) {
     return (

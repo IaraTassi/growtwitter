@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ProfileHeader } from "./ProfileHeader";
 import { useEffect, useState } from "react";
 import type { ProfileTab, ProfileUser } from "../types";
@@ -13,56 +13,98 @@ import { RepliesTab } from "./RepliesTab";
 import { MediaTab } from "./MediaTab";
 import { LikesTab } from "./LikesTab";
 import { useParams } from "react-router-dom";
+import { useAppDispatch } from "../../../hooks/redux";
+import { fetchFeed } from "../store/feedThunks";
+import { selectFeedLoading } from "../store/feedSelectors";
 
 export function ProfileTimeline() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<ProfileUser | null>(null);
   const [tab, setTab] = useState<ProfileTab>("tweets");
   const token = useSelector((state: RootState) => state.auth.token);
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
+  const feedLoading = useSelector(selectFeedLoading);
+  const [error, setError] = useState<string | null>(null);
+
+  const allTweets = useSelector((state: RootState) => state.feed.tweets ?? []);
+
+  const tweetsCount = user
+    ? allTweets.filter((t) => t.user.id === user.id && t.parentId == null)
+        .length
+    : 0;
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchFeed());
+    }
+  }, [dispatch, token]);
 
   useEffect(() => {
     async function loadUser() {
-      if (!token || !id) return;
+      if (!id || !token) return;
 
-      const users = await getUsers(token);
+      setLoading(true);
+      setError(null);
 
-      const profileUser = users.find((u) => u.id === id);
+      try {
+        const users = await getUsers(token);
+        const profileUser = users.find((u) => u.id === id);
 
-      if (profileUser) {
-        setUser(profileUser as ProfileUser);
+        if (!profileUser) {
+          setError("Perfil não encontrado");
+          setUser(null);
+        } else {
+          setUser(profileUser as ProfileUser);
+        }
+      } catch {
+        setError("Erro ao carregar perfil");
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
     }
 
     loadUser();
-  }, [token, id]);
-
-  if (!user) return null;
+  }, [id, token]);
 
   return (
     <Box component="section" aria-labelledby="profile-timeline-heading">
       <Box component="header" sx={{ py: 2, px: 3 }}>
-        {user && (
-          <ProfileHeader
-            name={user.name}
-            tweetsCount={user.tweets.length ?? 0}
-          />
-        )}
-      </Box>
-      <Box>
-        <ProfileBanner imageUrl={user?.imageUrl} />
-      </Box>
-      <Box sx={{ mt: 6 }}>
-        <ProfileInfo user={user} />
+        <ProfileHeader
+          name={user?.name ?? "Carregando..."}
+          tweetsCount={tweetsCount}
+        />
       </Box>
 
       <Box>
-        <ProfileTabs tab={tab} setTab={setTab} />
-        <Box>
-          {tab === "tweets" && <TweetsTab user={user} />}
-          {tab === "replies" && <RepliesTab />}
-          {tab === "media" && <MediaTab />}
-          {tab === "likes" && <LikesTab />}
-        </Box>
+        <ProfileBanner imageUrl={user?.imageUrl ?? ""} />
+      </Box>
+
+      <Box sx={{ mt: 6 }}>{user && <ProfileInfo user={user} />}</Box>
+
+      <Box sx={{ mt: 2, px: 3 }}>
+        {loading ? (
+          <Typography>Carregando...</Typography>
+        ) : error ? (
+          <Typography sx={{ color: "error.main" }}>{error}</Typography>
+        ) : (
+          <Box>
+            <ProfileTabs tab={tab} setTab={setTab} />
+            <Box>
+              {feedLoading ? (
+                <Typography>Carregando tweets...</Typography>
+              ) : (
+                <>
+                  {tab === "tweets" && user && <TweetsTab user={user} />}
+                  {tab === "replies" && user && <RepliesTab />}
+                  {tab === "media" && <MediaTab />}
+                  {tab === "likes" && <LikesTab />}
+                </>
+              )}
+            </Box>
+          </Box>
+        )}
       </Box>
     </Box>
   );
