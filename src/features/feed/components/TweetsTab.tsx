@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import type { TweetTabProps } from "../types";
+import type { TweetsTabProps } from "../types";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { useState } from "react";
@@ -10,13 +10,7 @@ import { ComposerModal } from "./ComposerModal";
 import { removeTweet } from "../store/feedSlice";
 import { TweetItem } from "./TweetItem";
 
-export function TweetsTab({ user }: TweetTabProps) {
-  const allTweets = useSelector((state: RootState) => state.feed.tweets ?? []);
-
-  const userTweets = allTweets.filter(
-    (t) => t.user.id === user.id && !t.parentId,
-  );
-
+export function TweetsTab({ user, tweets }: TweetsTabProps) {
   const [replyParentId, setReplyParentId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -25,6 +19,8 @@ export function TweetsTab({ user }: TweetTabProps) {
   const { handleDelete } = useDeleteTweet(token);
 
   const avatarSize = 37;
+
+  const userTweets = tweets.filter((t) => !t.parentId);
 
   const handleOpenReply = (tweetId: string) => {
     setReplyParentId(tweetId);

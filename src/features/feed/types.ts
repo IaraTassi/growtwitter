@@ -23,6 +23,8 @@ export interface FeedTweet {
   repliesCount: number;
   isLiked?: boolean;
   replies: FeedTweet[];
+  replyToId?: string | null;
+  replyToUser?: FeedUser | null;
 }
 
 export interface Like {
@@ -30,6 +32,12 @@ export interface Like {
   tweetId: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Follow {
+  followerId: string;
+  followingId: string;
+  createdAt: string;
 }
 
 export interface FeedTweetResponse {
@@ -235,29 +243,32 @@ export interface SuggestedUsersListProps {
   onToggleFollow: (userId: string) => void;
 }
 
+export interface ProfileUser extends FeedUser {
+  tweets: FeedTweetResponse[];
+  likes: Like[];
+  followers: Follow[];
+  following: Follow[];
+}
+
+export interface ProfileTimelineProps {
+  user: ProfileUser;
+  tweets: FeedTweet[];
+  feed: FeedTweet[];
+  likes: Like[];
+}
+
 export interface ProfileHeaderProps {
   name: string;
   tweetsCount: number;
   onClick?: () => void;
 }
 
-export interface ProfileUser extends FeedUser {
-  tweets: FeedTweetResponse[];
-  likes: Like[];
-  followers: {
-    followerId: string;
-    followingId: string;
-    createdAt: string;
-  }[];
-  following: {
-    followerId: string;
-    followingId: string;
-    createdAt: string;
-  }[];
-}
-
 export interface ProfileBannerProps extends CustomAvatarProps {
   bannerHeight?: number;
+}
+
+export interface ProfileInfoProps {
+  user: ProfileUser;
 }
 
 export type ProfileTab = "tweets" | "replies" | "media" | "likes";
@@ -267,33 +278,40 @@ export interface ProfileTabsProps {
   setTab: (tab: ProfileTab) => void;
 }
 
-export interface ProfileInfoProps {
+export interface TweetsTabProps {
   user: ProfileUser;
+  tweets: FeedTweet[];
 }
 
-export interface TweetTabProps {
-  user: FeedUser;
-}
-
-export type ReplyThreadProps = {
-  root: FeedTweet;
-  replies: FeedTweet[];
-  currentUserId: string;
-};
-
-export type LikeProps = {
-  tweet: FeedTweet;
-};
-
-export type TweetItemProps = {
+export interface TweetItemProps {
   tweet: FeedTweet;
   avatarSize: number;
   onReply: (tweetId: string) => void;
   onDelete: (tweetId: string) => void;
-};
+}
 
-export type ProfileLinkProps = {
+export interface RepliesTabProps {
+  userId: string;
+  tweets: FeedTweet[];
+}
+
+export interface ReplyThreadProps {
+  root: FeedTweet;
+  replies: FeedTweet[];
+  currentUserId: string;
+}
+
+export interface LikesTabProps {
+  likes: Like[];
+  feed: FeedTweet[];
+}
+
+export interface LikedTweetItemProps {
+  tweet: FeedTweet;
+}
+
+export interface ProfileLinkProps {
   userId: string;
   children: React.ReactNode;
   sx?: SxProps;
-};
+}

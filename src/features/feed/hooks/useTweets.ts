@@ -1,7 +1,5 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { deleteTweet } from "../services/tweetService";
-import type { FeedTweet } from "../types";
-import { mapThreads } from "../utils/tweetUtils";
 
 export function useDeleteTweet(token: string) {
   const handleDelete = useCallback(
@@ -17,8 +15,4 @@ export function useDeleteTweet(token: string) {
   );
 
   return { handleDelete };
-}
-
-export function useRepliesThreads(feed: FeedTweet[], currentUserId: string) {
-  return useMemo(() => mapThreads(feed, currentUserId), [feed, currentUserId]);
 }

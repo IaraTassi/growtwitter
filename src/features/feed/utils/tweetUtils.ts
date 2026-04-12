@@ -16,11 +16,8 @@ export function collectReplies(tweet: FeedTweet): FeedTweet[] {
   const result: FeedTweet[] = [];
 
   if (!tweet.replies || tweet.replies.length === 0) return result;
-  const sortedReplies = [...tweet.replies].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
 
-  for (const reply of sortedReplies) {
+  for (const reply of tweet.replies) {
     result.push({
       ...reply,
       replies: collectReplies(reply),
@@ -32,7 +29,7 @@ export function collectReplies(tweet: FeedTweet): FeedTweet[] {
 
 export function hasUserReply(tweet: FeedTweet, userId: string): boolean {
   if (tweet.user.id === userId) return true;
-  if (!tweet.replies || tweet.replies.length === 0) return false;
+  if (!tweet.replies?.length) return false;
   return tweet.replies.some((r) => hasUserReply(r, userId));
 }
 
@@ -42,19 +39,23 @@ export function mapThreads(feed: FeedTweet[], userId: string) {
     { root: FeedTweet; replies: FeedTweet[] }
   >();
 
-  [...feed]
+  const rootTweets = feed.filter((t) => !t.parentId);
+
+  rootTweets
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
     .forEach((tweet) => {
       const allReplies = collectReplies(tweet);
-      if (allReplies.length > 0 && hasUserReply(tweet, userId)) {
-        threadMap.set(tweet.id, {
-          root: tweet,
-          replies: allReplies,
-        });
-      }
+      if (allReplies.length === 0) return;
+
+      if (!hasUserReply(tweet, userId)) return;
+
+      threadMap.set(tweet.id, {
+        root: tweet,
+        replies: allReplies,
+      });
     });
 
   return threadMap;

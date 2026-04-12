@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import type { LikeProps } from "../types";
+import type { LikedTweetItemProps } from "../types";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
 import { LikeIcon } from "../utils/icons/LikeIcon";
 import { CalendarIcon } from "../utils/icons/CalendarIcon";
@@ -7,7 +7,7 @@ import { timeAgo } from "../utils/timeAgo";
 import { COLORS } from "../../../theme/colors";
 import { ProfileLink } from "./ProfileLink";
 
-export function LikedTweetItem({ tweet }: LikeProps) {
+export function LikedTweetItem({ tweet }: LikedTweetItemProps) {
   return (
     <Box
       className="profile-likes"

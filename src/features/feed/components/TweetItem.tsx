@@ -7,6 +7,8 @@ import { ReplyIcon } from "../utils/icons/ReplyIcon";
 import { COLORS } from "../../../theme/colors";
 import { TrashIcon } from "../utils/icons/TrashIcon";
 import { ProfileLink } from "./ProfileLink";
+import type { RootState } from "../../../store/store";
+import { useSelector } from "react-redux";
 
 export function TweetItem({
   tweet,
@@ -14,6 +16,10 @@ export function TweetItem({
   onReply,
   onDelete,
 }: TweetItemProps) {
+  const loggedUserId = useSelector((state: RootState) => state.auth.user?.id);
+
+  const isOwner = loggedUserId === tweet.userId;
+
   return (
     <Box
       className="profile-tweets"
@@ -72,26 +78,28 @@ export function TweetItem({
             >
               <ReplyIcon />
               <Typography variant="caption" sx={{ paddingTop: "0.2rem" }}>
-                {tweet.repliesCount ?? 0}
+                {tweet.repliesCount}
               </Typography>
             </Box>
           </Box>
 
-          <Box
-            className="delete-icon"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              marginLeft: "auto",
-              opacity: 0,
-              transition: "opacity 0.2s",
-              cursor: "pointer",
-              "&:hover svg": { fill: COLORS.error },
-            }}
-            onClick={() => onDelete(tweet.id)}
-          >
-            <TrashIcon />
-          </Box>
+          {isOwner && (
+            <Box
+              className="delete-icon"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                marginLeft: "auto",
+                opacity: 0,
+                transition: "opacity 0.2s",
+                cursor: "pointer",
+                "&:hover svg": { fill: COLORS.error },
+              }}
+              onClick={() => onDelete(tweet.id)}
+            >
+              <TrashIcon />
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

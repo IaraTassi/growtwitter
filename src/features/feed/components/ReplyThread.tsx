@@ -57,7 +57,7 @@ export function ReplyThread({
             >
               <ReplyThread
                 root={reply}
-                replies={reply.replies}
+                replies={reply.replies ?? []}
                 currentUserId={currentUserId}
               />
             </Box>
