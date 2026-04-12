@@ -219,23 +219,25 @@ export interface TrendingItemProps {
   };
 }
 
-export interface SuggestedUser extends FeedUser {
-  following: {
-    followerId: string;
-    followingId: string;
-    createdAt: string;
-  }[];
-  followers: {
-    followerId: string;
-    followingId: string;
-    createdAt: string;
-  }[];
-  isFollowing?: boolean;
-}
-
-export interface SuggestedUsersContainerProps {
+export type UseExplorerParams = {
   token: string;
   currentUserId: string;
+};
+
+export type UserWithFollowing = FeedUser & {
+  following?: Follow[];
+};
+
+export interface ExplorerTimelineProps {
+  users: SuggestedUser[];
+  remaining: number;
+  loading: boolean;
+  onToggleFollow: (userId: string) => void;
+  onLoadMore: () => void;
+}
+
+export interface SuggestedUser extends FeedUser {
+  isFollowing: boolean;
 }
 
 export interface SuggestedUsersListProps {
