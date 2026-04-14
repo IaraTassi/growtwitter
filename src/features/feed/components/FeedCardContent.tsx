@@ -17,11 +17,14 @@ export function FeedCardContent({
   isLastInThread,
   onReplyClick,
 }: FeedCardContentProps) {
+  const isLast = isLastInThread ?? false;
   const variant = tweet.user.imageUrl ? "primary" : "secondary";
-  const isVerified = !!tweet.user.imageUrl;
+  const isParentVerified = !!parentTweet?.user.imageUrl;
+
   const handleLikeClick = () => {
     onLike(tweet.id);
   };
+
   const handleReplyClick = () => {
     onReplyClick?.(tweet.id);
   };
@@ -47,7 +50,7 @@ export function FeedCardContent({
           <CustomAvatar imageUrl={tweet.user.imageUrl} />
         </ProfileLink>
 
-        {showThreadLine && !isLastInThread && (
+        {showThreadLine && !isLast && (
           <Box
             sx={{
               position: "absolute",
@@ -120,7 +123,7 @@ export function FeedCardContent({
               <Box
                 component="span"
                 sx={{
-                  color: isVerified ? "primary.main" : "text.disabled",
+                  color: isParentVerified ? "primary.main" : "text.disabled",
                 }}
               >
                 @{parentTweet.user.userName}

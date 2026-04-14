@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HomeTimeline } from "../components/HomeTimeline";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
-import { useTimeline } from "../hooks/useTimeline";
 import { useAppDispatch } from "../../../hooks/redux";
 import {
   selectFeedError,
@@ -15,6 +14,8 @@ import {
   fetchFeed,
   toggleLikeThunk,
 } from "../store/feedThunks";
+import { buildFollowingTimeline } from "../builders/buildFollowingTimeline";
+import { buildForYouTimeline } from "../builders/buildForYouTimeline";
 
 export function FeedPage() {
   const dispatch = useAppDispatch();
@@ -33,7 +34,13 @@ export function FeedPage() {
     }
   }, [dispatch, token]);
 
-  const timelineItems = useTimeline(tweets, tab, user?.id);
+  const timelineItems = useMemo(() => {
+    if (tab === "following") {
+      return buildFollowingTimeline(tweets, user?.id);
+    }
+
+    return buildForYouTimeline(tweets);
+  }, [tweets, tab, user?.id]);
 
   const handleLike = (tweetId: string) => {
     dispatch(toggleLikeThunk(tweetId));

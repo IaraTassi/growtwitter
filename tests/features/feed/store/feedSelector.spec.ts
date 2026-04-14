@@ -3,8 +3,6 @@ import {
   selectFeedTweets,
   selectFeedLoading,
   selectFeedError,
-  selectLikedTweets,
-  selectReplies,
 } from "../../../../src/features/feed/store/feedSelectors";
 import type { FeedTweet } from "../../../../src/features/feed/types";
 import { RootState } from "../../../../src/store/store";
@@ -89,117 +87,6 @@ describe("feedSelectors", () => {
       };
 
       expect(selectFeedError(state)).toBe("Erro");
-    });
-  });
-
-  describe("feedSelectors - selectLikedTweets", () => {
-    it("should return only tweets with isLiked true", () => {
-      const state = {
-        ...mockState,
-        feed: {
-          ...mockState.feed,
-          tweets: [
-            createMockTweet({ id: "1", isLiked: false }),
-            createMockTweet({ id: "2", isLiked: true }),
-          ],
-        },
-      };
-
-      const liked = selectLikedTweets(state);
-
-      expect(liked).toHaveLength(1);
-      expect(liked[0].id).toBe("2");
-    });
-
-    it("should return empty array when no tweets are liked", () => {
-      const state = {
-        ...mockState,
-        feed: {
-          ...mockState.feed,
-          tweets: [createMockTweet({ id: "1", isLiked: false })],
-        },
-      };
-
-      const liked = selectLikedTweets(state);
-
-      expect(liked).toHaveLength(0);
-    });
-
-    it("should return multiple liked tweets", () => {
-      const state = {
-        ...mockState,
-        feed: {
-          ...mockState.feed,
-          tweets: [
-            createMockTweet({ id: "1", isLiked: true }),
-            createMockTweet({ id: "2", isLiked: true }),
-            createMockTweet({ id: "3", isLiked: false }),
-          ],
-        },
-      };
-
-      const liked = selectLikedTweets(state);
-
-      expect(liked).toHaveLength(2);
-      expect(liked.map((t) => t.id)).toEqual(["1", "2"]);
-    });
-
-    it("should not sort tweets (keeps original order)", () => {
-      const state = {
-        ...mockState,
-        feed: {
-          ...mockState.feed,
-          tweets: [
-            createMockTweet({ id: "1", isLiked: true }),
-            createMockTweet({ id: "2", isLiked: true }),
-          ],
-        },
-      };
-
-      const liked = selectLikedTweets(state);
-
-      expect(liked[0].id).toBe("1");
-      expect(liked[1].id).toBe("2");
-    });
-  });
-
-  describe("feedSelectors - selectFeedReplies", () => {
-    it("should return all replies for a given tweet", () => {
-      const tweetWithReplies = createMockTweet({
-        id: "3",
-        replies: [
-          createMockTweet({ id: "3-1", parentId: "3" }),
-          createMockTweet({ id: "3-2", parentId: "3" }),
-        ],
-      });
-
-      const state: RootState = {
-        ...mockState,
-        feed: {
-          ...mockState.feed,
-          tweets: [createMockTweet({ id: "1" }), tweetWithReplies],
-        },
-      };
-
-      const replies = selectReplies(state);
-      const repliesForTweet3 = replies.filter((r) => r.parentId === "3");
-
-      expect(repliesForTweet3).toHaveLength(2);
-      expect(repliesForTweet3.map((r) => r.id)).toEqual(["3-1", "3-2"]);
-    });
-
-    it("should return empty array when there are no replies", () => {
-      const state: RootState = {
-        ...mockState,
-        feed: {
-          ...mockState.feed,
-          tweets: [createMockTweet({ id: "1" })],
-        },
-      };
-
-      const replies = selectReplies(state);
-
-      expect(replies).toHaveLength(0);
     });
   });
 });

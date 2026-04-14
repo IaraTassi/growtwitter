@@ -1,25 +1,18 @@
 import { Box, Typography } from "@mui/material";
-import type { FeedTweet, ThreadItemProps } from "../types";
+import type { FeedTweet, ThreadListProps } from "../types";
 import { FeedCardContent } from "./FeedCardContent";
-import { useState } from "react";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { useExpanded } from "../hooks/useExpanded";
 
-export function ThreadItem({ root, onLike, onReplyClick }: ThreadItemProps) {
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+export function ThreadList({ root, onLike, onReplyClick }: ThreadListProps) {
+  const { toggle, isExpanded } = useExpanded();
 
-  const toggleExpand = (id: string) =>
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
-
-  const renderReplies = (replies: FeedTweet[], parentContinues: boolean) =>
-    replies.map((reply, index) => {
-      const hasChildren = reply.replies.length > 0;
-      const isExpanded = expanded[reply.id];
-      const isLast = index === replies.length - 1;
-
-      const shouldContinueLine =
-        !isLast || parentContinues || (hasChildren && isExpanded);
+  const renderReplies = (replies: FeedTweet[]) =>
+    replies.map((reply) => {
+      const hasChildren = (reply.replies?.length ?? 0) > 0;
+      const expanded = isExpanded(reply.id);
 
       return (
         <Box key={reply.id}>
@@ -28,7 +21,7 @@ export function ThreadItem({ root, onLike, onReplyClick }: ThreadItemProps) {
             onLike={onLike}
             onReplyClick={onReplyClick}
             showThreadLine
-            isLastInThread={!shouldContinueLine}
+            isLastInThread={!hasChildren || !expanded}
           />
 
           {hasChildren && (
@@ -49,26 +42,24 @@ export function ThreadItem({ root, onLike, onReplyClick }: ThreadItemProps) {
                   color: "primary.main",
                 },
               }}
-              onClick={() => toggleExpand(reply.id)}
+              onClick={() => toggle(reply.id)}
             >
-              {isExpanded ? (
+              {expanded ? (
                 <ExpandLessIcon fontSize="inherit" />
               ) : (
                 <ExpandMoreIcon fontSize="inherit" />
               )}
 
               <Typography fontSize="inherit">
-                {isExpanded
+                {expanded
                   ? "Ocultar respostas"
                   : `Ver mais respostas (${reply.replies.length})`}
               </Typography>
             </Box>
           )}
 
-          {hasChildren && isExpanded && (
-            <Box>
-              {renderReplies(reply.replies, !isLast || parentContinues)}
-            </Box>
+          {hasChildren && expanded && (
+            <Box>{renderReplies(reply.replies)}</Box>
           )}
         </Box>
       );
@@ -81,10 +72,10 @@ export function ThreadItem({ root, onLike, onReplyClick }: ThreadItemProps) {
         onLike={onLike}
         onReplyClick={onReplyClick}
         showThreadLine={root.replies.length > 0}
-        isLastInThread={false}
+        isLastInThread={root.replies.length === 0}
       />
 
-      {renderReplies(root.replies, false)}
+      {renderReplies(root.replies)}
     </Box>
   );
 }

@@ -2,7 +2,7 @@ import type { FeedContentProps } from "../types";
 import { FeedTabs } from "./FeedTabs";
 import { FeedCardContent } from "./FeedCardContent";
 import { Box, Typography } from "@mui/material";
-import { ThreadItem } from "./TheadItem";
+import { ThreadList } from "./TheadList";
 import { FeedBlock } from "./FeedBlock";
 import { useState } from "react";
 import { ComposerModal } from "./ComposerModal";
@@ -91,6 +91,7 @@ export function HomeTimeline({
                   />
                   <FeedCardContent
                     tweet={item.reply}
+                    parentTweet={item.root}
                     onLike={onLike}
                     onReplyClick={handleOpenReply}
                     showReplyLabel
@@ -106,7 +107,7 @@ export function HomeTimeline({
                   showBottomDivider
                   key={item.root.id}
                 >
-                  <ThreadItem
+                  <ThreadList
                     root={item.root}
                     onLike={onLike}
                     onReplyClick={handleOpenReply}

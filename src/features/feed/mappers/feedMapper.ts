@@ -3,25 +3,21 @@ import type { FeedTweet, FeedTweetResponse, FeedUser } from "../types";
 export function mapFeedTweet(
   tweet: FeedTweetResponse,
   loggedUserId?: string,
-  parentUser?: FeedUser | null,
 ): FeedTweet {
   const likes = tweet.likes ?? [];
 
-  const safeUser: FeedUser = tweet.user ??
-    parentUser ?? {
-      id: tweet.userId,
-      name: "Usuário",
-      userName: "unknown",
-      email: "",
-      imageUrl: null,
-      createdAt: tweet.createdAt,
-      updatedAt: tweet.updatedAt,
-    };
-
-  const replyToUser = parentUser ?? null;
+  const safeUser: FeedUser = tweet.user ?? {
+    id: tweet.userId,
+    name: "Usuário",
+    userName: "unknown",
+    email: "",
+    imageUrl: null,
+    createdAt: tweet.createdAt,
+    updatedAt: tweet.updatedAt,
+  };
 
   const sortedReplies = [...(tweet.replies ?? [])].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
 
   return {
@@ -38,11 +34,7 @@ export function mapFeedTweet(
       : false,
 
     repliesCount: tweet.replies?.length ?? 0,
-    replyToId: tweet.parentId ?? null,
-    replyToUser,
-    replies: sortedReplies.map((reply) =>
-      mapFeedTweet(reply, loggedUserId, safeUser),
-    ),
+    replies: sortedReplies.map((reply) => mapFeedTweet(reply, loggedUserId)),
   };
 }
 

@@ -21,10 +21,10 @@ export interface FeedTweet {
   user: FeedUser;
   likesCount: number;
   repliesCount: number;
-  isLiked?: boolean;
+  isLiked: boolean;
   replies: FeedTweet[];
-  replyToId?: string | null;
-  replyToUser?: FeedUser | null;
+  replyToId?: string | null; // @deprecated
+  replyToUser?: FeedUser | null; // @deprecated
 }
 
 export interface Like {
@@ -52,18 +52,6 @@ export interface FeedTweetResponse {
   replies?: FeedTweetResponse[];
 }
 
-export interface TweetResponse {
-  id: string;
-  content: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  user: FeedUser;
-  likesCount: number;
-  repliesCount: number;
-  isLiked: boolean;
-}
-
 export type CreateReplyApiResponse = {
   ok: boolean;
   message: string;
@@ -73,8 +61,14 @@ export type CreateReplyApiResponse = {
 export type CreateTweetApiResponse = {
   ok: boolean;
   message: string;
-  tweet: TweetResponse;
+  tweet: FeedTweetResponse;
 };
+
+export interface FeedState {
+  tweets: FeedTweet[];
+  loading: boolean;
+  error: string | null;
+}
 
 export type TabType = "foryou" | "following";
 
@@ -110,11 +104,30 @@ export interface FeedBlockProps {
   children: React.ReactNode;
 }
 
-export interface ThreadItemProps {
+export interface ThreadListProps {
   root: FeedTweet;
   onLike: (id: string) => void;
   onReplyClick?: (tweetId: string) => void;
 }
+
+export type TimelineItem =
+  | {
+      kind: "following";
+      root: FeedTweet;
+    }
+  | {
+      kind: "foryou-simple";
+      root: FeedTweet;
+    }
+  | {
+      kind: "foryou-single-reply";
+      root: FeedTweet;
+      reply: FeedTweet;
+    }
+  | {
+      kind: "foryou-thread";
+      root: FeedTweet;
+    };
 
 export interface AppModalProps {
   open: boolean;
@@ -140,34 +153,6 @@ export interface PrimaryButtonProps {
   variant?: "contained" | "outlined";
   fullWidth?: boolean;
   sx?: object;
-}
-
-export type TimelineItem =
-  | {
-      kind: "following";
-      root: FeedTweet;
-    }
-  | {
-      kind: "foryou-simple";
-      root: FeedTweet;
-      replies: FeedTweet[];
-    }
-  | {
-      kind: "foryou-single-reply";
-      root: FeedTweet;
-      reply: FeedTweet;
-    }
-  | {
-      kind: "foryou-thread";
-      root: FeedTweet;
-      replies: FeedTweet[];
-      hasNestedReplies: boolean;
-    };
-
-export interface FeedState {
-  tweets: FeedTweet[];
-  loading: boolean;
-  error: string | null;
 }
 
 export interface SidebarNavItemProps {
