@@ -230,6 +230,29 @@ export interface SuggestedUsersListProps {
   onToggleFollow: (userId: string) => void;
 }
 
+export interface ProfileTweetResponseDto {
+  id: string;
+  content: string;
+  createdAt: string;
+
+  user: {
+    id: string;
+    name: string;
+    userName: string;
+    imageUrl?: string;
+  };
+
+  parent?: {
+    id: string;
+    userName: string;
+  };
+
+  likesCount: number;
+  repliesCount: number;
+
+  likedByMe: boolean;
+}
+
 export interface ProfileUser extends FeedUser {
   tweets: FeedTweetResponse[];
   likes: Like[];
