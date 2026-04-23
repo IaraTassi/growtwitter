@@ -23,8 +23,6 @@ export interface FeedTweet {
   repliesCount: number;
   isLiked: boolean;
   replies: FeedTweet[];
-  replyToId?: string | null; // @deprecated
-  replyToUser?: FeedUser | null; // @deprecated
 }
 
 export interface Like {
@@ -242,29 +240,49 @@ export interface ProfileTweetResponseDto {
     imageUrl?: string;
   };
 
-  parent?: {
-    id: string;
+  likesCount: number;
+  repliesCount: number;
+}
+
+export interface ProfileReplyResponseDto {
+  id: string;
+  content: string;
+  createdAt: string;
+
+  user: {
+    name: string;
     userName: string;
+    imageUrl?: string;
+  };
+
+  replies: ProfileReplyResponseDto[];
+}
+
+export interface ProfileLikedTweetResponseDto {
+  id: string;
+  content: string;
+  createdAt: string;
+
+  user: {
+    id: string;
+    name: string;
+    userName: string;
+    imageUrl?: string;
   };
 
   likesCount: number;
-  repliesCount: number;
-
-  likedByMe: boolean;
 }
 
+export type ReplyTree = ProfileReplyResponseDto;
+
 export interface ProfileUser extends FeedUser {
-  tweets: FeedTweetResponse[];
-  likes: Like[];
   followers: Follow[];
   following: Follow[];
+  tweetsCount?: number;
 }
 
 export interface ProfileTimelineProps {
   user: ProfileUser;
-  tweets: FeedTweet[];
-  feed: FeedTweet[];
-  likes: Like[];
 }
 
 export interface ProfileHeaderProps {
@@ -289,12 +307,11 @@ export interface ProfileTabsProps {
 }
 
 export interface TweetsTabProps {
-  user: ProfileUser;
-  tweets: FeedTweet[];
+  userId: string;
 }
 
 export interface TweetItemProps {
-  tweet: FeedTweet;
+  tweet: ProfileTweetResponseDto;
   avatarSize: number;
   onReply: (tweetId: string) => void;
   onDelete: (tweetId: string) => void;
@@ -302,22 +319,18 @@ export interface TweetItemProps {
 
 export interface RepliesTabProps {
   userId: string;
-  tweets: FeedTweet[];
 }
 
 export interface ReplyThreadProps {
-  root: FeedTweet;
-  replies: FeedTweet[];
-  currentUserId: string;
+  node: ProfileReplyResponseDto;
 }
 
 export interface LikesTabProps {
-  likes: Like[];
-  feed: FeedTweet[];
+  userId: string;
 }
 
 export interface LikedTweetItemProps {
-  tweet: FeedTweet;
+  tweet: ProfileLikedTweetResponseDto;
 }
 
 export interface ProfileLinkProps {

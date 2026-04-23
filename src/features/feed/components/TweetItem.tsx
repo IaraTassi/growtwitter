@@ -18,7 +18,7 @@ export function TweetItem({
 }: TweetItemProps) {
   const loggedUserId = useSelector((state: RootState) => state.auth.user?.id);
 
-  const isOwner = loggedUserId === tweet.userId;
+  const isOwner = loggedUserId === tweet.user.id;
 
   return (
     <Box

@@ -1,13 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import { ReplyThread } from "./ReplyThread";
-import { mapThreads } from "../utils/tweetUtils";
 import type { RepliesTabProps } from "../types";
+import { useProfileReplies } from "../hooks/useProfileReplies";
 
-export function RepliesTab({ userId, tweets }: RepliesTabProps) {
-  const threadsMap = mapThreads(tweets, userId);
-  const threads = Array.from(threadsMap.values());
+export function RepliesTab({ userId }: RepliesTabProps) {
+  const { data, loading } = useProfileReplies(userId);
 
-  if (threads.length === 0) {
+  if (loading) {
+    return (
+      <Box>
+        <Typography sx={{ px: 3, pt: 2 }}>Carregando respostas...</Typography>
+      </Box>
+    );
+  }
+
+  if (!data.length) {
     return (
       <Box className="replies-tab" sx={{ p: 4 }}>
         <Box component="header">
@@ -34,12 +41,10 @@ export function RepliesTab({ userId, tweets }: RepliesTabProps) {
 
   return (
     <Box>
-      {threads.map(({ root, replies }) => (
+      {data.map((node) => (
         <ReplyThread
-          key={root.id}
-          root={root}
-          replies={replies}
-          currentUserId={userId}
+          key={node.id}
+          node={node}
         />
       ))}
     </Box>

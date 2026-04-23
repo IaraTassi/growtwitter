@@ -3,16 +3,11 @@ import type { ReplyThreadProps } from "../types";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
 import { ProfileLink } from "./ProfileLink";
 
-export function ReplyThread({
-  root,
-  replies,
-  currentUserId,
-}: ReplyThreadProps) {
+export function ReplyThread({ node }: ReplyThreadProps) {
   const avatarSize = 28;
 
   return (
     <Box
-      key={root.id}
       className="profile-replies"
       sx={{
         borderBottom: 1,
@@ -23,28 +18,28 @@ export function ReplyThread({
       }}
     >
       <Box component="header" display="flex" alignItems="center" gap={1}>
-        <ProfileLink userId={root.user.id}>
+        <ProfileLink userId={node.user.userName}>
           <CustomAvatar
-            imageUrl={root.user.imageUrl}
+            imageUrl={node.user.imageUrl}
             width={avatarSize}
             height={avatarSize}
           />
         </ProfileLink>
-        <ProfileLink userId={root.user.id}>
+        <ProfileLink userId={node.user.userName}>
           <Typography sx={{ fontSize: "0.75rem", fontWeight: 800 }}>
-            {root.user.name}
+            {node.user.name}
           </Typography>
         </ProfileLink>
       </Box>
 
       <Box component="main">
         <Typography sx={{ fontSize: "0.75rem", fontWeight: 400, pl: "36px" }}>
-          {root.content}
+          {node.content}
         </Typography>
       </Box>
-      {replies.length > 0 && (
+      {node.replies.length > 0 && (
         <Box sx={{ mt: 1 }}>
-          {replies.map((reply) => (
+          {node.replies.map((reply) => (
             <Box
               key={reply.id}
               sx={{
@@ -55,11 +50,7 @@ export function ReplyThread({
                 borderColor: "divider",
               }}
             >
-              <ReplyThread
-                root={reply}
-                replies={reply.replies ?? []}
-                currentUserId={currentUserId}
-              />
+              <ReplyThread node={reply} />
             </Box>
           ))}
         </Box>

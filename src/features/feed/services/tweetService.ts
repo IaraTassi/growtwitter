@@ -1,4 +1,4 @@
-import type { CreateTweetApiResponse, TweetResponse } from "../types";
+import type { CreateTweetApiResponse, FeedTweetResponse } from "../types";
 import { authFetch } from "./authService";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
@@ -6,7 +6,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 export async function createTweet(
   token: string,
   content: string,
-): Promise<TweetResponse> {
+): Promise<FeedTweetResponse> {
   const response = await authFetch(
     `${BASE_URL}/api/tweets`,
     {

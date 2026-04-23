@@ -10,15 +10,10 @@ import { RepliesTab } from "./RepliesTab";
 import { MediaTab } from "./MediaTab";
 import { LikesTab } from "./LikesTab";
 
-export function ProfileTimeline({
-  user,
-  tweets = [],
-  feed = [],
-  likes = [],
-}: ProfileTimelineProps) {
+export function ProfileTimeline({ user }: ProfileTimelineProps) {
   const [tab, setTab] = useState<ProfileTab>("tweets");
 
-  const tweetsCount = tweets.filter((t) => !t.parentId).length;
+  const tweetsCount = user.tweetsCount ?? 0;
 
   return (
     <Box component="section" aria-labelledby="profile-timeline-heading">
@@ -38,13 +33,13 @@ export function ProfileTimeline({
         <ProfileTabs tab={tab} setTab={setTab} />
 
         <Box>
-          {tab === "tweets" && <TweetsTab tweets={tweets} user={user} />}
+          {tab === "tweets" && <TweetsTab userId={user.id} />}
 
-          {tab === "replies" && <RepliesTab tweets={feed} userId={user.id} />}
+          {tab === "replies" && <RepliesTab userId={user.id} />}
 
           {tab === "media" && <MediaTab />}
 
-          {tab === "likes" && <LikesTab likes={likes} feed={feed} />}
+          {tab === "likes" && <LikesTab userId={user.id} />}
         </Box>
       </Box>
     </Box>

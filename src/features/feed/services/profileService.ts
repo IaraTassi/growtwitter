@@ -1,8 +1,16 @@
+import type {
+  ProfileLikedTweetResponseDto,
+  ProfileReplyResponseDto,
+  ProfileTweetResponseDto,
+} from "../types";
 import { authFetch } from "./authService";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function getProfileTweets(userId: string, token: string) {
+export async function getProfileTweets(
+  userId: string,
+  token: string,
+): Promise<ProfileTweetResponseDto[]> {
   const response = await authFetch(`${BASE_URL}/api/profile/${userId}/tweets`, {
     method: "GET",
     headers: {
@@ -23,7 +31,10 @@ export async function getProfileTweets(userId: string, token: string) {
   return data.tweets;
 }
 
-export async function getProfileReplies(userId: string, token: string) {
+export async function getProfileReplies(
+  userId: string,
+  token: string,
+): Promise<ProfileReplyResponseDto[]> {
   const response = await authFetch(
     `${BASE_URL}/api/profile/${userId}/replies`,
     {
@@ -47,7 +58,10 @@ export async function getProfileReplies(userId: string, token: string) {
   return data.replies;
 }
 
-export async function getProfileLikes(userId: string, token: string) {
+export async function getProfileLikes(
+  userId: string,
+  token: string,
+): Promise<ProfileLikedTweetResponseDto[]> {
   const response = await authFetch(`${BASE_URL}/api/profile/${userId}/likes`, {
     method: "GET",
     headers: {

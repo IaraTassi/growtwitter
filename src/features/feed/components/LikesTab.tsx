@@ -1,16 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import { LikedTweetItem } from "./LikedTweetItem";
-import { flattenTweets } from "../utils/tweetUtils";
 import type { LikesTabProps } from "../types";
+import { useProfileLikes } from "../hooks/useProfileLikes";
 
-export function LikesTab({ likes, feed }: LikesTabProps) {
-  const likedIds = new Set(likes.map((l) => l.tweetId));
+export function LikesTab({ userId }: LikesTabProps) {
+  const { data, loading } = useProfileLikes(userId);
 
-  const allTweets = flattenTweets(feed);
+  if (loading) {
+    return (
+      <Box>
+        <Typography sx={{ px: 3, pt: 2 }}>Carregando curtidas...</Typography>
+      </Box>
+    );
+  }
 
-  const likedTweets = allTweets.filter((t) => likedIds.has(t.id));
-
-  if (likedTweets.length === 0) {
+  if (data.length === 0) {
     return (
       <Box className="likes-tab" sx={{ p: 4 }}>
         <Box component="header">
@@ -42,7 +46,7 @@ export function LikesTab({ likes, feed }: LikesTabProps) {
 
   return (
     <Box>
-      {likedTweets.map((tweet) => (
+      {data.map((tweet) => (
         <LikedTweetItem key={tweet.id} tweet={tweet} />
       ))}
     </Box>
