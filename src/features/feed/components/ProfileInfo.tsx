@@ -2,8 +2,15 @@ import { Box, Typography } from "@mui/material";
 import type { ProfileInfoProps } from "../types";
 import { CalendarIcon } from "../utils/icons/CalendarIcon";
 import { formatJoinDate } from "../utils/timeAgo";
+import { PrimaryButton } from "./PrimaryButton";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../store/store";
 
-export function ProfileInfo({ user }: ProfileInfoProps) {
+export function ProfileInfo({ user, onToggleFollow }: ProfileInfoProps) {
+  const loggedUserId = useSelector((s: RootState) => s.auth.user?.id);
+
+  const isOwnProfile = loggedUserId === user.id;
+
   const followersCount = user.followers?.length ?? 0;
   const followingCount = user.following?.length ?? 0;
 
@@ -81,6 +88,17 @@ export function ProfileInfo({ user }: ProfileInfoProps) {
           </Typography>
         </Box>
       </Box>
+
+      {!isOwnProfile && (
+        <Box sx={{ mt: 1.2 }}>
+          <PrimaryButton
+            variant={user.isFollowing ? "outlined" : "contained"}
+            onClick={() => onToggleFollow(user.id)}
+          >
+            {user.isFollowing ? "Seguindo" : "Seguir"}
+          </PrimaryButton>
+        </Box>
+      )}
     </Box>
   );
 }

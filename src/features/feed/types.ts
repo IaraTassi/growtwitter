@@ -285,6 +285,7 @@ export interface ProfileUser extends FeedUser {
   followers: Follow[];
   following: Follow[];
   tweetsCount?: number;
+  isFollowing: boolean;
 }
 
 export interface ProfileTimelineProps {
@@ -303,6 +304,7 @@ export interface ProfileBannerProps extends CustomAvatarProps {
 
 export interface ProfileInfoProps {
   user: ProfileUser;
+  onToggleFollow: (userId: string) => void;
 }
 
 export type ProfileTab = "tweets" | "replies" | "media" | "likes";
