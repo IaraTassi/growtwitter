@@ -18,14 +18,14 @@ export function ReplyThread({ node }: ReplyThreadProps) {
       }}
     >
       <Box component="header" display="flex" alignItems="center" gap={1}>
-        <ProfileLink userId={node.user.userName}>
+        <ProfileLink userId={node.user.id}>
           <CustomAvatar
             imageUrl={node.user.imageUrl}
             width={avatarSize}
             height={avatarSize}
           />
         </ProfileLink>
-        <ProfileLink userId={node.user.userName}>
+        <ProfileLink userId={node.user.id}>
           <Typography sx={{ fontSize: "0.75rem", fontWeight: 800 }}>
             {node.user.name}
           </Typography>

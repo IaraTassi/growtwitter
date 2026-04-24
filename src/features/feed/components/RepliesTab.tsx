@@ -2,9 +2,12 @@ import { Box, Typography } from "@mui/material";
 import { ReplyThread } from "./ReplyThread";
 import type { RepliesTabProps } from "../types";
 import { useProfileReplies } from "../hooks/useProfileReplies";
+import { filterReplyRoots } from "../utils/profile.utils";
 
 export function RepliesTab({ userId }: RepliesTabProps) {
   const { data, loading } = useProfileReplies(userId);
+
+  const roots = filterReplyRoots(data); 
 
   if (loading) {
     return (
@@ -41,11 +44,8 @@ export function RepliesTab({ userId }: RepliesTabProps) {
 
   return (
     <Box>
-      {data.map((node) => (
-        <ReplyThread
-          key={node.id}
-          node={node}
-        />
+      {roots.map((node) => (
+        <ReplyThread key={node.id} node={node} />
       ))}
     </Box>
   );

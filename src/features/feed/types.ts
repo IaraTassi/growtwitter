@@ -250,6 +250,7 @@ export interface ProfileReplyResponseDto {
   createdAt: string;
 
   user: {
+    id: string;
     name: string;
     userName: string;
     imageUrl?: string;
