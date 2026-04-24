@@ -45,26 +45,38 @@ export function TweetItem({
         />
       </ProfileLink>
 
-      <Box component="main" sx={{ flex: 1 }}>
-        <Typography sx={{ fontSize: "0.75rem", fontWeight: 400 }}>
-          {tweet.content}
-        </Typography>
+      <Box sx={{ flex: 1 }}>
+        <Box display="flex" alignItems="center" gap={1}>
+          <ProfileLink userId={tweet.user.id}>
+            <Typography sx={{ fontSize: "0.75rem", fontWeight: 800 }}>
+              {tweet.user.name}
+            </Typography>
+          </ProfileLink>
+        </Box>
+
+        <Box component="main">
+          <Typography
+            sx={{ fontSize: "0.75rem", fontWeight: 400, mt: "0.2rem" }}
+          >
+            {tweet.content}
+          </Typography>
+        </Box>
 
         <Box
           component="footer"
           sx={{
             display: "flex",
+            justifyContent: "space-between",
             marginTop: "0.3rem",
-            gap: 4,
             color: "text.disabled",
             fontSize: "0.75rem",
             fontWeight: 500,
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Box display="flex" alignItems="center" gap={2}>
             <Box display="flex" alignItems="center" gap={1}>
               <CalendarIcon />
-              <Typography variant="caption" sx={{ paddingTop: "0.2rem" }}>
+              <Typography variant="caption">
                 {timeAgo(tweet.createdAt)}
               </Typography>
             </Box>
@@ -87,9 +99,6 @@ export function TweetItem({
             <Box
               className="delete-icon"
               sx={{
-                display: "flex",
-                alignItems: "center",
-                marginLeft: "auto",
                 opacity: 0,
                 transition: "opacity 0.2s",
                 cursor: "pointer",

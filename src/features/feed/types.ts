@@ -271,6 +271,11 @@ export interface ProfileLikedTweetResponseDto {
     imageUrl?: string;
   };
 
+  parent?: {
+    id: string;
+    userName: string;
+  };
+
   likesCount: number;
 }
 

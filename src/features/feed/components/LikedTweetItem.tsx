@@ -36,6 +36,18 @@ export function LikedTweetItem({ tweet }: LikedTweetItemProps) {
           </ProfileLink>
         </Box>
 
+        {tweet.parent?.userName && (
+          <Typography
+            sx={{
+              fontSize: "0.7rem",
+              color: "text.disabled",
+              mb: "0.1rem",
+            }}
+          >
+            Respondendo a @{tweet.parent.userName}
+          </Typography>
+        )}
+
         <Box component="main">
           <Typography
             sx={{ fontSize: "0.75rem", fontWeight: 400, mt: "0.2rem" }}
