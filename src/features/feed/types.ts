@@ -304,6 +304,7 @@ export interface ProfileBannerProps extends CustomAvatarProps {
 
 export interface ProfileInfoProps {
   user: ProfileUser;
+  followersCount: number;
   onToggleFollow: (userId: string) => void;
 }
 

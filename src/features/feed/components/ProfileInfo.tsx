@@ -6,12 +6,15 @@ import { PrimaryButton } from "./PrimaryButton";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 
-export function ProfileInfo({ user, onToggleFollow }: ProfileInfoProps) {
+export function ProfileInfo({
+  user,
+  followersCount,
+  onToggleFollow,
+}: ProfileInfoProps) {
   const loggedUserId = useSelector((s: RootState) => s.auth.user?.id);
 
   const isOwnProfile = loggedUserId === user.id;
 
-  const followersCount = user.followers?.length ?? 0;
   const followingCount = user.following?.length ?? 0;
 
   return (
