@@ -45,5 +45,5 @@ export function ProfilePage() {
   if (error || !user)
     return <Typography sx={{ px: 3, pt: 2 }}>Erro</Typography>;
 
-  return <ProfileTimeline user={user} />;
+  return <ProfileTimeline key={user.id} user={user} />;
 }

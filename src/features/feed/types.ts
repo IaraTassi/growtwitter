@@ -279,11 +279,13 @@ export interface ProfileLikedTweetResponseDto {
   likesCount: number;
 }
 
-export type ReplyTree = ProfileReplyResponseDto;
-
 export interface ProfileUser extends FeedUser {
   followers: Follow[];
   following: Follow[];
+
+  followersCount: number;
+  followingCount: number;
+
   tweetsCount?: number;
   isFollowing: boolean;
 }

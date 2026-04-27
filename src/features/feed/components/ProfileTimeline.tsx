@@ -11,7 +11,7 @@ import { MediaTab } from "./MediaTab";
 import { LikesTab } from "./LikesTab";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
-import { useFollow } from "../hooks/useFollow";
+import { useFollowUser } from "../hooks/useProfileFollowUser";
 
 export function ProfileTimeline({ user }: ProfileTimelineProps) {
   const [tab, setTab] = useState<ProfileTab>("tweets");
@@ -21,32 +21,17 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
   const loggedUserId = useSelector((s: RootState) => s.auth.user?.id);
   const token = useSelector((s: RootState) => s.auth.token);
 
-  const { toggleFollow } = useFollow(token ?? "");
+  const safeToken = token ?? undefined;
 
-  const baseIsFollowing =
-    user.followers?.some((f) => f.followerId === loggedUserId) ?? false;
-
-  const baseFollowersCount = user.followers?.length ?? 0;
-
-  const [localIsFollowing, setLocalIsFollowing] = useState(baseIsFollowing);
-
-  const [followersCount, setFollowersCount] = useState(baseFollowersCount);
-
-  const handleToggleFollow = async (userId: string) => {
-    await toggleFollow(userId, localIsFollowing, () => {
-      setLocalIsFollowing((prev) => {
-        const next = !prev;
-
-        setFollowersCount((count) => (next ? count + 1 : count - 1));
-
-        return next;
-      });
-    });
-  };
+  const { isFollowing, followersCount, handleToggleFollow } = useFollowUser(
+    user,
+    loggedUserId,
+    safeToken,
+  );
 
   const localUser = {
     ...user,
-    isFollowing: localIsFollowing,
+    isFollowing,
   };
 
   return (
@@ -59,7 +44,7 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
         <ProfileBanner imageUrl={user.imageUrl ?? ""} />
       </Box>
 
-      <Box key={user.id} sx={{ mt: 6 }}>
+      <Box sx={{ mt: 6 }}>
         <ProfileInfo
           user={localUser}
           followersCount={followersCount}
