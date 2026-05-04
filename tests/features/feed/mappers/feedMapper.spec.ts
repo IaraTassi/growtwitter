@@ -34,6 +34,8 @@ function createMockTweetResponse(
     likes: [],
     replies: [],
     parentId: null,
+    likesCount: 0,
+    repliesCount: 0,
     ...overrides,
   };
 }
@@ -52,6 +54,8 @@ describe("feedMapper", () => {
             updatedAt: "2026-03-04T16:34:25.840Z",
           },
         ],
+        likesCount: 1,
+        repliesCount: 0,
       });
 
       const result = mapFeedTweet(tweetResponse, loggedUserId);
@@ -114,6 +118,7 @@ describe("feedMapper", () => {
             updatedAt: "",
           },
         ],
+        likesCount: 1,
       });
 
       const result = mapFeedTweet(tweet);
@@ -123,8 +128,10 @@ describe("feedMapper", () => {
 
     it("should handle empty likes and replies safely", () => {
       const tweet = createMockTweetResponse({
-        likes: undefined,
-        replies: undefined,
+        likes: [],
+        replies: [],
+        likesCount: 0,
+        repliesCount: 0,
       });
 
       const result = mapFeedTweet(tweet);
@@ -140,6 +147,8 @@ describe("feedMapper", () => {
           { userId: "u1", tweetId: "1", createdAt: "", updatedAt: "" },
           { userId: "u2", tweetId: "1", createdAt: "", updatedAt: "" },
         ],
+        likesCount: 2,
+        repliesCount: 0,
       });
 
       const result = mapFeedTweet(tweet, "u1");

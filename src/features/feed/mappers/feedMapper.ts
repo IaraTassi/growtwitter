@@ -28,12 +28,12 @@ export function mapFeedTweet(
     createdAt: tweet.createdAt,
     updatedAt: tweet.updatedAt,
     user: safeUser,
-    likesCount: likes.length,
+    likesCount: tweet.likesCount ?? likes.length,
     isLiked: loggedUserId
       ? likes.some((like) => like.userId === loggedUserId)
       : false,
 
-    repliesCount: tweet.replies?.length ?? 0,
+    repliesCount: tweet.repliesCount ?? sortedReplies.length,
     replies: sortedReplies.map((reply) => mapFeedTweet(reply, loggedUserId)),
   };
 }
