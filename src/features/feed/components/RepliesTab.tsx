@@ -7,7 +7,7 @@ import { filterReplyRoots } from "../utils/profile.utils";
 export function RepliesTab({ userId }: RepliesTabProps) {
   const { data, loading } = useProfileReplies(userId);
 
-  const roots = filterReplyRoots(data); 
+  const roots = filterReplyRoots(data);
 
   if (loading) {
     return (

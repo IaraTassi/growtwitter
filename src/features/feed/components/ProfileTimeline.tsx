@@ -18,20 +18,17 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
 
   const tweetsCount = user.tweetsCount ?? 0;
 
-  const loggedUserId = useSelector((s: RootState) => s.auth.user?.id);
   const token = useSelector((s: RootState) => s.auth.token);
-
-  const safeToken = token ?? undefined;
 
   const { isFollowing, followersCount, handleToggleFollow } = useFollowUser(
     user,
-    loggedUserId,
-    safeToken,
+    token ?? undefined,
   );
 
   const localUser = {
     ...user,
     isFollowing,
+    followersCount,
   };
 
   return (

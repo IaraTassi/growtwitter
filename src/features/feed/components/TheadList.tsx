@@ -58,9 +58,7 @@ export function ThreadList({ root, onLike, onReplyClick }: ThreadListProps) {
             </Box>
           )}
 
-          {hasChildren && expanded && (
-            <Box>{renderReplies(reply.replies)}</Box>
-          )}
+          {hasChildren && expanded && <Box>{renderReplies(reply.replies)}</Box>}
         </Box>
       );
     });
