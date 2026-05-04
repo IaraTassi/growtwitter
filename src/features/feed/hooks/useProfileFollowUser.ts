@@ -2,32 +2,29 @@ import { useState } from "react";
 import type { ProfileUser } from "../types";
 import { useFollow } from "./useFollow";
 
-export function useFollowUser(
-  user: ProfileUser,
-  loggedUserId?: string,
-  token?: string,
-) {
+export function useFollowUser(user: ProfileUser, token?: string) {
   const { toggleFollow } = useFollow(token ?? "");
 
-  const baseIsFollowing =
-    user.followers?.some((f) => f.followerId === loggedUserId) ?? false;
+  const [localState, setLocalState] = useState<{
+    isFollowing: boolean;
+    followersCount: number;
+  } | null>(null);
 
-  const [isFollowing, setIsFollowing] = useState(baseIsFollowing);
+  const isFollowing = localState?.isFollowing ?? user.isFollowing;
 
-  const [followersCount, setFollowersCount] = useState(
-    user.followersCount ?? 0,
-  );
+  const followersCount = localState?.followersCount ?? user.followersCount ?? 0;
 
   const handleToggleFollow = async () => {
     if (!user.id) return;
 
     await toggleFollow(user.id, isFollowing, () => {
-      setIsFollowing((prev) => {
-        const next = !prev;
+      const next = !isFollowing;
 
-        setFollowersCount((c) => (next ? c + 1 : Math.max(0, c - 1)));
-
-        return next;
+      setLocalState({
+        isFollowing: next,
+        followersCount: next
+          ? followersCount + 1
+          : Math.max(0, followersCount - 1),
       });
     });
   };

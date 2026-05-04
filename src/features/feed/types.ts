@@ -48,6 +48,8 @@ export interface FeedTweetResponse {
   user: FeedUser;
   likes?: Like[];
   replies?: FeedTweetResponse[];
+  likesCount: number;
+  repliesCount: number;
 }
 
 export type CreateReplyApiResponse = {
@@ -209,6 +211,9 @@ export type UseExplorerParams = {
 
 export type UserWithFollowing = FeedUser & {
   following?: Follow[];
+  followers?: Follow[];
+  followersCount?: number;
+  followingCount?: number;
 };
 
 export interface ExplorerTimelineProps {
