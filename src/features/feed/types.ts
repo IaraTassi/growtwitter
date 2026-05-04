@@ -209,7 +209,7 @@ export type UseExplorerParams = {
   currentUserId: string;
 };
 
-export type UserWithFollowing = FeedUser & {
+export type UserWithRelations = FeedUser & {
   following?: Follow[];
   followers?: Follow[];
   followersCount?: number;
@@ -226,6 +226,7 @@ export interface ExplorerTimelineProps {
 
 export interface SuggestedUser extends FeedUser {
   isFollowing: boolean;
+  followersCount: number;
 }
 
 export interface SuggestedUsersListProps {
@@ -285,8 +286,8 @@ export interface ProfileLikedTweetResponseDto {
 }
 
 export interface ProfileUser extends FeedUser {
-  followers: Follow[];
-  following: Follow[];
+  followers?: Follow[];
+  following?: Follow[];
 
   followersCount: number;
   followingCount: number;

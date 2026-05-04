@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import type {
   SuggestedUser,
   UseExplorerParams,
-  UserWithFollowing,
+  UserWithRelations,
 } from "../types";
 import { useFollow } from "./useFollow";
 import { getUsers } from "../services/userService";
+import { mapUser } from "../mappers/userMapper";
 
 export function useExplorer({ token, currentUserId }: UseExplorerParams) {
   const [allUsers, setAllUsers] = useState<SuggestedUser[]>([]);
@@ -21,19 +22,11 @@ export function useExplorer({ token, currentUserId }: UseExplorerParams) {
       try {
         setLoading(true);
 
-        const users = (await getUsers(token)) as UserWithFollowing[];
-
-        const currentUser = users.find((u) => u.id === currentUserId);
-
-        const followingIds =
-          currentUser?.following?.map((f) => f.followingId) ?? [];
+        const users = (await getUsers(token)) as UserWithRelations[];
 
         const mappedUsers: SuggestedUser[] = users
           .filter((u) => u.id !== currentUserId)
-          .map((u) => ({
-            ...u,
-            isFollowing: followingIds.includes(u.id),
-          }));
+          .map((u) => mapUser(u, currentUserId));
 
         setAllUsers(mappedUsers);
       } catch (err) {
@@ -67,7 +60,15 @@ export function useExplorer({ token, currentUserId }: UseExplorerParams) {
     await toggleFollow(userId, isFollowing, () => {
       setAllUsers((prev) =>
         prev.map((u) =>
-          u.id === userId ? { ...u, isFollowing: !isFollowing } : u,
+          u.id === userId
+            ? {
+                ...u,
+                isFollowing: !isFollowing,
+                followersCount: isFollowing
+                  ? Math.max(0, u.followersCount - 1)
+                  : u.followersCount + 1,
+              }
+            : u,
         ),
       );
     });
