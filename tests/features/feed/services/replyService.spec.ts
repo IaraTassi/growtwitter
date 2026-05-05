@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { FeedTweetResponse } from "../../../../src/features/feed/types";
+import type { FeedTweetResponse } from "../../../../src/features/feed/types";
 import { createReply } from "../../../../src/features/feed/services/replyService";
 
 describe("replyService - createReply", () => {
@@ -31,6 +31,8 @@ describe("replyService - createReply", () => {
         },
         likes: [],
         replies: [],
+        likesCount: 0,
+        repliesCount: 0,
       },
     ];
 
@@ -78,6 +80,8 @@ describe("replyService - createReply", () => {
         },
         likes: [],
         replies: [],
+        likesCount: 0,
+        repliesCount: 0,
       },
     ];
 

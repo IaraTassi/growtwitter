@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { TweetResponse } from "../../../../src/features/feed/types";
+import type { FeedTweetResponse } from "../../../../src/features/feed/types";
 import {
   createTweet,
   deleteTweet,
@@ -17,7 +17,7 @@ describe("tweetService", () => {
 
   describe("tweetService - createTweet", () => {
     it("should return tweet when response is ok", async () => {
-      const mockResponse: TweetResponse = {
+      const mockResponse: FeedTweetResponse = {
         id: "1",
         content,
         userId: "u1",
@@ -32,7 +32,6 @@ describe("tweetService", () => {
           createdAt: "",
           updatedAt: "",
         },
-        isLiked: false,
         likesCount: 0,
         repliesCount: 0,
       };

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { FeedTweetResponse } from "../../../../src/features/feed/types";
+import type { FeedTweetResponse } from "../../../../src/features/feed/types";
 import { getFeed } from "../../../../src/features/feed/services/feedService";
 
 describe("feedService - getFeed", () => {
@@ -25,6 +25,8 @@ describe("feedService - getFeed", () => {
         },
         likes: [],
         replies: [],
+        likesCount: 0,
+        repliesCount: 0,
       },
     ];
 

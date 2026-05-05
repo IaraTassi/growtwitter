@@ -1,9 +1,9 @@
-import type { ProfileUser, SuggestedUser } from "../types";
+import type { ProfileUser, UserWithRelations } from "../types";
 import { authFetch } from "./authService";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
-export async function getUsers(token: string): Promise<SuggestedUser[]> {
+export async function getUsers(token: string): Promise<UserWithRelations[]> {
   const response = await authFetch(
     `${BASE_URL}/api/users`,
     { method: "GET" },

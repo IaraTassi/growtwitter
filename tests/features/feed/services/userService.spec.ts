@@ -5,7 +5,7 @@ import {
 } from "../../../../src/features/feed/services/userService";
 import type {
   ProfileUser,
-  SuggestedUser,
+  UserWithRelations,
 } from "../../../../src/features/feed/types";
 
 describe("userService", () => {
@@ -19,7 +19,7 @@ describe("userService", () => {
 
   describe("userService - getUsers", () => {
     it("should return users when response is ok", async () => {
-      const mockResponse: SuggestedUser[] = [
+      const mockResponse: UserWithRelations[] = [
         {
           id: "1",
           name: "User 1",
@@ -28,8 +28,7 @@ describe("userService", () => {
           imageUrl: "",
           createdAt: "",
           updatedAt: "",
-          following: [],
-          followers: [],
+          followersCount: 0,
         },
       ];
 
@@ -106,10 +105,11 @@ describe("userService", () => {
         imageUrl: "",
         createdAt: "",
         updatedAt: "",
-        tweets: [],
-        likes: [],
         followers: [],
         following: [],
+        followersCount: 0,
+        followingCount: 0,
+        isFollowing: false,
       };
 
       vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({

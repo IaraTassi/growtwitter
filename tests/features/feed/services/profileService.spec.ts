@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { ProfileTweetResponseDto } from "../../../../src/features/feed/types";
+import type {
+  ProfileTweetResponseDto,
+  ProfileReplyResponseDto,
+  ProfileLikedTweetResponseDto,
+} from "../../../../src/features/feed/types";
 import {
   getProfileTweets,
   getProfileReplies,
@@ -27,12 +31,37 @@ describe("profileService", () => {
       imageUrl: "",
     },
 
-    parent: undefined,
-
     likesCount: 10,
     repliesCount: 5,
+  });
 
-    likedByMe: true,
+  const makeReply = (): ProfileReplyResponseDto => ({
+    id: "tweet-1",
+    content: "Hello world",
+    createdAt: "2026-01-01T00:00:00.000Z",
+
+    user: {
+      id: "user-1",
+      name: "User 1",
+      userName: "user1",
+      imageUrl: "",
+    },
+    replies: [],
+  });
+
+  const makeLike = (): ProfileLikedTweetResponseDto => ({
+    id: "tweet-1",
+    content: "Hello world",
+    createdAt: "2026-01-01T00:00:00.000Z",
+
+    user: {
+      id: "user-1",
+      name: "User 1",
+      userName: "user1",
+      imageUrl: "",
+    },
+
+    likesCount: 10,
   });
 
   describe("profileService - getProfileTweets", () => {
@@ -114,7 +143,7 @@ describe("profileService", () => {
 
   describe("profileService - getProfileReplies", () => {
     it("should return replies when response is ok", async () => {
-      const mockReplies = [makeTweet()];
+      const mockReplies = [makeReply()];
 
       vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
         ok: true,
@@ -171,7 +200,7 @@ describe("profileService", () => {
 
   describe("profileService - getProfileLikes", () => {
     it("should return likes when response is ok", async () => {
-      const mockLikes = [makeTweet()];
+      const mockLikes = [makeLike()];
 
       vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
         ok: true,
