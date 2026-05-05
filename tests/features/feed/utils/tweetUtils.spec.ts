@@ -1,6 +1,6 @@
 import { removeTweetRecursive } from "../../../../src/features/feed/utils/tweetUtils";
 import { describe, expect, it } from "vitest";
-import { FeedTweet } from "../../../../src/features/feed/types";
+import type { FeedTweet } from "../../../../src/features/feed/types";
 
 function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {
   const baseUserId = overrides?.userId ?? overrides?.user?.id ?? "user1";

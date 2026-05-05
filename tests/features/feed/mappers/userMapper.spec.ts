@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { mapUser } from "../../../../src/features/feed/mappers/userMapper";
 
-import { UserWithRelations } from "../../../../src/features/feed/types";
+import type { UserWithRelations } from "../../../../src/features/feed/types";
 
 function createMockUser(
   overrides?: Partial<UserWithRelations>,

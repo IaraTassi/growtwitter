@@ -5,7 +5,7 @@ import {
   selectFeedError,
 } from "../../../../src/features/feed/store/feedSelectors";
 import type { FeedTweet } from "../../../../src/features/feed/types";
-import { RootState } from "../../../../src/store/store";
+import type { RootState } from "../../../../src/store/store";
 
 describe("feedSelectors", () => {
   function createMockTweet(overrides?: Partial<FeedTweet>): FeedTweet {

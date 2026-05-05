@@ -10,7 +10,7 @@ import {
   fetchFeed,
   toggleLikeThunk,
 } from "../../../../src/features/feed/store/feedThunks";
-import { FeedTweetResponse } from "../../../../src/features/feed/types";
+import type { FeedTweetResponse } from "../../../../src/features/feed/types";
 
 vi.mock("../../../../src/features/feed/services/feedService");
 vi.mock("../../../../src/features/feed/services/likeService");
@@ -36,6 +36,8 @@ function createMockFeedResponse(
     },
     likes: [],
     parentId: null,
+    likesCount: 0,
+    repliesCount: 0,
     ...overrides,
   };
 }
@@ -153,6 +155,8 @@ describe("feedThunks", () => {
         },
         likes: [],
         replies: [],
+        likesCount: 0,
+        repliesCount: 0,
       };
 
       mockGetState.mockReturnValue({

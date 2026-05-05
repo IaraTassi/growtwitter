@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
+import type {
   FeedTweetResponse,
   FeedUser,
 } from "../../../../src/features/feed/types";
