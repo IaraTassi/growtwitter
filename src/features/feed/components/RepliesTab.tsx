@@ -27,12 +27,12 @@ export function RepliesTab({ userId }: RepliesTabProps) {
         </Box>
         <Box className="main">
           <Typography
-            sx={{
+            sx={(theme) => ({
               fontWeight: 500,
               fontSize: "0.625rem",
-              color: "text.disabled",
               mt: 1,
-            }}
+              color: theme.custom.text.muted,
+            })}
           >
             Se ainda não aparece nenhuma resposta aqui, talvez você precise
             interagir mais com seus Growtweets para receber respostas.

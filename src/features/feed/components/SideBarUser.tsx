@@ -18,19 +18,19 @@ export function SidebarUser({
           display="flex"
           alignItems="center"
           gap={1}
-          sx={{
+          sx={(theme) => ({
             width: 170,
             height: 48,
             borderRadius: "999px",
-            transition: "background 0.2s",
             px: 1,
             py: 1,
             ml: -1,
             mr: 1,
+            transition: "background-color 0.2s ease",
             "&:hover": {
-              backgroundColor: "rgba(255,255,255,0.08)",
+              backgroundColor: theme.custom.hover.item,
             },
-          }}
+          })}
         >
           <CustomAvatar imageUrl={imageUrl} />
 
@@ -44,8 +44,11 @@ export function SidebarUser({
               {name}
             </Typography>
             <Typography
-              sx={{ fontSize: 12, fontWeight: 400 }}
-              color="text.disabled"
+              sx={(theme) => ({
+                fontSize: 12,
+                fontWeight: 400,
+                color: theme.custom.text.muted,
+              })}
             >
               @{userName}
             </Typography>
@@ -59,18 +62,6 @@ export function SidebarUser({
           sx={{
             width: 162,
             height: 28,
-            textTransform: "none",
-            borderRadius: "1rem",
-            fontSize: "0.75rem",
-            fontWeight: 700,
-            borderWidth: "1px",
-            color: "primary.main",
-            borderColor: "primary.main",
-            backgroundColor: "transparent",
-            "&:hover": {
-              borderColor: "primary.light",
-              backgroundColor: "rgba(29,155,240,0.08)",
-            },
           }}
         >
           Sair

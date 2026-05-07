@@ -21,13 +21,16 @@ export function SuggestedUsersList({
               display="flex"
               alignItems="center"
               justifyContent="space-between"
-              sx={{
-                py: 1.5,
+              sx={(theme) => ({
+                py: 3,
                 mx: -3,
                 px: 3,
-                transition: "background 0.2s",
-                "&:hover": { backgroundColor: "rgba(255,255,255,0.08)" },
-              }}
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                transition: "background-color 0.2s ease",
+                "&:hover": {
+                  backgroundColor: theme.custom.hover.item,
+                },
+              })}
             >
               <Box display="flex" alignItems="center" gap={1}>
                 <ProfileLink userId={user.id}>
@@ -42,17 +45,22 @@ export function SuggestedUsersList({
                     </ProfileLink>
                     <VerifyIcon
                       variant={variant}
-                      sx={{
+                      sx={(theme) => ({
                         width: 12,
                         height: 12,
-                        color: isVerified ? "primary.main" : "text.disabled",
-                      }}
+                        color: isVerified
+                          ? theme.palette.text.primary
+                          : theme.custom.text.muted,
+                      })}
                     />
                   </Box>
 
                   <Typography
-                    sx={{ fontWeight: 400, fontSize: 12 }}
-                    color="text.disabled"
+                    sx={(theme) => ({
+                      fontWeight: 400,
+                      fontSize: 12,
+                      color: theme.custom.text.muted,
+                    })}
                   >
                     @{user.userName}
                   </Typography>

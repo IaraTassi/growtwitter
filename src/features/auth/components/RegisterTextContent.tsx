@@ -4,10 +4,8 @@ export function RegisterTextContent() {
   return (
     <Box
       component="section"
-      sx={{
+      sx={(theme) => ({
         flex: 1,
-        bgcolor: "secondary.main",
-        color: "text.primary",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -15,7 +13,9 @@ export function RegisterTextContent() {
         py: 2,
         gap: 1.5,
         overflow: "hidden",
-      }}
+        bgcolor: theme.custom.auth.accent,
+        color: theme.custom.auth.text,
+      })}
     >
       <Typography
         component="h2"

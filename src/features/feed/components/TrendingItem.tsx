@@ -4,40 +4,40 @@ import type { TrendingItemProps } from "../types";
 export function TrendingItem({ topic }: TrendingItemProps) {
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         px: 2,
         cursor: "pointer",
-        transition: "background 0.2s ease",
+        transition: "background-color 0.2s ease",
         "&:hover": {
-          backgroundColor: "rgba(255,255,255,0.08)",
+          backgroundColor: theme.custom.hover.item,
         },
-      }}
+      })}
     >
       <Typography
-        sx={{
+        sx={(theme) => ({
           fontSize: "0.625rem",
           fontWeight: 500,
-          color: "text.disabled",
-        }}
+          color: theme.custom.text.muted,
+        })}
       >
         {topic.description}
       </Typography>
       <Typography
-        sx={{
+        sx={(theme) => ({
           fontSize: "0.75rem",
           fontWeight: 700,
-          color: "text.primary",
-        }}
+          color: theme.palette.text.primary,
+        })}
       >
         {topic.category} · {topic.title}
       </Typography>
 
       <Typography
-        sx={{
+        sx={(theme) => ({
           fontSize: "0.625rem",
           fontWeight: 500,
-          color: "text.disabled",
-        }}
+          color: theme.custom.text.muted,
+        })}
       >
         {topic.tweets}
       </Typography>

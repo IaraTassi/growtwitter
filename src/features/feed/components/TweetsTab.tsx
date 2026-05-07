@@ -69,12 +69,12 @@ export function TweetsTab({ userId }: TweetsTabProps) {
         </Box>
         <Box className="main">
           <Typography
-            sx={{
+            sx={(theme) => ({
               fontWeight: 500,
               fontSize: "0.625rem",
-              color: "text.disabled",
               mt: 1,
-            }}
+              color: theme.custom.text.muted,
+            })}
           >
             Não esqueça que para que as pessoas possam interagir com as suas
             publicações, você precisa... publicar.

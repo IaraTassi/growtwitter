@@ -29,12 +29,12 @@ export function LikesTab({ userId }: LikesTabProps) {
         </Box>
         <Box className="main">
           <Typography
-            sx={{
+            sx={(theme) => ({
               fontWeight: 500,
               fontSize: "0.625rem",
-              color: "text.disabled",
               mt: 1,
-            }}
+              color: theme.custom.text.muted,
+            })}
           >
             Toque no coração em qualquer Tweet para demonstrar afeto. Quando
             você realizar essa ação, o resultado aparece aqui.

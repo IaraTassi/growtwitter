@@ -27,13 +27,13 @@ export function ProfileInfo({
       </Typography>
       <Typography
         component="span"
-        sx={{
+        sx={(theme) => ({
           display: "block",
-          color: "text.disabled",
           fontSize: "0.625rem",
           fontWeight: 500,
           mb: 1,
-        }}
+          color: theme.custom.text.muted,
+        })}
       >
         @{user.userName}
       </Typography>
@@ -42,11 +42,11 @@ export function ProfileInfo({
         <CalendarIcon />
         <Typography
           component="span"
-          sx={{
-            color: "text.disabled",
+          sx={(theme) => ({
             fontSize: "0.625rem",
             fontWeight: 500,
-          }}
+            color: theme.custom.text.muted,
+          })}
         >
           {formatJoinDate(user.createdAt)}
         </Typography>
@@ -62,11 +62,11 @@ export function ProfileInfo({
           </Typography>
           <Typography
             component="span"
-            sx={{
+            sx={(theme) => ({
               fontWeight: 500,
               fontSize: "0.625rem",
-              color: "text.disabled",
-            }}
+              color: theme.custom.text.muted,
+            })}
           >
             Seguindo
           </Typography>
@@ -81,11 +81,11 @@ export function ProfileInfo({
           </Typography>
           <Typography
             component="span"
-            sx={{
+            sx={(theme) => ({
               fontWeight: 500,
               fontSize: "0.625rem",
-              color: "text.disabled",
-            }}
+              color: theme.custom.text.muted,
+            })}
           >
             Seguidores
           </Typography>

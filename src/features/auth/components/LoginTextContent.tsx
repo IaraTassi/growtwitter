@@ -4,10 +4,8 @@ export function LoginTextContent() {
   return (
     <Box
       component="section"
-      sx={{
+      sx={(theme) => ({
         flex: 1,
-        bgcolor: "secondary.main",
-        color: "text.primary",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -15,12 +13,14 @@ export function LoginTextContent() {
         py: 2,
         gap: 1.5,
         overflow: "hidden",
-      }}
+        bgcolor: theme.custom.auth.accent,
+        color: theme.custom.auth.text,
+      })}
     >
       <Typography
         component="h2"
         variant="h4"
-        sx={{ fontSize: "2rem", fontWeight: 700}}
+        sx={{ fontSize: "2rem", fontWeight: 700 }}
       >
         Growtwitter
       </Typography>
@@ -36,7 +36,11 @@ export function LoginTextContent() {
           fontSize: { lineHeight: 1.5 },
         }}
       >
-        O Growtwitter é a plataforma definitiva para todos os apaixonados por redes sociais que buscam uma experiência familiar e poderosa, semelhante ao Twitter, mas com um toque único. Seja parte desta comunidade que valoriza a liberdade de expressão, a conexão com pessoas de todo o mundo e a disseminação de ideias.
+        O Growtwitter é a plataforma definitiva para todos os apaixonados por
+        redes sociais que buscam uma experiência familiar e poderosa, semelhante
+        ao Twitter, mas com um toque único. Seja parte desta comunidade que
+        valoriza a liberdade de expressão, a conexão com pessoas de todo o mundo
+        e a disseminação de ideias.
       </Typography>
     </Box>
   );

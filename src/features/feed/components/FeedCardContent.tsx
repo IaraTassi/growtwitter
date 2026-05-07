@@ -52,13 +52,13 @@ export function FeedCardContent({
 
         {showThreadLine && !isLast && (
           <Box
-            sx={{
+            sx={(theme) => ({
               position: "absolute",
               top: 56,
               bottom: 0,
               width: 2,
-              bgcolor: "divider",
-            }}
+              bgcolor: theme.palette.divider,
+            })}
           />
         )}
       </Box>
@@ -99,53 +99,59 @@ export function FeedCardContent({
 
               <Typography
                 variant="caption"
-                color="text.disabled"
-                sx={{
+                sx={(theme) => ({
                   fontSize: "0.75rem",
                   fontWeight: 500,
-                }}
+                  color: theme.custom.text.muted,
+                })}
               >
                 @{tweet.user.userName} • {timeAgo(tweet.createdAt)}
               </Typography>
             </Box>
           </Box>
-          {showReplyLabel && parentTweet && (
+          {showReplyLabel && parentTweet && isParentVerified && (
             <Typography
               variant="caption"
-              sx={{
+              sx={(theme) => ({
                 fontSize: "0.75rem",
                 fontWeight: 500,
                 marginTop: 0.3,
-                color: "text.disabled",
-              }}
+                color: theme.custom.text.muted,
+              })}
             >
               Em resposta a{" "}
               <Box
                 component="span"
-                sx={{
-                  color: isParentVerified ? "primary.main" : "text.disabled",
-                }}
+                sx={(theme) => ({
+                  color: theme.custom.text.link,
+                })}
               >
                 @{parentTweet.user.userName}
               </Box>
             </Typography>
           )}
         </Box>
-        <Box component="main" color="text.secondary">
-          <Typography sx={{ fontSize: "0.75rem", fontWeight: 400 }}>
+        <Box component="main">
+          <Typography
+            sx={(theme) => ({
+              fontSize: "0.75rem",
+              fontWeight: 400,
+              color: theme.palette.text.secondary,
+            })}
+          >
             {tweet.content}
           </Typography>
         </Box>
         <Box
           component="footer"
-          sx={{
+          sx={(theme) => ({
             display: "flex",
             marginTop: "0.3rem",
             gap: 4,
-            color: "text.disabled",
             fontSize: "0.75rem",
             fontWeight: 500,
-          }}
+            color: theme.custom.text.muted,
+          })}
         >
           <Box display="flex" alignItems="center" gap={1}>
             <ReplyIcon onClick={handleReplyClick} />

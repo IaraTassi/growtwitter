@@ -10,29 +10,29 @@ export function SidebarNavItem({ icon, label, to }: SidebarNavItemProps) {
           display="flex"
           alignItems="center"
           gap={1}
-          sx={{
+          sx={(theme) => ({
             width: 170,
             height: 28,
             borderRadius: "999px",
-            transition: "background 0.2s",
             px: 1,
             py: 1,
             ml: -1,
             mr: 1,
             my: 0.5,
+            transition: "background-color 0.2s ease",
             "&:hover": {
-              backgroundColor: "rgba(255,255,255,0.08)",
+              backgroundColor: theme.custom.hover.item,
             },
-          }}
+          })}
         >
           {icon}
 
           <Typography
-            sx={{
-              color: "text.primary",
+            sx={(theme) => ({
               fontSize: "0.875rem",
               fontWeight: isActive ? 800 : 400,
-            }}
+              color: theme.palette.text.primary,
+            })}
           >
             {label}
           </Typography>

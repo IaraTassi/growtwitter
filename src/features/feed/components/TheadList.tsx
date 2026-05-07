@@ -29,19 +29,19 @@ export function ThreadList({ root, onLike, onReplyClick }: ThreadListProps) {
               display="flex"
               alignItems="center"
               gap={0.4}
-              sx={{
+              sx={(theme) => ({
                 cursor: "pointer",
                 ml: 8,
                 mb: 1,
                 width: "fit-content",
-                color: "text.secondary",
                 fontSize: "0.75rem",
                 fontWeight: 500,
-                transition: "color 0.2s ease",
+                color: theme.palette.text.secondary,
+                transition: "background-color 0.2s ease",
                 "&:hover": {
-                  color: "primary.main",
+                  backgroundColor: theme.custom.hover.item,
                 },
-              }}
+              })}
               onClick={() => toggle(reply.id)}
             >
               {expanded ? (

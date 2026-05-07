@@ -1,15 +1,14 @@
+import { Box } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { loginThunk, registerThunk } from "../../auth/store/authThunks";
 import { LoginForm } from "../components/LoginForm";
-import { RegisterForm } from "../components/RegisterForm";
-import type { CreateAccountDto, LoginDto } from "../types";
 import { LoginTextContent } from "../components/LoginTextContent";
+import { RegisterForm } from "../components/RegisterForm";
 import { RegisterTextContent } from "../components/RegisterTextContent";
-import { Box } from "@mui/material";
-import { COLORS } from "../../../theme/colors";
 import { AuthLayout } from "../layouts/AuthLayout";
-import { useNavigate } from "react-router-dom";
+import type { CreateAccountDto, LoginDto } from "../types";
 
 export function LoginPage() {
   const dispatch = useAppDispatch();
@@ -54,14 +53,14 @@ export function LoginPage() {
   return (
     <Box
       component="main"
-      sx={{
+      sx={(theme) => ({
         minHeight: "100vh",
-        bgcolor: COLORS.modalBackground,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         px: { xs: 3, sm: 4 },
-      }}
+        bgcolor: theme.custom.layout.outer,
+      })}
     >
       <Box
         key={isLogin ? "login" : "register"}

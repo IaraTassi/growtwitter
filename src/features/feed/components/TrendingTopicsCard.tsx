@@ -1,7 +1,6 @@
 import { Paper, Stack, Typography } from "@mui/material";
 import { TrendingItem } from "./TrendingItem";
 import { trendingTopics } from "../mocks/trendingTopics";
-import { COLORS } from "../../../theme/colors";
 import { useNavigate } from "react-router-dom";
 
 export function TrendingTopicsCard() {
@@ -14,10 +13,10 @@ export function TrendingTopicsCard() {
   return (
     <Paper
       elevation={0}
-      sx={{
-        backgroundColor: COLORS.trendingTopicsBg,
+      sx={(theme) => ({
         borderRadius: 2,
-      }}
+        bgcolor: theme.palette.background.paper,
+      })}
     >
       <Typography
         variant="h6"
@@ -38,14 +37,14 @@ export function TrendingTopicsCard() {
       </Stack>
 
       <Typography
-        color="primary"
-        sx={{
+        sx={(theme) => ({
           cursor: "pointer",
           fontSize: "0.625rem",
           fontWeight: 500,
           p: 2,
           pb: 1,
-        }}
+          color: theme.custom.text.link,
+        })}
         onClick={handleShowMore}
       >
         Mostrar mais

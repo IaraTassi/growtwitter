@@ -27,11 +27,11 @@ export function ProfileHeader({ name, tweetsCount }: ProfileHeaderProps) {
 
         <Typography
           component="span"
-          sx={{
+          sx={(theme) => ({
             fontSize: "0.625rem",
             fontWeight: 500,
-            color: "text.disabled",
-          }}
+            color: theme.custom.text.muted,
+          })}
         >
           {tweetsCount} growtweets
         </Typography>

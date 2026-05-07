@@ -125,9 +125,8 @@ export function RegisterForm({
   return (
     <Box
       component="section"
-      sx={{
+      sx={(theme) => ({
         flex: 1,
-        bgcolor: "background.default",
         color: "text.primary",
         display: "flex",
         flexDirection: "column",
@@ -135,7 +134,8 @@ export function RegisterForm({
         px: 3,
         py: 1.5,
         gap: 1.5,
-      }}
+        bgcolor: theme.custom.auth.form,
+      })}
     >
       <Typography
         component="h2"
@@ -216,7 +216,11 @@ export function RegisterForm({
         <Typography
           variant="body2"
           textAlign="center"
-          sx={{ color: "text.secondary", pt: 0.5, fontSize: "1rem" }}
+          sx={(theme) => ({
+            pt: 0.5,
+            fontSize: "1rem",
+            color: theme.palette.text.secondary,
+          })}
         >
           Já tem conta?{" "}
           <Button

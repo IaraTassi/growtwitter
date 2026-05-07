@@ -1,10 +1,9 @@
+import { Box, Divider, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import type { ComposerModalProps } from "../types";
-import { AppModal } from "./AppModal";
-import { Box, Divider, TextField, Typography } from "@mui/material";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
+import { AppModal } from "./AppModal";
 import { PrimaryButton } from "./PrimaryButton";
-import { COLORS } from "../../../theme/colors";
 
 export function ComposerModal({
   open,
@@ -58,17 +57,17 @@ export function ComposerModal({
               inputProps: { maxLength: MAX_LENGTH },
             },
           }}
-          sx={{
+          sx={(theme) => ({
             "& .MuiInputBase-input": {
               pt: "0.75rem",
             },
             "& .MuiInputBase-input::placeholder": {
-              color: COLORS.textTertiary,
               fontSize: "0.875rem",
               fontWeight: 500,
               opacity: 1,
+              color: theme.custom.text.muted,
             },
-          }}
+          })}
         />
         {showCounter && (
           <Typography
@@ -81,7 +80,9 @@ export function ComposerModal({
         )}
       </Box>
 
-      <Divider sx={{ my: 1, ml: 8, mr: 1 }} />
+      <Divider
+        sx={(theme) => ({ my: 1, ml: 8, mr: 1, color: theme.palette.divider })}
+      />
 
       <Box display="flex" justifyContent="flex-end" sx={{ p: 0, mr: 1 }}>
         <PrimaryButton onClick={handleSubmit} disabled={!content.trim()}>

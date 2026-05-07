@@ -10,15 +10,23 @@ export function FeedBlock({
   return (
     <Box
       component="section"
-      sx={{
+      sx={(theme) => ({
         position: variant === "thread" ? "relative" : "static",
-      }}
+        transition: "background-color 0.2s ease",
+        "&:hover": {
+          backgroundColor: theme.custom.hover.item,
+        },
+      })}
     >
-      {showTopDivider && <Divider />}
+      {showTopDivider && (
+        <Divider sx={(theme) => ({ color: theme.palette.divider })} />
+      )}
 
       <Box>{children}</Box>
 
-      {showBottomDivider && <Divider />}
+      {showBottomDivider && (
+        <Divider sx={(theme) => ({ color: theme.palette.divider })} />
+      )}
     </Box>
   );
 }

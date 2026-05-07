@@ -10,7 +10,10 @@ const tabs: { label: string; key: ProfileTab }[] = [
 
 export function ProfileTabs({ tab, setTab }: ProfileTabsProps) {
   return (
-    <Box display="flex" borderBottom={1} borderColor="divider">
+    <Box
+      display="flex"
+      sx={(theme) => ({ borderBottom: `1px solid ${theme.palette.divider}` })}
+    >
       {tabs.map(({ label, key }) => (
         <Box
           key={key}

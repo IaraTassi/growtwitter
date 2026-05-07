@@ -4,7 +4,6 @@ import { CustomAvatar } from "../utils/icons/CustomAvatar";
 import { CalendarIcon } from "../utils/icons/CalendarIcon";
 import { timeAgo } from "../utils/timeAgo";
 import { ReplyIcon } from "../utils/icons/ReplyIcon";
-import { COLORS } from "../../../theme/colors";
 import { TrashIcon } from "../utils/icons/TrashIcon";
 import { ProfileLink } from "./ProfileLink";
 import type { RootState } from "../../../store/store";
@@ -23,19 +22,18 @@ export function TweetItem({
   return (
     <Box
       className="profile-tweets"
-      sx={{
+      sx={(theme) => ({
         display: "flex",
         gap: 2,
         px: 3,
         py: 2,
-        borderBottom: 1,
-        borderColor: "divider",
+        borderBottom: `1px solid ${theme.palette.divider}`,
         transition: "background-color 0.2s",
         "&:hover": {
-          backgroundColor: "action.hover",
+          backgroundColor: theme.custom.hover.item,
           "& .delete-icon": { opacity: 1 },
         },
-      }}
+      })}
     >
       <ProfileLink userId={tweet.user.id}>
         <CustomAvatar
@@ -56,7 +54,12 @@ export function TweetItem({
 
         <Box component="main">
           <Typography
-            sx={{ fontSize: "0.75rem", fontWeight: 400, mt: "0.2rem" }}
+            sx={(theme) => ({
+              fontSize: "0.75rem",
+              fontWeight: 400,
+              mt: "0.2rem",
+              color: theme.palette.text.secondary,
+            })}
           >
             {tweet.content}
           </Typography>
@@ -64,14 +67,14 @@ export function TweetItem({
 
         <Box
           component="footer"
-          sx={{
+          sx={(theme) => ({
             display: "flex",
             justifyContent: "space-between",
             marginTop: "0.3rem",
-            color: "text.disabled",
             fontSize: "0.75rem",
             fontWeight: 500,
-          }}
+            color: theme.custom.text.muted,
+          })}
         >
           <Box display="flex" alignItems="center" gap={2}>
             <Box display="flex" alignItems="center" gap={1}>
@@ -98,12 +101,12 @@ export function TweetItem({
           {isOwner && (
             <Box
               className="delete-icon"
-              sx={{
+              sx={(theme) => ({
                 opacity: 0,
                 transition: "opacity 0.2s",
                 cursor: "pointer",
-                "&:hover svg": { fill: COLORS.error },
-              }}
+                "&:hover svg": { color: theme.custom.icon.danger },
+              })}
               onClick={() => onDelete(tweet.id)}
             >
               <TrashIcon />

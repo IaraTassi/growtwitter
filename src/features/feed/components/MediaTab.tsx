@@ -12,12 +12,12 @@ export function MediaTab() {
         Luzes, câmera...anexos!
       </Typography>
       <Typography
-        sx={{
+        sx={(theme) => ({
           fontWeight: 500,
           fontSize: "0.625rem",
-          color: "text.disabled",
           mt: 1,
-        }}
+          color: theme.custom.text.muted,
+        })}
       >
         Quando você enviar Tweets com fotos ou vídeos, eles serão exibidos aqui.
       </Typography>

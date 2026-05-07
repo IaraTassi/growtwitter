@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import type { CustomAvatarProps } from "../types";
 import { BgDefaultIcon } from "../utils/icons/BgDefaultIcon";
 import { CustomAvatar } from "../utils/icons/CustomAvatar";
-import { COLORS } from "../../../theme/colors";
 
 export interface ProfileBannerProps extends CustomAvatarProps {
   bannerHeight?: number;
@@ -16,12 +15,12 @@ export function ProfileBanner({
 
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         width: "100%",
         height: bannerHeight,
         position: "relative",
-        backgroundColor: COLORS.profileContainerBg,
-      }}
+        bgcolor: theme.custom.surface,
+      })}
     >
       <Box
         sx={{

@@ -9,13 +9,12 @@ export function ReplyThread({ node }: ReplyThreadProps) {
   return (
     <Box
       className="profile-replies"
-      sx={{
-        borderBottom: 1,
-        borderColor: "divider",
+      sx={(theme) => ({
         cursor: "default",
         px: 3,
         py: 2,
-      }}
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      })}
     >
       <Box component="header" display="flex" alignItems="center" gap={1}>
         <ProfileLink userId={node.user.id}>
@@ -33,7 +32,14 @@ export function ReplyThread({ node }: ReplyThreadProps) {
       </Box>
 
       <Box component="main">
-        <Typography sx={{ fontSize: "0.75rem", fontWeight: 400, pl: "36px" }}>
+        <Typography
+          sx={(theme) => ({
+            fontSize: "0.75rem",
+            fontWeight: 400,
+            pl: "36px",
+            color: theme.palette.text.secondary,
+          })}
+        >
           {node.content}
         </Typography>
       </Box>

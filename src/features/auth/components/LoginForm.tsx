@@ -107,16 +107,16 @@ export function LoginForm({
   return (
     <Box
       component="section"
-      sx={{
+      sx={(theme) => ({
         flex: 1,
-        bgcolor: "background.default",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         px: 3,
         py: 1.5,
         gap: 1.5,
-      }}
+        bgcolor: theme.custom.auth.form,
+      })}
     >
       <Typography
         component="h2"
@@ -154,9 +154,11 @@ export function LoginForm({
               <>
                 <Typography
                   variant="caption"
-                  sx={{
-                    color: errors.identifier ? "error.main" : "text.disabled",
-                  }}
+                  sx={(theme) => ({
+                    color: errors.identifier
+                      ? theme.palette.error.main
+                      : theme.custom.text.muted,
+                  })}
                 >
                   {touched.identifier && errors.identifier
                     ? errors.identifier
@@ -168,12 +170,12 @@ export function LoginForm({
                   onClick={handleSwitchMode}
                   size="small"
                   variant="text"
-                  sx={{
+                  sx={(theme) => ({
                     textTransform: "none",
                     fontSize: "0.75rem",
                     minWidth: "auto",
-                    color: "text.secondary",
-                  }}
+                    color: theme.custom.text.muted,
+                  })}
                 >
                   {isEmail ? "Usar nome de usuário" : "Usar email"}
                 </Button>
@@ -240,7 +242,11 @@ export function LoginForm({
         <Typography
           variant="body2"
           textAlign="center"
-          sx={{ color: "text.secondary", pt: 0.5, fontSize: "1rem" }}
+          sx={(theme) => ({
+            pt: 0.5,
+            fontSize: "1rem",
+            color: theme.palette.text.secondary,
+          })}
         >
           Não tem conta?{" "}
           <Button
