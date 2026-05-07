@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { TrendingTopicsCard } from "./TrendingTopicsCard";
+import { ThemeToggleButton } from "../../../components/theme/ThemeToggleButton";
 
 export function RightBar() {
   return (
@@ -16,7 +17,15 @@ export function RightBar() {
         top: 0,
       }}
     >
-      <TrendingTopicsCard />
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="flex-start"
+        gap={2}
+      >
+        <TrendingTopicsCard />
+        <ThemeToggleButton />
+      </Box>
     </Box>
   );
 }

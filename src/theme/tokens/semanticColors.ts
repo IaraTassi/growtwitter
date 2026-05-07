@@ -1,5 +1,10 @@
 export const semanticColors = {
   dark: {
+    brand: {
+      logoPrimary: "#FFFFFF",
+      logoAccent: "#F58634",
+    },
+
     appBackground: "#161616",
     appShell: "#0B0707",
 
@@ -37,6 +42,11 @@ export const semanticColors = {
   },
 
   light: {
+    brand: {
+      logoPrimary: "#2B385B",
+      logoAccent: "#F58634",
+    },
+
     appBackground: "#F2F2F2",
     appShell: "#FFFFFF",
 

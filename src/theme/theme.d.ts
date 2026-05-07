@@ -3,6 +3,11 @@ import "@mui/material/styles";
 declare module "@mui/material/styles" {
   interface Theme {
     custom: {
+      brand: {
+        logoPrimary: string;
+        logoAccent: string;
+      };
+
       layout: {
         outer: string;
         inner: string;

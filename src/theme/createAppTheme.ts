@@ -34,6 +34,11 @@ export const createAppTheme = (mode: "light" | "dark") => {
     },
 
     custom: {
+      brand: {
+        logoPrimary: s.brand.logoPrimary,
+        logoAccent: s.brand.logoAccent,
+      },
+
       layout: {
         outer: s.appBackground,
         inner: s.appShell,

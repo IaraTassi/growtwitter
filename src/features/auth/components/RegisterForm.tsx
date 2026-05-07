@@ -12,6 +12,7 @@ import { validateRegisterData } from "../validators/registerValidator";
 import { AuthError } from "./AuthError";
 import { AuthTextField } from "./AuthTextField";
 import { SubmitButton } from "./SubmitButton";
+import { ThemeToggleButton } from "../../../components/theme/ThemeToggleButton";
 
 export function RegisterForm({
   loading,
@@ -137,6 +138,10 @@ export function RegisterForm({
         bgcolor: theme.custom.auth.form,
       })}
     >
+      <Box display="flex" justifyContent="flex-end">
+        <ThemeToggleButton />
+      </Box>
+
       <Typography
         component="h2"
         variant="h5"
@@ -182,6 +187,14 @@ export function RegisterForm({
                           onClick={handleTogglePassword}
                           onMouseDown={(e) => e.preventDefault()}
                           edge="end"
+                          disableRipple
+                          sx={{
+                            backgroundColor: "transparent",
+
+                            "&:hover": {
+                              backgroundColor: "transparent",
+                            },
+                          }}
                           aria-label={
                             showPassword ? "Hide password" : "Show password"
                           }
