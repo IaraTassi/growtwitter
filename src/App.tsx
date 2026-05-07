@@ -2,6 +2,8 @@ import { Outlet } from "react-router-dom";
 import { Sidebar } from "./features/feed/components/Sidebar";
 import { RightBar } from "./features/feed/components/RightBar";
 import { Box, Divider } from "@mui/material";
+import { MobileTopBar } from "./components/layout/mobile/MobileTopBar";
+import { MobileBottomNav } from "./components/layout/mobile/MobileBottomNav";
 
 export function App() {
   return (
@@ -10,11 +12,24 @@ export function App() {
       sx={(theme) => ({
         backgroundColor: theme.custom.layout.outer,
         minHeight: "100vh",
+        pt: { xs: "56px", md: 0 },
+        pb: { xs: "56px", md: 0 },
       })}
     >
       <Box
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
+        <MobileTopBar />
+      </Box>
+      <Box
         className="sidebar"
         sx={(theme) => ({
+          display: {
+            xs: "none",
+            md: "flex",
+          },
           backgroundColor: theme.custom.layout.inner,
         })}
       >
@@ -23,7 +38,13 @@ export function App() {
       <Divider
         orientation="vertical"
         flexItem
-        sx={(theme) => ({ color: theme.palette.divider })}
+        sx={(theme) => ({
+          display: {
+            xs: "none",
+            md: "flex",
+          },
+          color: theme.palette.divider,
+        })}
       />
       <Box
         className="main"
@@ -36,15 +57,32 @@ export function App() {
       <Divider
         orientation="vertical"
         flexItem
-        sx={(theme) => ({ color: theme.palette.divider })}
+        sx={(theme) => ({
+          display: {
+            xs: "none",
+            md: "flex",
+          },
+          color: theme.palette.divider,
+        })}
       />
       <Box
         className="rightbar"
         sx={(theme) => ({
+          display: {
+            xs: "none",
+            md: "flex",
+          },
           backgroundColor: theme.custom.layout.inner,
         })}
       >
         <RightBar />
+      </Box>
+      <Box
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
+        <MobileBottomNav />
       </Box>
     </Box>
   );

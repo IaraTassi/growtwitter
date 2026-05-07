@@ -128,13 +128,13 @@ export function RegisterForm({
       component="section"
       sx={(theme) => ({
         flex: 1,
-        color: "text.primary",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         px: 3,
-        py: 1.5,
-        gap: 1.5,
+        py: 1,
+        gap: 1,
+        color: theme.palette.text.primary,
         bgcolor: theme.custom.auth.form,
       })}
     >

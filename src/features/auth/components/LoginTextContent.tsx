@@ -9,7 +9,21 @@ export function LoginTextContent() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        px: 3,
+        alignItems: {
+          xs: "center",
+          md: "flex-start",
+        },
+
+        textAlign: {
+          xs: "center",
+          md: "left",
+        },
+
+        px: {
+          xs: 2,
+          md: 3,
+        },
+
         py: 2,
         gap: 1.5,
         overflow: "hidden",
@@ -20,12 +34,27 @@ export function LoginTextContent() {
       <Typography
         component="h2"
         variant="h4"
-        sx={{ fontSize: "2rem", fontWeight: 700 }}
+        sx={{
+          fontSize: {
+            xs: "1.5rem",
+            md: "2rem",
+          },
+          fontWeight: 700,
+        }}
       >
         Growtwitter
       </Typography>
 
-      <Typography component="p" variant="body2">
+      <Typography
+        component="p"
+        variant="body2"
+        sx={{
+          fontSize: {
+            xs: "0.75rem",
+            md: "0.875rem",
+          },
+        }}
+      >
         Trabalho final do bloco intermediário.
       </Typography>
 
@@ -33,7 +62,17 @@ export function LoginTextContent() {
         component="p"
         variant="body1"
         sx={{
-          fontSize: { lineHeight: 1.5 },
+          maxWidth: {
+            xs: "100%",
+            md: 420,
+          },
+
+          fontSize: {
+            xs: "0.875rem",
+            md: "1rem",
+          },
+
+          lineHeight: 1.5,
         }}
       >
         O Growtwitter é a plataforma definitiva para todos os apaixonados por
