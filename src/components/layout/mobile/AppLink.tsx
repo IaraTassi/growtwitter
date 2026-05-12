@@ -1,10 +1,6 @@
 import { Box } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-
-type AppLinkProps = {
-  to: string;
-  children: React.ReactNode;
-};
+import type { AppLinkProps } from "../../../type";
 
 export function AppLink({ to, children }: AppLinkProps) {
   const location = useLocation();
@@ -27,6 +23,7 @@ export function AppLink({ to, children }: AppLinkProps) {
         display: "flex",
         alignItems: "center",
         gap: 1,
+        mt: 0.5,
 
         fontWeight: isActive ? 700 : 500,
         transition: "all 0.2s ease",
