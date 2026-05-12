@@ -41,7 +41,7 @@ export function Sidebar() {
     <Box
       component="aside"
       sx={{
-        height: "98vh",
+        height: "100vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -49,7 +49,7 @@ export function Sidebar() {
         position: "sticky",
         top: 0,
         marginRight: 2,
-        py: 3,
+        p: 3,
       }}
     >
       <Box display="flex" flexDirection="column">

@@ -49,7 +49,7 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
         />
       </Box>
 
-      <Box sx={{ mt: 2, px: 3 }}>
+      <Box>
         <ProfileTabs tab={tab} setTab={setTab} />
 
         <Box>

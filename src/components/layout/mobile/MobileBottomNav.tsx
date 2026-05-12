@@ -1,10 +1,14 @@
 import { Box } from "@mui/material";
-import { HomeIcon } from "../../../features/feed/utils/icons/HomeIcon";
-import { ExplorerIcon } from "../../../features/feed/utils/icons/ExplorerIcon";
-import { PrimaryButton } from "../../../features/feed/components/PrimaryButton";
-import { ProfileIcon } from "../../../features/feed/utils/icons/ProfileIcon";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../store/store";
+import { getNavItems } from "../../../navigation/navItems";
+import { AppLink } from "./AppLink";
 
 export function MobileBottomNav() {
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+
+  const items = getNavItems(userId);
+
   return (
     <Box
       sx={(theme) => ({
@@ -21,10 +25,11 @@ export function MobileBottomNav() {
         zIndex: 1100,
       })}
     >
-      <HomeIcon />
-      <ExplorerIcon />
-      <PrimaryButton children={undefined} />
-      <ProfileIcon />
+      {items.map((item) => (
+        <AppLink key={item.label} to={item.to}>
+          <item.icon />
+        </AppLink>
+      ))}
     </Box>
   );
 }
