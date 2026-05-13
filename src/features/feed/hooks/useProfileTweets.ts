@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ProfileTweetResponseDto } from "../types";
 import { getProfileTweets } from "../services/profileService";
 
@@ -11,40 +11,34 @@ export function useProfileTweets(userId: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!token || !userId) return;
 
-    const safeToken = token;
+    try {
+      setLoading(true);
+      setError(null);
 
-    let isMounted = true;
+      const res = await getProfileTweets(userId, token);
 
-    async function load() {
-      try {
-        setLoading(true);
-        setError(null);
+      setData(res);
+    } catch (error) {
+      console.error("Erro ao carregar tweets do perfil:", error);
 
-        const res = await getProfileTweets(userId, safeToken);
-
-        if (!isMounted) return;
-
-        setData(res);
-      } catch (error) {
-        console.error("Erro ao carregar tweets do perfil:", error);
-        if (!isMounted) return;
-
-        setError("Erro ao carregar tweets");
-        setData([]);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
+      setError("Erro ao carregar tweets");
+      setData([]);
+    } finally {
+      setLoading(false);
     }
-
-    load();
-
-    return () => {
-      isMounted = false;
-    };
   }, [userId, token]);
 
-  return { data, loading, error };
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return {
+    data,
+    loading,
+    error,
+    refetch: load,
+  };
 }

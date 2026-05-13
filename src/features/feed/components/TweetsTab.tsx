@@ -10,24 +10,35 @@ import { ComposerModal } from "./ComposerModal";
 import { removeTweet } from "../store/feedSlice";
 import { TweetItem } from "./TweetItem";
 import { useProfileTweets } from "../hooks/useProfileTweets";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 export function TweetsTab({ userId }: TweetsTabProps) {
-  const { data, loading } = useProfileTweets(userId);
-  const [tweets, setTweets] = useState(data);
+  const { data, loading, refetch } = useProfileTweets(userId);
+
+  const [deletedTweetIds, setDeletedTweetIds] = useState<string[]>([]);
+
+  const [deleteTweetId, setDeleteTweetId] = useState<string | null>(null);
 
   const [replyParentId, setReplyParentId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   const token = useSelector((state: RootState) => state.auth.token)!;
   const user = useSelector((state: RootState) => state.auth.user);
+
+  const globalTweets = useSelector((state: RootState) => state.feed.tweets);
+
   const dispatch = useAppDispatch();
   const { handleDelete } = useDeleteTweet(token ?? "");
 
   const avatarSize = 37;
 
+  const visibleTweets = data.filter(
+    (tweet) => !deletedTweetIds.includes(tweet.id),
+  );
+
   useEffect(() => {
-    setTweets(data);
-  }, [data]);
+    refetch();
+  }, [globalTweets.length, refetch]);
 
   const handleOpenReply = (tweetId: string) => {
     setReplyParentId(tweetId);
@@ -49,15 +60,29 @@ export function TweetsTab({ userId }: TweetsTabProps) {
       }),
     );
 
+    await refetch();
+
     handleCloseModal();
   };
 
   const handleDeleteTweet = (tweetId: string) => {
-    handleDelete(tweetId, () => {
-      dispatch(removeTweet(tweetId));
+    setDeleteTweetId(tweetId);
+  };
 
-      setTweets((prev) => prev.filter((tweet) => tweet.id !== tweetId));
+  const handleConfirmDelete = () => {
+    if (!deleteTweetId) return;
+
+    handleDelete(deleteTweetId, () => {
+      dispatch(removeTweet(deleteTweetId));
+
+      setDeletedTweetIds((prev) => [...prev, deleteTweetId]);
+
+      setDeleteTweetId(null);
     });
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteTweetId(null);
   };
 
   if (loading) {
@@ -68,7 +93,7 @@ export function TweetsTab({ userId }: TweetsTabProps) {
     );
   }
 
-  if (!tweets.length) {
+  if (!visibleTweets.length) {
     return (
       <Box className="tweets-tab" sx={{ p: 4 }}>
         <Box className="header">
@@ -95,7 +120,7 @@ export function TweetsTab({ userId }: TweetsTabProps) {
 
   return (
     <Box>
-      {tweets.map((tweet) => (
+      {visibleTweets.map((tweet) => (
         <TweetItem
           key={tweet.id}
           tweet={tweet}
@@ -111,6 +136,16 @@ export function TweetsTab({ userId }: TweetsTabProps) {
         userImageUrl={user?.imageUrl ?? ""}
         onSubmit={handleSubmitReply}
         submitLabel="Responder"
+      />
+
+      <ConfirmDialog
+        open={!!deleteTweetId}
+        title="Excluir growtweet?"
+        description="Essa ação não poderá ser desfeita."
+        confirmLabel="Excluir"
+        cancelLabel="Cancelar"
+        onConfirm={handleConfirmDelete}
+        onClose={handleCloseDeleteDialog}
       />
     </Box>
   );

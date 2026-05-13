@@ -357,3 +357,13 @@ export interface ProfileLinkProps {
   children: React.ReactNode;
   sx?: SxProps;
 }
+
+export interface ConfirmDialogProps {
+  open: boolean;
+  title: string;
+  description?: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onConfirm: () => void;
+  onClose: () => void;
+}
