@@ -109,7 +109,7 @@ export function FeedCardContent({
               </Typography>
             </Box>
           </Box>
-          {showReplyLabel && parentTweet && isParentVerified && (
+          {showReplyLabel && parentTweet && (
             <Typography
               variant="caption"
               sx={(theme) => ({
@@ -123,7 +123,9 @@ export function FeedCardContent({
               <Box
                 component="span"
                 sx={(theme) => ({
-                  color: theme.custom.text.link,
+                  color: isParentVerified
+                    ? theme.custom.text.link
+                    : theme.custom.text.muted,
                 })}
               >
                 @{parentTweet.user.userName}
