@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import type { TweetsTabProps } from "../types";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useDeleteTweet } from "../hooks/useTweets";
 import { createReplyThunk } from "../store/feedThunks";
@@ -13,6 +13,7 @@ import { useProfileTweets } from "../hooks/useProfileTweets";
 
 export function TweetsTab({ userId }: TweetsTabProps) {
   const { data, loading } = useProfileTweets(userId);
+  const [tweets, setTweets] = useState(data);
 
   const [replyParentId, setReplyParentId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,6 +24,10 @@ export function TweetsTab({ userId }: TweetsTabProps) {
   const { handleDelete } = useDeleteTweet(token ?? "");
 
   const avatarSize = 37;
+
+  useEffect(() => {
+    setTweets(data);
+  }, [data]);
 
   const handleOpenReply = (tweetId: string) => {
     setReplyParentId(tweetId);
@@ -48,7 +53,11 @@ export function TweetsTab({ userId }: TweetsTabProps) {
   };
 
   const handleDeleteTweet = (tweetId: string) => {
-    handleDelete(tweetId, () => dispatch(removeTweet(tweetId)));
+    handleDelete(tweetId, () => {
+      dispatch(removeTweet(tweetId));
+
+      setTweets((prev) => prev.filter((tweet) => tweet.id !== tweetId));
+    });
   };
 
   if (loading) {
@@ -59,7 +68,7 @@ export function TweetsTab({ userId }: TweetsTabProps) {
     );
   }
 
-  if (!data.length) {
+  if (!tweets.length) {
     return (
       <Box className="tweets-tab" sx={{ p: 4 }}>
         <Box className="header">
@@ -86,7 +95,7 @@ export function TweetsTab({ userId }: TweetsTabProps) {
 
   return (
     <Box>
-      {data.map((tweet) => (
+      {tweets.map((tweet) => (
         <TweetItem
           key={tweet.id}
           tweet={tweet}
