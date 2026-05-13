@@ -9,11 +9,14 @@ import { TweetsTab } from "./TweetsTab";
 import { RepliesTab } from "./RepliesTab";
 import { MediaTab } from "./MediaTab";
 import { LikesTab } from "./LikesTab";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { useFollowUser } from "../hooks/useProfileFollowUser";
+import { logout } from "../../auth/store/authSlice";
 
 export function ProfileTimeline({ user }: ProfileTimelineProps) {
+  const dispatch = useDispatch();
+
   const [tab, setTab] = useState<ProfileTab>("tweets");
 
   const tweetsCount = user.tweetsCount ?? 0;
@@ -25,10 +28,10 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
     token ?? undefined,
   );
 
-  const localUser = {
-    ...user,
-    isFollowing,
-    followersCount,
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+
+    dispatch(logout());
   };
 
   return (
@@ -43,9 +46,11 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
 
       <Box sx={{ mt: 6 }}>
         <ProfileInfo
-          user={localUser}
+          user={user}
           followersCount={followersCount}
+          isFollowing={isFollowing}
           onToggleFollow={handleToggleFollow}
+          onLogout={handleLogout}
         />
       </Box>
 

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import type { ProfileInfoProps } from "../types";
 import { CalendarIcon } from "../utils/icons/CalendarIcon";
 import { formatJoinDate } from "../utils/timeAgo";
@@ -9,13 +9,17 @@ import type { RootState } from "../../../store/store";
 export function ProfileInfo({
   user,
   followersCount,
+  isFollowing,
   onToggleFollow,
+  onLogout,
 }: ProfileInfoProps) {
   const loggedUserId = useSelector((s: RootState) => s.auth.user?.id);
 
   const isOwnProfile = loggedUserId === user.id;
 
-  const followingCount = user.following?.length ?? 0;
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Box sx={{ px: 3, py: 1 }}>
@@ -58,7 +62,7 @@ export function ProfileInfo({
             component="span"
             sx={{ fontWeight: 700, fontSize: "0.625rem", mr: 0.5 }}
           >
-            {followingCount}
+            {user.followingCount}
           </Typography>
           <Typography
             component="span"
@@ -92,16 +96,29 @@ export function ProfileInfo({
         </Box>
       </Box>
 
-      {!isOwnProfile && (
+      {isOwnProfile && isMobile ? (
         <Box sx={{ mt: 1.2 }}>
           <PrimaryButton
-            variant={user.isFollowing ? "outlined" : "contained"}
-            onClick={() => onToggleFollow(user.id)}
+            variant="outlined"
+            onClick={onLogout}
+            sx={{
+              width: 162,
+              height: 28,
+            }}
           >
-            {user.isFollowing ? "Seguindo" : "Seguir"}
+            Sair
           </PrimaryButton>
         </Box>
-      )}
+      ) : !isOwnProfile ? (
+        <Box sx={{ mt: 1.2 }}>
+          <PrimaryButton
+            variant={isFollowing ? "outlined" : "contained"}
+            onClick={() => onToggleFollow(user.id)}
+          >
+            {isFollowing ? "Seguindo" : "Seguir"}
+          </PrimaryButton>
+        </Box>
+      ) : null}
     </Box>
   );
 }

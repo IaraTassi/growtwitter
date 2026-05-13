@@ -313,7 +313,9 @@ export interface ProfileBannerProps extends CustomAvatarProps {
 export interface ProfileInfoProps {
   user: ProfileUser;
   followersCount: number;
+  isFollowing: boolean;
   onToggleFollow: (userId: string) => void;
+  onLogout: () => void;
 }
 
 export type ProfileTab = "tweets" | "replies" | "media" | "likes";

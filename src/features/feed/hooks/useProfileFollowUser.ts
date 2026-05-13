@@ -1,18 +1,33 @@
 import { useState } from "react";
 import type { ProfileUser } from "../types";
 import { useFollow } from "./useFollow";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../store/store";
 
 export function useFollowUser(user: ProfileUser, token?: string) {
+  const loggedUserId = useSelector((s: RootState) => s.auth.user?.id);
+
   const { toggleFollow } = useFollow(token ?? "");
 
-  const [localState, setLocalState] = useState<{
+  const baseIsFollowing =
+    user.followers?.some((follower) => follower.followerId === loggedUserId) ??
+    false;
+
+  const [optimisticState, setOptimisticState] = useState<{
+    userId: string;
     isFollowing: boolean;
     followersCount: number;
   } | null>(null);
 
-  const isFollowing = localState?.isFollowing ?? user.isFollowing;
+  const isCurrentUserState = optimisticState?.userId === user.id;
 
-  const followersCount = localState?.followersCount ?? user.followersCount ?? 0;
+  const isFollowing = isCurrentUserState
+    ? optimisticState.isFollowing
+    : baseIsFollowing;
+
+  const followersCount = isCurrentUserState
+    ? optimisticState.followersCount
+    : (user.followersCount ?? 0);
 
   const handleToggleFollow = async () => {
     if (!user.id) return;
@@ -20,7 +35,8 @@ export function useFollowUser(user: ProfileUser, token?: string) {
     await toggleFollow(user.id, isFollowing, () => {
       const next = !isFollowing;
 
-      setLocalState({
+      setOptimisticState({
+        userId: user.id,
         isFollowing: next,
         followersCount: next
           ? followersCount + 1
@@ -29,5 +45,9 @@ export function useFollowUser(user: ProfileUser, token?: string) {
     });
   };
 
-  return { isFollowing, followersCount, handleToggleFollow };
+  return {
+    isFollowing,
+    followersCount,
+    handleToggleFollow,
+  };
 }
