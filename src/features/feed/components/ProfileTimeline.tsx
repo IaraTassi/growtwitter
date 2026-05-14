@@ -9,13 +9,15 @@ import { TweetsTab } from "./TweetsTab";
 import { RepliesTab } from "./RepliesTab";
 import { MediaTab } from "./MediaTab";
 import { LikesTab } from "./LikesTab";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import { useFollowUser } from "../hooks/useProfileFollowUser";
-import { logout } from "../../auth/store/authSlice";
+
+import { useLogout } from "../hooks/useLogout";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 export function ProfileTimeline({ user }: ProfileTimelineProps) {
-  const dispatch = useDispatch();
+  const { open, requestLogout, confirmLogout, cancelLogout } = useLogout();
 
   const [tab, setTab] = useState<ProfileTab>("tweets");
 
@@ -27,12 +29,6 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
     user,
     token ?? undefined,
   );
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-
-    dispatch(logout());
-  };
 
   return (
     <Box component="section" aria-labelledby="profile-timeline-heading">
@@ -50,7 +46,17 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
           followersCount={followersCount}
           isFollowing={isFollowing}
           onToggleFollow={handleToggleFollow}
-          onLogout={handleLogout}
+          onLogout={requestLogout}
+        />
+
+        <ConfirmDialog
+          open={open}
+          title="Sair da conta?"
+          description="Você precisará fazer login novamente."
+          confirmLabel="Sair"
+          cancelLabel="Cancelar"
+          onConfirm={confirmLogout}
+          onClose={cancelLogout}
         />
       </Box>
 

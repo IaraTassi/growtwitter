@@ -12,12 +12,15 @@ import type { RootState } from "../../../store/store";
 import { ComposerModal } from "./ComposerModal";
 import { useState } from "react";
 import { createTweetThunk } from "../store/feedThunks";
-import { logout } from "../../auth/store/authSlice";
+import { useLogout } from "../hooks/useLogout";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 export function Sidebar() {
   const dispatch = useAppDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const [openComposer, setOpenComposer] = useState(false);
+
+  const { open, requestLogout, confirmLogout, cancelLogout } = useLogout();
 
   const handleCreateTweet = async (content: string) => {
     await dispatch(createTweetThunk(content));
@@ -30,11 +33,6 @@ export function Sidebar() {
 
   const handleCloseComposer = () => {
     setOpenComposer(false);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    dispatch(logout());
   };
 
   return (
@@ -86,7 +84,7 @@ export function Sidebar() {
         name={user?.name ?? ""}
         userName={user?.userName ?? ""}
         imageUrl={user?.imageUrl}
-        onLogout={handleLogout}
+        onLogout={requestLogout}
       />
       <ComposerModal
         open={openComposer}
@@ -94,6 +92,16 @@ export function Sidebar() {
         userImageUrl={user?.imageUrl}
         onSubmit={handleCreateTweet}
         submitLabel="Tweetar"
+      />
+
+      <ConfirmDialog
+        open={open}
+        title="Sair da conta?"
+        description="Você precisará fazer login novamente."
+        confirmLabel="Sair"
+        cancelLabel="Cancelar"
+        onConfirm={confirmLogout}
+        onClose={cancelLogout}
       />
     </Box>
   );

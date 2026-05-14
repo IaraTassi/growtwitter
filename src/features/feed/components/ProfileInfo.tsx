@@ -19,7 +19,7 @@ export function ProfileInfo({
 
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTabletOrMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <Box sx={{ px: 3, py: 1 }}>
@@ -96,7 +96,7 @@ export function ProfileInfo({
         </Box>
       </Box>
 
-      {isOwnProfile && isMobile ? (
+      {isOwnProfile && isTabletOrMobile ? (
         <Box sx={{ mt: 1.2 }}>
           <PrimaryButton
             variant="outlined"
