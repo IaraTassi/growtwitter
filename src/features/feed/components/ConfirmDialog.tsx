@@ -9,6 +9,7 @@ export function ConfirmDialog({
   description,
   confirmLabel = "Confirmar",
   cancelLabel = "Cancelar",
+  hideCancelButton = false,
   onConfirm,
   onClose,
 }: ConfirmDialogProps) {
@@ -46,9 +47,11 @@ export function ConfirmDialog({
             gap: 1,
           }}
         >
-          <PrimaryButton variant="outlined" onClick={onClose}>
-            {cancelLabel}
-          </PrimaryButton>
+          {!hideCancelButton && (
+            <PrimaryButton variant="outlined" onClick={onClose}>
+              {cancelLabel}
+            </PrimaryButton>
+          )}
 
           <PrimaryButton onClick={onConfirm}>{confirmLabel}</PrimaryButton>
         </Box>

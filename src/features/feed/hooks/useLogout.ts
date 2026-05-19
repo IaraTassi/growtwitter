@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../../hooks/redux";
 import { logout } from "../../auth/store/authSlice";
+import { clearAuth } from "../../auth/store/authStorage";
 
 export function useLogout() {
   const dispatch = useAppDispatch();
@@ -12,7 +13,7 @@ export function useLogout() {
   };
 
   const confirmLogout = () => {
-    localStorage.removeItem("token");
+    clearAuth();
     dispatch(logout());
     setOpen(false);
   };

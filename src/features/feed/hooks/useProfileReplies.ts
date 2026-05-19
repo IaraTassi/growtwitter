@@ -3,6 +3,7 @@ import type { RootState } from "../../../store/store";
 import { useEffect, useState } from "react";
 import type { ProfileReplyResponseDto } from "../types";
 import { getProfileReplies } from "../services/profileService";
+import { SessionExpiredError } from "../services/errors/SessionExpiredError";
 
 export function useProfileReplies(userId: string) {
   const token = useSelector((s: RootState) => s.auth.token);
@@ -27,6 +28,10 @@ export function useProfileReplies(userId: string) {
 
         setData(res);
       } catch (err) {
+        if (err instanceof SessionExpiredError) {
+          return;
+        }
+
         console.error("Erro ao buscar replies:", err);
 
         if (isMounted) {

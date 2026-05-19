@@ -3,6 +3,7 @@ import type { RootState } from "../../../store/store";
 import { useCallback, useEffect, useState } from "react";
 import type { ProfileTweetResponseDto } from "../types";
 import { getProfileTweets } from "../services/profileService";
+import { SessionExpiredError } from "../services/errors/SessionExpiredError";
 
 export function useProfileTweets(userId: string) {
   const token = useSelector((s: RootState) => s.auth.token);
@@ -11,28 +12,54 @@ export function useProfileTweets(userId: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    if (!token || !userId) return;
+  const load = useCallback(
+    async (isMounted: () => boolean = () => true) => {
+      if (!token || !userId) {
+        if (isMounted()) {
+          setLoading(false);
+          setData([]);
+        }
 
-    try {
-      setLoading(true);
-      setError(null);
+        return;
+      }
 
-      const res = await getProfileTweets(userId, token);
+      try {
+        setLoading(true);
+        setError(null);
 
-      setData(res);
-    } catch (error) {
-      console.error("Erro ao carregar tweets do perfil:", error);
+        const res = await getProfileTweets(userId, token);
 
-      setError("Erro ao carregar tweets");
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [userId, token]);
+        if (!isMounted()) return;
+
+        setData(res);
+      } catch (error) {
+        if (!isMounted()) return;
+
+        if (error instanceof SessionExpiredError) {
+          return;
+        }
+
+        console.error("Erro ao carregar tweets do perfil:", error);
+
+        setError("Erro ao carregar tweets");
+        setData([]);
+      } finally {
+        if (isMounted()) {
+          setLoading(false);
+        }
+      }
+    },
+    [userId, token],
+  );
 
   useEffect(() => {
-    load();
+    let isMounted = true;
+
+    load(() => isMounted);
+
+    return () => {
+      isMounted = false;
+    };
   }, [load]);
 
   return {

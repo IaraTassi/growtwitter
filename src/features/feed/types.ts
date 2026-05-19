@@ -364,6 +364,7 @@ export interface ConfirmDialogProps {
   description?: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  hideCancelButton?: boolean;
   onConfirm: () => void;
   onClose: () => void;
 }

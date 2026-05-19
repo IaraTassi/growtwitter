@@ -7,6 +7,7 @@ import type {
 import { useFollow } from "./useFollow";
 import { getUsers } from "../services/userService";
 import { mapUser } from "../mappers/userMapper";
+import { SessionExpiredError } from "../services/errors/SessionExpiredError";
 
 export function useExplorer({ token, currentUserId }: UseExplorerParams) {
   const [allUsers, setAllUsers] = useState<SuggestedUser[]>([]);
@@ -18,11 +19,15 @@ export function useExplorer({ token, currentUserId }: UseExplorerParams) {
   useEffect(() => {
     if (!token || !currentUserId) return;
 
+    let isMounted = true;
+
     const loadUsers = async () => {
       try {
         setLoading(true);
 
         const users = (await getUsers(token)) as UserWithRelations[];
+
+        if (!isMounted) return;
 
         const mappedUsers: SuggestedUser[] = users
           .filter((u) => u.id !== currentUserId)
@@ -30,13 +35,23 @@ export function useExplorer({ token, currentUserId }: UseExplorerParams) {
 
         setAllUsers(mappedUsers);
       } catch (err) {
+        if (err instanceof SessionExpiredError) {
+          return;
+        }
+
         console.error("Erro ao carregar usuários:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     loadUsers();
+
+    return () => {
+      isMounted = false;
+    };
   }, [token, currentUserId]);
 
   const suggestedUsers = useMemo(() => {

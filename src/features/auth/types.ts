@@ -70,6 +70,7 @@ export type LoginFormProps = {
   error?: string | ApiError | null;
   onSubmit: (data: LoginDto) => void;
   onSwitchMode?: () => void;
+  onInteraction?: () => void;
 };
 
 export type AuthLayoutProps = {

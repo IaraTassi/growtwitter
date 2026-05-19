@@ -6,6 +6,7 @@ import type { ProfileUser } from "../types";
 import { getUserById } from "../services/userService";
 import { Typography } from "@mui/material";
 import { ProfileTimeline } from "../components/ProfileTimeline";
+import { SessionExpiredError } from "../services/errors/SessionExpiredError";
 
 export function ProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -29,8 +30,14 @@ export function ProfilePage() {
         const userRes = await getUserById(safeId, safeToken);
         setUser(userRes);
       } catch (error) {
+        if (error instanceof SessionExpiredError) {
+          return;
+        }
+
         console.error(error);
+
         setError("Erro ao carregar perfil");
+
         setUser(null);
       } finally {
         setLoading(false);
@@ -43,7 +50,7 @@ export function ProfilePage() {
   if (loading)
     return <Typography sx={{ px: 3, pt: 2 }}>Carregando...</Typography>;
   if (error || !user)
-    return <Typography sx={{ px: 3, pt: 2 }}>Erro</Typography>;
+    return <Typography sx={{ px: 3, pt: 2 }}>Perfil não encontrado</Typography>;
 
   return <ProfileTimeline key={user.id} user={user} />;
 }

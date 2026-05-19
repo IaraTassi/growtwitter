@@ -19,6 +19,7 @@ export function LoginForm({
   error: apiError,
   onSubmit,
   onSwitchMode,
+  onInteraction,
 }: LoginFormProps) {
   const [loginData, setLoginData] = useState<LoginDto>({
     identifier: "",
@@ -68,6 +69,8 @@ export function LoginForm({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onInteraction?.();
+
     const { name, value } = e.target;
     const updated = {
       ...loginData,

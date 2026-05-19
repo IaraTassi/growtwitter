@@ -5,19 +5,22 @@ import { PrivateRoute } from "./PrivateRoute";
 import { FeedPage } from "../features/feed/pages/FeedPage";
 import { ExplorerPage } from "../features/feed/pages/ExplorerPage";
 import { ProfilePage } from "../features/feed/pages/ProfilePage";
+import { SessionManagerProvider } from "../components/SessionManagerProvider";
 
 export const AppRoutes = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route element={<PrivateRoute />}>
-        <Route path="/app" element={<App />}>
-          <Route index element={<FeedPage />} />
-          <Route path="explorer" element={<ExplorerPage />} />
-          <Route path="profile/:id" element={<ProfilePage />} />
+      <Route element={<SessionManagerProvider />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/app" element={<App />}>
+            <Route index element={<FeedPage />} />
+            <Route path="explorer" element={<ExplorerPage />} />
+            <Route path="profile/:id" element={<ProfilePage />} />
+          </Route>
         </Route>
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Route>
-      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   </BrowserRouter>
 );

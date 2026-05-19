@@ -1,3 +1,5 @@
+import { SessionExpiredError } from "./errors/SessionExpiredError";
+
 export async function authFetch(
   url: string,
   options: RequestInit = {},
@@ -21,9 +23,7 @@ export async function authFetch(
   });
 
   if (response.status === 401) {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-    throw new Error("Sessão expirada");
+    throw new SessionExpiredError();
   }
 
   return response;
