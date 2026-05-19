@@ -5,6 +5,7 @@ import {
 } from "../../../../src/features/feed/services/followService";
 import { act, renderHook } from "@testing-library/react";
 import { useFollow } from "../../../../src/features/feed/hooks/useFollow";
+import { SessionExpiredError } from "../../../../src/features/feed/services/errors/SessionExpiredError";
 
 vi.mock("../../../../src/features/feed/services/followService", () => ({
   followUser: vi.fn(),
@@ -143,5 +144,20 @@ describe("useFollow", () => {
     });
 
     expect(result.current.loadingIds).toEqual([]);
+  });
+
+  it("should ignore SessionExpiredError and clear loading state", async () => {
+    const { result } = renderHook(() => useFollow("token"));
+
+    const onSuccess = vi.fn();
+
+    mockedFollowUser.mockRejectedValue(new SessionExpiredError());
+
+    await act(async () => {
+      await result.current.toggleFollow("1", false, onSuccess);
+    });
+
+    expect(onSuccess).not.toHaveBeenCalled();
+    expect(result.current.loadingIds).not.toContain("1");
   });
 });

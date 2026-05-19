@@ -3,6 +3,7 @@ import type { UserWithRelations } from "../../../../src/features/feed/types";
 import { getUsers } from "../../../../src/features/feed/services/userService";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { useExplorer } from "../../../../src/features/feed/hooks/useExplorer";
+import { SessionExpiredError } from "../../../../src/features/feed/services/errors/SessionExpiredError";
 
 const toggleFollowMock = vi.fn();
 
@@ -182,5 +183,28 @@ describe("useExplorer", () => {
     });
 
     expect(toggleFollowMock).not.toHaveBeenCalled();
+  });
+
+  it("should handle SessionExpiredError and not update users", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    mockedGetUsers.mockRejectedValue(new SessionExpiredError());
+
+    const { result } = renderHook(() =>
+      useExplorer({ token: "token", currentUserId: "1" }),
+    );
+
+    expect(result.current.loading).toBe(true);
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
+
+    expect(result.current.users).toEqual([]);
+    expect(mockedGetUsers).toHaveBeenCalledWith("token");
+
+    expect(consoleSpy).not.toHaveBeenCalled();
+
+    consoleSpy.mockRestore();
   });
 });

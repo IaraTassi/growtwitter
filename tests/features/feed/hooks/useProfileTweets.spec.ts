@@ -5,6 +5,7 @@ import type { RootState } from "../../../../src/store/store";
 import type { ProfileTweetResponseDto } from "../../../../src/features/feed/types";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useProfileTweets } from "../../../../src/features/feed/hooks/useProfileTweets";
+import { SessionExpiredError } from "../../../../src/features/feed/services/errors/SessionExpiredError";
 
 vi.mock("../../../../src/features/feed/services/profileService", () => ({
   getProfileTweets: vi.fn(),
@@ -59,10 +60,13 @@ describe("useProfileTweets", () => {
     const { result } = renderHook(() => useProfileTweets("user-1"));
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(true);
+      expect(result.current.loading).toBe(false);
     });
 
     expect(mockedGetProfileTweets).not.toHaveBeenCalled();
+
+    expect(result.current.data).toEqual([]);
+    expect(result.current.error).toBeNull();
   });
 
   it("should handle error correctly", async () => {
@@ -80,5 +84,22 @@ describe("useProfileTweets", () => {
 
     expect(result.current.data).toEqual([]);
     expect(result.current.error).toBe("Erro ao carregar tweets");
+  });
+
+  it("should ignore SessionExpiredError", async () => {
+    mockedUseSelector.mockImplementation((selectorFn) =>
+      selectorFn(mockState("token-123") as RootState),
+    );
+
+    mockedGetProfileTweets.mockRejectedValue(new SessionExpiredError());
+
+    const { result } = renderHook(() => useProfileTweets("user-1"));
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
+
+    expect(result.current.error).toBeNull();
+    expect(result.current.data).toEqual([]);
   });
 });

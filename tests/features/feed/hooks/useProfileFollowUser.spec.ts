@@ -11,6 +11,24 @@ vi.mock("../../../../src/features/feed/hooks/useFollow", () => ({
   })),
 }));
 
+vi.mock("react-redux", async () => {
+  const actual =
+    await vi.importActual<typeof import("react-redux")>("react-redux");
+
+  return {
+    ...actual,
+    useSelector: vi.fn((selector) =>
+      selector({
+        auth: {
+          user: {
+            id: "logged-user",
+          },
+        },
+      }),
+    ),
+  };
+});
+
 const mockUser: ProfileUser = {
   id: "1",
   name: "Test User",
@@ -18,9 +36,10 @@ const mockUser: ProfileUser = {
   email: "",
   createdAt: "2026-02-19T10:00:00Z",
   updatedAt: "2026-02-19T10:00:00Z",
-  isFollowing: false,
+  followers: [],
   followersCount: 10,
   followingCount: 0,
+  isFollowing: false,
 };
 
 describe("useFollowUser", () => {
@@ -76,7 +95,13 @@ describe("useFollowUser", () => {
 
     const userFollowing: ProfileUser = {
       ...mockUser,
-      isFollowing: true,
+      followers: [
+        {
+          followerId: "logged-user",
+          followingId: "",
+          createdAt: "",
+        },
+      ],
       followersCount: 10,
     };
 

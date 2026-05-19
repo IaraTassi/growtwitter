@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { authFetch } from "../../../../src/features/feed/services/authService";
+import { SessionExpiredError } from "../../../../src/features/feed/services/errors/SessionExpiredError";
 
 describe("authFetch", () => {
   const BASE_URL = "https://api.test.com/test";
@@ -27,16 +28,7 @@ describe("authFetch", () => {
     );
   });
 
-  it("should throw error and redirect on 401", async () => {
-    const removeItemSpy = vi.spyOn(Storage.prototype, "removeItem");
-
-    const originalLocation = window.location;
-
-    Object.defineProperty(window, "location", {
-      writable: true,
-      value: { href: "" },
-    });
-
+  it("should throw SessionExpiredError on 401", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
       status: 401,
       ok: false,
@@ -44,12 +36,7 @@ describe("authFetch", () => {
 
     await expect(
       authFetch(BASE_URL, { method: "GET" }, "fake-token"),
-    ).rejects.toThrow("Sessão expirada");
-
-    expect(removeItemSpy).toHaveBeenCalledWith("token");
-    expect(window.location.href).toBe("/");
-
-    location = originalLocation;
+    ).rejects.toBeInstanceOf(SessionExpiredError);
   });
 
   it("should return response when not 401", async () => {

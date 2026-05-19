@@ -5,6 +5,7 @@ import type { RootState } from "../../../../src/store/store";
 import type { ProfileLikedTweetResponseDto } from "../../../../src/features/feed/types";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useProfileLikes } from "../../../../src/features/feed/hooks/useProfileLikes";
+import { SessionExpiredError } from "../../../../src/features/feed/services/errors/SessionExpiredError";
 
 vi.mock("../../../../src/features/feed/services/profileService", () => ({
   getProfileLikes: vi.fn(),
@@ -59,5 +60,21 @@ describe("useProfileLikes", () => {
     await waitFor(() => {
       expect(mockedGetProfileLikes).not.toHaveBeenCalled();
     });
+  });
+
+  it("should ignore SessionExpiredError", async () => {
+    mockedUseSelector.mockImplementation((selectorFn) =>
+      selectorFn(mockState("token-123") as RootState),
+    );
+
+    mockedGetProfileLikes.mockRejectedValue(new SessionExpiredError());
+
+    const { result } = renderHook(() => useProfileLikes("user-1"));
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
+
+    expect(result.current.data).toEqual([]);
   });
 });
