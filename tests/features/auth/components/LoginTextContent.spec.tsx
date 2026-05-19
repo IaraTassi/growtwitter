@@ -1,11 +1,12 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { LoginTextContent } from "../../../../src/features/auth/components/LoginTextContent";
+import { renderWithTheme } from "../../../utils/renderWithTheme";
 
 describe("LoginTextContent", () => {
   it("renders static text and login form", () => {
-    render(<LoginTextContent />);
+    renderWithTheme(<LoginTextContent />);
 
     expect(
       screen.getByRole("heading", { level: 2, name: /growtwitter/i }),

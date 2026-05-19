@@ -1,9 +1,10 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { LoginForm } from "../../../../src/features/auth/components/LoginForm";
 import type { LoginDto } from "../../../../src/features/auth/types";
+import { renderWithTheme } from "../../../utils/renderWithTheme";
 
 describe("LoginForm", () => {
   const defaultProps = {
@@ -14,7 +15,7 @@ describe("LoginForm", () => {
   };
 
   it("should render email, password and submit button", () => {
-    render(<LoginForm {...defaultProps} />);
+    renderWithTheme(<LoginForm {...defaultProps} />);
 
     expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/senha/i)).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("LoginForm", () => {
 
   it("should allow typing into inputs", async () => {
     const user = userEvent.setup();
-    render(<LoginForm {...defaultProps} />);
+    renderWithTheme(<LoginForm {...defaultProps} />);
 
     const emailInput = screen.getByRole("textbox", { name: /email/i });
     const passwordInput = screen.getByLabelText(/senha/i);
@@ -39,7 +40,7 @@ describe("LoginForm", () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
-    render(<LoginForm {...defaultProps} onSubmit={onSubmit} />);
+    renderWithTheme(<LoginForm {...defaultProps} onSubmit={onSubmit} />);
 
     const loginData: LoginDto = {
       identifier: "test@example.com",
@@ -56,7 +57,7 @@ describe("LoginForm", () => {
   });
 
   it("should disable all inputs and button when loading is true", () => {
-    render(<LoginForm {...defaultProps} loading={true} />);
+    renderWithTheme(<LoginForm {...defaultProps} loading={true} />);
 
     const button = screen.getByRole("button", { name: /entrando.../i });
     expect(button).toBeDisabled();
@@ -66,7 +67,9 @@ describe("LoginForm", () => {
   });
 
   it("should displays error message when error exists", () => {
-    render(<LoginForm {...defaultProps} error="Usuário ou senha incorretos" />);
+    renderWithTheme(
+      <LoginForm {...defaultProps} error="Usuário ou senha incorretos" />,
+    );
 
     expect(
       screen.getByText(/usuário ou senha incorretos/i),
@@ -77,7 +80,7 @@ describe("LoginForm", () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
-    render(<LoginForm {...defaultProps} onSubmit={onSubmit} />);
+    renderWithTheme(<LoginForm {...defaultProps} onSubmit={onSubmit} />);
 
     await user.click(screen.getByRole("button", { name: /entrar/i }));
 
@@ -88,7 +91,9 @@ describe("LoginForm", () => {
     const user = userEvent.setup();
     const onSwitchMode = vi.fn();
 
-    render(<LoginForm {...defaultProps} onSwitchMode={onSwitchMode} />);
+    renderWithTheme(
+      <LoginForm {...defaultProps} onSwitchMode={onSwitchMode} />,
+    );
 
     const switchButton = screen.getByRole("button", {
       name: /criar conta|inscreva-se/i,

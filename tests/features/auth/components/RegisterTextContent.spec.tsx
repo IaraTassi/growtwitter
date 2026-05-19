@@ -1,11 +1,12 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { RegisterTextContent } from "../../../../src/features/auth/components/RegisterTextContent";
+import { renderWithTheme } from "../../../utils/renderWithTheme";
 
 describe("RegisterTextContent", () => {
   it("renders static register text content", () => {
-    render(<RegisterTextContent />);
+    renderWithTheme(<RegisterTextContent />);
 
     expect(
       screen.getByRole("heading", { level: 2, name: /growtwitter/i }),

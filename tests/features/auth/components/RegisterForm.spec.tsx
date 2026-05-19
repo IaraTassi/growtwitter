@@ -1,9 +1,10 @@
 import { describe, vi, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { RegisterForm } from "../../../../src/features/auth/components/RegisterForm";
 import type { CreateAccountDto } from "../../../../src/features/auth/types";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
+import { renderWithTheme } from "../../../utils/renderWithTheme";
 
 describe("RegisterForm", () => {
   const defaultProps = {
@@ -14,7 +15,7 @@ describe("RegisterForm", () => {
   };
 
   it("should render all form fields and submit button", () => {
-    render(<RegisterForm {...defaultProps} />);
+    renderWithTheme(<RegisterForm {...defaultProps} />);
 
     expect(screen.getByLabelText(/nome completo/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/nome de usuário/i)).toBeInTheDocument();
@@ -29,7 +30,7 @@ describe("RegisterForm", () => {
 
   it("should allow typing into inputs", async () => {
     const user = userEvent.setup({ delay: null });
-    render(<RegisterForm {...defaultProps} />);
+    renderWithTheme(<RegisterForm {...defaultProps} />);
 
     await user.type(screen.getByLabelText(/nome completo/i), "Test User");
     await user.type(screen.getByLabelText(/nome de usuário/i), "testuser");
@@ -53,7 +54,7 @@ describe("RegisterForm", () => {
     const user = userEvent.setup({ delay: null });
     const onSubmit = vi.fn();
 
-    render(<RegisterForm {...defaultProps} onSubmit={onSubmit} />);
+    renderWithTheme(<RegisterForm {...defaultProps} onSubmit={onSubmit} />);
 
     const data: CreateAccountDto = {
       name: "Test User",
@@ -79,7 +80,7 @@ describe("RegisterForm", () => {
   });
 
   it("should disable all inputs and button when loading is true", () => {
-    render(<RegisterForm {...defaultProps} loading={true} />);
+    renderWithTheme(<RegisterForm {...defaultProps} loading={true} />);
 
     expect(
       screen.getByRole("textbox", { name: /nome completo/i }),
@@ -99,7 +100,9 @@ describe("RegisterForm", () => {
   });
 
   it("displays error message when error exists", () => {
-    render(<RegisterForm {...defaultProps} error="Erro ao criar conta" />);
+    renderWithTheme(
+      <RegisterForm {...defaultProps} error="Erro ao criar conta" />,
+    );
     expect(screen.getByText(/erro ao criar conta/i)).toBeInTheDocument();
   });
 
@@ -107,7 +110,7 @@ describe("RegisterForm", () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
 
-    render(<RegisterForm {...defaultProps} onSubmit={onSubmit} />);
+    renderWithTheme(<RegisterForm {...defaultProps} onSubmit={onSubmit} />);
 
     await user.click(screen.getByRole("button", { name: /criar conta/i }));
 
@@ -118,7 +121,9 @@ describe("RegisterForm", () => {
     const user = userEvent.setup();
     const onSwitchMode = vi.fn();
 
-    render(<RegisterForm {...defaultProps} onSwitchMode={onSwitchMode} />);
+    renderWithTheme(
+      <RegisterForm {...defaultProps} onSwitchMode={onSwitchMode} />,
+    );
 
     const switchButton = screen.getByRole("button", {
       name: /já tem conta|entrar/i,

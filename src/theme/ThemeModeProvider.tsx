@@ -1,10 +1,23 @@
-import { createContext } from "react";
+import { useMemo, useState } from "react";
+import { ThemeModeContext, type ThemeMode } from "./ThemeModeContext";
+import { createAppTheme } from "./createAppTheme";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 
-export type ThemeMode = "light" | "dark";
+export function ThemeModeProvider({ children }: { children: React.ReactNode }) {
+  const [mode, setMode] = useState<ThemeMode>("dark");
 
-export type ThemeModeContextType = {
-  mode: ThemeMode;
-  toggleTheme: () => void;
-};
+  const toggleTheme = () => {
+    setMode((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
-export const ThemeModeContext = createContext({} as ThemeModeContextType);
+  const theme = useMemo(() => createAppTheme(mode), [mode]);
+
+  return (
+    <ThemeModeContext.Provider value={{ mode, toggleTheme }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
+    </ThemeModeContext.Provider>
+  );
+}
