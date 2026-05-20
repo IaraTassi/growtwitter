@@ -174,6 +174,7 @@ export function LoginForm({
                 </Typography>
 
                 <Button
+                  data-cy="switch-login-mode"
                   type="button"
                   onClick={handleSwitchMode}
                   size="small"

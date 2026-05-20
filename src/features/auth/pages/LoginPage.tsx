@@ -47,10 +47,15 @@ export function LoginPage() {
   };
 
   const handleLogin = async (data: LoginDto) => {
-    setRegisterSuccess(false);
+    try {
+      setRegisterSuccess(false);
 
-    await dispatch(loginThunk(data)).unwrap();
-    navigate("/app");
+      await dispatch(loginThunk(data)).unwrap();
+
+      navigate("/app");
+    } catch {
+      // redux já trata erro
+    }
   };
 
   const toggleMode = () => {
