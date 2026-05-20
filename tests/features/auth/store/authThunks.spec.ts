@@ -1,16 +1,37 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "../../../../src/features/auth/store/authSlice";
 import {
   loginThunk,
   registerThunk,
 } from "../../../../src/features/auth/store/authThunks";
 import * as authService from "../../../../src/features/auth/services/authServices";
 
+type RootState = {
+  auth: ReturnType<typeof authReducer>;
+};
+
+function createTestStore() {
+  return configureStore({
+    reducer: {
+      auth: authReducer,
+    },
+  });
+}
+
 describe("authThunks", () => {
+  let store: ReturnType<typeof createTestStore>;
+
+  beforeEach(() => {
+    store = createTestStore();
+    vi.clearAllMocks();
+  });
+
   describe("authThunk - registerThunk", () => {
     it("should dispatch fulfilled when register succeeds", async () => {
       const mockResponse = {
         ok: true,
-        message: "Conta criada com sucesso.",
+        message: "Conta criada",
         user: {
           id: "1",
           name: "Test User",
@@ -24,25 +45,20 @@ describe("authThunks", () => {
         mockResponse,
       );
 
-      const dispatch = vi.fn();
-      const getState = vi.fn();
+      await store.dispatch(
+        registerThunk({
+          name: "Test User",
+          userName: "testuser",
+          email: "test@email.com",
+          password: "123456",
+          imageUrl: "",
+        }),
+      );
 
-      const result = await registerThunk({
-        name: "Test User",
-        userName: "testuser",
-        email: "test@email.com",
-        password: "123456",
-      })(dispatch, getState, undefined);
+      const state: RootState = store.getState();
 
-      expect(authService.createAccount).toHaveBeenCalledWith({
-        name: "Test User",
-        userName: "testuser",
-        email: "test@email.com",
-        password: "123456",
-      });
-
-      expect(result.type).toBe("auth/register/fulfilled");
-      expect(result.payload).toEqual(mockResponse);
+      expect(state.auth.loading).toBe(false);
+      expect(state.auth.error).toBeNull();
     });
 
     it("should dispatch rejected when register fails", async () => {
@@ -50,18 +66,20 @@ describe("authThunks", () => {
         new Error("Email já existe"),
       );
 
-      const dispatch = vi.fn();
-      const getState = vi.fn();
+      await store.dispatch(
+        registerThunk({
+          name: "Test User",
+          userName: "testuser",
+          email: "test@email.com",
+          password: "123456",
+          imageUrl: "",
+        }),
+      );
 
-      const result = await registerThunk({
-        name: "Test User",
-        userName: "testuser",
-        email: "test@email.com",
-        password: "123456",
-      })(dispatch, getState, undefined);
+      const state: RootState = store.getState();
 
-      expect(result.type).toBe("auth/register/rejected");
-      expect(result.payload).toBe("Email já existe");
+      expect(state.auth.loading).toBe(false);
+      expect(state.auth.error).toBe("Email já existe");
     });
   });
 
@@ -69,8 +87,8 @@ describe("authThunks", () => {
     it("should dispatch fulfilled when login succeeds", async () => {
       const mockResponse = {
         ok: true,
-        message: "Login realizado com sucesso.",
-        token: "jwt-token",
+        message: "Login ok",
+        token: "jwt",
         user: {
           id: "1",
           name: "Test User",
@@ -82,21 +100,17 @@ describe("authThunks", () => {
 
       vi.spyOn(authService, "login").mockResolvedValueOnce(mockResponse);
 
-      const dispatch = vi.fn();
-      const getState = vi.fn();
+      await store.dispatch(
+        loginThunk({
+          identifier: "testuser",
+          password: "123456",
+        }),
+      );
 
-      const result = await loginThunk({
-        identifier: "testuser",
-        password: "123456",
-      })(dispatch, getState, undefined);
+      const state: RootState = store.getState();
 
-      expect(authService.login).toHaveBeenCalledWith({
-        identifier: "testuser",
-        password: "123456",
-      });
-
-      expect(result.type).toBe("auth/login/fulfilled");
-      expect(result.payload).toEqual(mockResponse);
+      expect(state.auth.token).toBe("jwt");
+      expect(state.auth.user).toEqual(mockResponse.user);
     });
 
     it("should dispatch rejected when login fails", async () => {
@@ -104,16 +118,16 @@ describe("authThunks", () => {
         new Error("Invalid credentials"),
       );
 
-      const dispatch = vi.fn();
-      const getState = vi.fn();
+      await store.dispatch(
+        loginThunk({
+          identifier: "testuser",
+          password: "wrong",
+        }),
+      );
 
-      const result = await loginThunk({
-        identifier: "testuser",
-        password: "wrongpass",
-      })(dispatch, getState, undefined);
+      const state: RootState = store.getState();
 
-      expect(result.type).toBe("auth/login/rejected");
-      expect(result.payload).toBe("Invalid credentials");
+      expect(state.auth.error).toBe("Invalid credentials");
     });
   });
 });

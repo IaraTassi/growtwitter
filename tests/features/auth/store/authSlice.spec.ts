@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import authReducer, {
   initialState,
+  logout,
 } from "../../../../src/features/auth/store/authSlice";
 import {
   loginThunk,
@@ -138,6 +139,40 @@ describe("authSlice", () => {
 
       expect(state.loading).toBe(false);
       expect(state.error).toBe("Invalid credentials");
+    });
+  });
+
+  describe("authSlice - logout", () => {
+    it("should clear user and token on logout", () => {
+      const loggedInState = {
+        ...initialState,
+        user: {
+          id: "1",
+          name: "Test User",
+          userName: "testuser",
+          email: "test@email.com",
+          imageUrl: "",
+        },
+        token: "jwt-token",
+      };
+
+      const state = authReducer(loggedInState, logout());
+      expect(state.user).toBeNull();
+      expect(state.token).toBeNull();
+    });
+
+    it("should use default error when payload is undefined on login.rejected", () => {
+      const state = authReducer(
+        initialState,
+        loginThunk.rejected(
+          new Error(),
+          "",
+          { identifier: "x", password: "y" },
+          undefined,
+        ),
+      );
+
+      expect(state.error).toBe("Erro ao fazer login");
     });
   });
 });
