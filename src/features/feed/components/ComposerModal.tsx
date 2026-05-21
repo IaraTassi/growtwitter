@@ -42,6 +42,7 @@ export function ComposerModal({
         <CustomAvatar imageUrl={userImageUrl} aria-hidden="true" />
 
         <TextField
+          data-cy="composer-input"
           autoFocus
           placeholder="O que está acontecendo?"
           multiline
@@ -85,7 +86,11 @@ export function ComposerModal({
       />
 
       <Box display="flex" justifyContent="flex-end" sx={{ p: 0, mr: 1 }}>
-        <PrimaryButton onClick={handleSubmit} disabled={!content.trim()}>
+        <PrimaryButton
+          data-cy="composer-submit"
+          onClick={handleSubmit}
+          disabled={!content.trim()}
+        >
           {submitLabel}
         </PrimaryButton>
       </Box>

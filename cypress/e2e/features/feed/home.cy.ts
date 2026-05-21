@@ -54,6 +54,18 @@ describe("Home", () => {
 
       cy.url().should("include", "/login");
     });
+
+    it.only("should create tweet from sidebar composer", () => {
+      const tweet = `tweet e2e ${Date.now()}`;
+
+      cy.get('[data-cy="nav-tweet"]').click();
+
+      cy.get('[data-cy="composer-input"]').should("be.visible").type(tweet);
+
+      cy.get('[data-cy="composer-submit"]').click();
+
+      cy.contains(tweet).should("be.visible");
+    });
   });
 
   describe("Feed", () => {});
