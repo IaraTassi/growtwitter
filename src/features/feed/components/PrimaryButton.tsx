@@ -10,46 +10,50 @@ export function PrimaryButton({
   variant = "contained",
   fullWidth = false,
   sx,
+  ...props
 }: PrimaryButtonProps) {
   return (
     <Button
+      {...props}
       variant={variant}
       type={type}
       onClick={onClick}
       fullWidth={fullWidth}
       disabled={disabled || loading}
-      sx={(theme) => ({
-        textTransform: "none",
-        borderRadius: "1rem",
-        fontSize: "0.75rem",
-        fontWeight: 700,
-        minWidth: 70,
+      sx={[
+        (theme) => ({
+          textTransform: "none",
+          borderRadius: "1rem",
+          fontSize: "0.75rem",
+          fontWeight: 700,
+          minWidth: 70,
 
-        ...(variant === "contained" && {
-          backgroundColor: theme.custom.button.primary.default,
-          color: theme.palette.common.white,
+          ...(variant === "contained" && {
+            backgroundColor: theme.custom.button.primary.default,
+            color: theme.palette.common.white,
 
-          "&:hover": {
-            backgroundColor: theme.custom.button.primary.hover,
-          },
+            "&:hover": {
+              backgroundColor: theme.custom.button.primary.hover,
+            },
 
-          "&.Mui-disabled": {
-            backgroundColor: theme.custom.button.primary.disabled,
-          },
+            "&.Mui-disabled": {
+              backgroundColor: theme.custom.button.primary.disabled,
+            },
+          }),
+
+          ...(variant === "outlined" && {
+            borderColor: theme.palette.primary.main,
+            color: theme.palette.primary.main,
+
+            "&:hover": {
+              borderColor: theme.palette.primary.light,
+              backgroundColor: theme.custom.hover.item,
+            },
+          }),
         }),
 
-        ...(variant === "outlined" && {
-          borderColor: theme.palette.primary.main,
-          color: theme.palette.primary.main,
-
-          "&:hover": {
-            borderColor: theme.palette.primary.light,
-            backgroundColor: theme.custom.hover.item,
-          },
-        }),
-
-        ...sx,
-      })}
+        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+      ]}
     >
       {loading ? <CircularProgress size={18} /> : children}
     </Button>

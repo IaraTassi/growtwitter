@@ -26,6 +26,7 @@ export type AuthState = {
   token: string | null;
   loading: boolean;
   error: string | null;
+  hydrated: boolean;
 };
 
 export type CreateAccountResponse = {
@@ -85,4 +86,9 @@ export type AuthTextFieldProps = TextFieldProps & {
   slotProps?: {
     endAdornment?: React.ReactNode;
   };
+};
+
+export type HydratePayload = {
+  user: AuthState["user"];
+  token: AuthState["token"];
 };

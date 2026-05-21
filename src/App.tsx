@@ -4,8 +4,22 @@ import { RightBar } from "./features/feed/components/RightBar";
 import { Box, Divider } from "@mui/material";
 import { MobileTopBar } from "./components/layout/mobile/MobileTopBar";
 import { MobileBottomNav } from "./components/layout/mobile/MobileBottomNav";
+import { useAppDispatch } from "./hooks/redux";
+import { useEffect } from "react";
+import { loadAuth } from "./features/auth/store/authStorage";
+import { hydrate } from "./features/auth/store/authSlice";
 
 export function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const persistedAuth = loadAuth();
+
+    if (persistedAuth?.token) {
+      dispatch(hydrate(persistedAuth));
+    }
+  }, [dispatch]);
+
   return (
     <Box
       className="app-container"

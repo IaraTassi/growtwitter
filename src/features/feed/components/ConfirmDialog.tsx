@@ -14,7 +14,12 @@ export function ConfirmDialog({
   onClose,
 }: ConfirmDialogProps) {
   return (
-    <AppModal open={open} onClose={onClose} width={360}>
+    <AppModal
+      data-cy="confirm-dialog"
+      open={open}
+      onClose={onClose}
+      width={360}
+    >
       <Box sx={{ p: 3 }}>
         <Typography
           sx={{
@@ -48,12 +53,18 @@ export function ConfirmDialog({
           }}
         >
           {!hideCancelButton && (
-            <PrimaryButton variant="outlined" onClick={onClose}>
+            <PrimaryButton
+              data-cy="dialog-cancel"
+              variant="outlined"
+              onClick={onClose}
+            >
               {cancelLabel}
             </PrimaryButton>
           )}
 
-          <PrimaryButton onClick={onConfirm}>{confirmLabel}</PrimaryButton>
+          <PrimaryButton data-cy="dialog-confirm" onClick={onConfirm}>
+            {confirmLabel}
+          </PrimaryButton>
         </Box>
       </Box>
     </AppModal>

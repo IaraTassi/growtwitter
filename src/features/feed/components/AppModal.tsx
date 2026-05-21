@@ -7,9 +7,11 @@ export function AppModal({
   onClose,
   width = 454,
   children,
+  ...props
 }: AppModalProps) {
   return (
     <Modal
+      {...props}
       open={open}
       onClose={onClose}
       slotProps={{
@@ -35,7 +37,10 @@ export function AppModal({
         })}
       >
         <Box display="flex" justifyContent="flex-start">
-          <IconButton onClick={onClose} size="small">
+          <IconButton
+            onClick={() => onClose?.({}, "backdropClick")}
+            size="small"
+          >
             <CloseIcon
               sx={(theme) => ({
                 width: 17,

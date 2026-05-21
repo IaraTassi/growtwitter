@@ -1,4 +1,10 @@
-import type { SvgIconProps, SxProps } from "@mui/material";
+import type {
+  BoxProps,
+  ButtonProps,
+  ModalProps,
+  SvgIconProps,
+  SxProps,
+} from "@mui/material";
 
 export interface FeedUser {
   id: string;
@@ -129,9 +135,7 @@ export type TimelineItem =
       root: FeedTweet;
     };
 
-export interface AppModalProps {
-  open: boolean;
-  onClose: () => void;
+export interface AppModalProps extends Omit<ModalProps, "children"> {
   width?: number;
   children: React.ReactNode;
 }
@@ -144,18 +148,12 @@ export interface ComposerModalProps {
   submitLabel?: string;
 }
 
-export interface PrimaryButtonProps {
+export interface PrimaryButtonProps extends ButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
   loading?: boolean;
-  type?: "button" | "submit";
-  variant?: "contained" | "outlined";
-  fullWidth?: boolean;
-  sx?: object;
 }
 
-export interface SidebarNavItemProps {
+export interface SidebarNavItemProps extends BoxProps {
   icon: React.ReactNode;
   label: string;
   to: string;

@@ -57,6 +57,7 @@ export function SidebarUser({
       </ProfileLink>
       <Box>
         <PrimaryButton
+          data-cy="logout"
           variant="outlined"
           onClick={onLogout}
           sx={{

@@ -1,15 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { AuthState } from "../types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { AuthState, HydratePayload } from "../types";
 import { loginThunk, registerThunk } from "../store/authThunks";
-import { loadAuth, clearAuth, saveAuth } from "../store/authStorage";
-
-const persistedAuth = loadAuth();
+import { clearAuth, saveAuth } from "../store/authStorage";
 
 export const initialState: AuthState = {
-  user: persistedAuth.user,
-  token: persistedAuth.token,
+  user: null,
+  token: null,
   loading: false,
   error: null,
+  hydrated: false,
 };
 
 const authSlice = createSlice({
@@ -20,8 +19,15 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.error = null;
+      state.hydrated = true;
 
       clearAuth();
+    },
+
+    hydrate(state, action: PayloadAction<HydratePayload>) {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.hydrated = true;
     },
   },
   extraReducers: (builder) => {
@@ -46,15 +52,17 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        state.hydrated = true;
 
         saveAuth(action.payload.token, action.payload.user);
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro ao fazer login";
+        state.hydrated = true;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, hydrate } = authSlice.actions;
 export default authSlice.reducer;

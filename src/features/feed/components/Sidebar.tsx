@@ -55,15 +55,22 @@ export function Sidebar() {
           <Logo />
         </Box>
 
-        <SidebarNavItem icon={<HomeIcon />} label="Página Inicial" to="/app" />
+        <SidebarNavItem
+          data-cy="nav-home"
+          icon={<HomeIcon />}
+          label="Página Inicial"
+          to="/app"
+        />
 
         <SidebarNavItem
+          data-cy="nav-explorer"
           icon={<ExplorerIcon />}
           label="Explorar"
           to="/app/explorer"
         />
 
         <SidebarNavItem
+          data-cy="nav-profile"
           icon={<ProfileIcon />}
           label="Perfil"
           to={`/app/profile/${user?.id}`}
@@ -71,6 +78,7 @@ export function Sidebar() {
 
         <Box>
           <PrimaryButton
+            data-cy="nav-tweet"
             onClick={handleOpenComposer}
             sx={{ width: 162, height: 28, mt: 1 }}
           >

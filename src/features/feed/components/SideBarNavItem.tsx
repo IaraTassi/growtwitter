@@ -2,11 +2,17 @@ import { Box, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import type { SidebarNavItemProps } from "../types";
 
-export function SidebarNavItem({ icon, label, to }: SidebarNavItemProps) {
+export function SidebarNavItem({
+  icon,
+  label,
+  to,
+  ...props
+}: SidebarNavItemProps) {
   return (
     <NavLink to={to} end={to === "/app"} style={{ textDecoration: "none" }}>
       {({ isActive }) => (
         <Box
+          {...props}
           display="flex"
           alignItems="center"
           gap={1}
