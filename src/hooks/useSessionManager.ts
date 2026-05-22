@@ -30,11 +30,13 @@ export function useSessionManager() {
 
       expiredRef.current = true;
 
-      navigate("/login?expired=true", {
-        replace: true,
-      });
-
       dispatch(logout());
+
+      queueMicrotask(() => {
+        navigate("/login?expired=true", {
+          replace: true,
+        });
+      });
     };
 
     try {
@@ -81,11 +83,11 @@ export function useSessionManager() {
         );
       };
     } catch {
+      dispatch(logout());
+
       navigate("/login", {
         replace: true,
       });
-
-      dispatch(logout());
     }
   }, [token, dispatch, navigate]);
 }

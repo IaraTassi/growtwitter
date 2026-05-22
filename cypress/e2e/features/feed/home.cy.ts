@@ -55,7 +55,27 @@ describe("Home", () => {
       cy.url().should("include", "/login");
     });
 
-    it.only("should create tweet from sidebar composer", () => {
+    it.only("should logout without showing session expired dialog", () => {
+      cy.loginByApi(TEST_USERS.user1.email, TEST_USERS.user1.password);
+
+      cy.visit("/app");
+
+      cy.get('[data-cy="logout"]').click();
+
+      cy.get('[data-cy="confirm-dialog"]', { timeout: 10000 })
+        .should("be.visible")
+        .and("contain", "Sair da conta?");
+
+      cy.get('[data-cy="dialog-confirm"]').click();
+
+      cy.url().should("include", "/login");
+
+      cy.url().should("not.include", "expired=true");
+
+      cy.get('[data-cy="confirm-dialog"]').should("not.exist");
+    });
+
+    it("should create tweet from sidebar composer", () => {
       const tweet = `tweet e2e ${Date.now()}`;
 
       cy.get('[data-cy="nav-tweet"]').click();

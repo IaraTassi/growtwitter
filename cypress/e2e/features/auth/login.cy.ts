@@ -1,4 +1,5 @@
 import { TEST_USERS } from "../../../fixtures/test-users";
+import { createExpiredToken } from "../../../support/utils/auth";
 
 describe("LoginPage", () => {
   describe("Login", () => {
@@ -172,6 +173,64 @@ describe("LoginPage", () => {
       cy.contains("Inscreva-se").click();
 
       cy.contains("Criar conta").should("exist");
+    });
+  });
+
+  describe("Session Expiration", () => {
+    it("should redirect user after session expiration", () => {
+      const expiredToken = createExpiredToken();
+
+      cy.visit("/app", {
+        onBeforeLoad(win) {
+          win.localStorage.setItem("token", expiredToken);
+
+          win.localStorage.setItem("user", JSON.stringify(TEST_USERS.user1));
+        },
+      });
+
+      cy.url().should("include", "/login?expired=true");
+
+      cy.get('[data-cy="confirm-dialog"]')
+        .should("be.visible")
+        .and("contain", "Sessão expirada");
+    });
+
+    it("should keep authenticated user after page refresh", () => {
+      cy.loginByApi(TEST_USERS.user1.email, TEST_USERS.user1.password);
+
+      cy.visit("/app");
+
+      cy.reload();
+
+      cy.url().should("include", "/app");
+
+      cy.get('[data-cy="nav-home"]').should("be.visible");
+    });
+
+    it("should redirect unauthenticated user to login without expired param", () => {
+      cy.clearLocalStorage();
+
+      cy.visit("/app");
+
+      cy.url().should("include", "/login");
+
+      cy.url().should("not.include", "expired=true");
+
+      cy.get('[data-cy="confirm-dialog"]').should("not.exist");
+    });
+
+    it("should redirect to login when token is invalid", () => {
+      cy.visit("/app", {
+        onBeforeLoad(win) {
+          win.localStorage.setItem("token", "invalid-token");
+
+          win.localStorage.setItem("user", JSON.stringify(TEST_USERS.user1));
+        },
+      });
+
+      cy.url().should("include", "/login");
+
+      cy.url().should("not.include", "expired=true");
     });
   });
 });
