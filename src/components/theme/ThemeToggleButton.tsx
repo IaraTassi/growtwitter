@@ -9,6 +9,7 @@ export function ThemeToggleButton() {
 
   return (
     <IconButton
+      data-cy="theme-toggle"
       onClick={toggleTheme}
       disableRipple
       sx={{

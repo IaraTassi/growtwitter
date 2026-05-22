@@ -37,6 +37,7 @@ export function TrendingTopicsCard() {
       </Stack>
 
       <Typography
+        data-cy="show-more"
         sx={(theme) => ({
           cursor: "pointer",
           fontSize: "0.625rem",

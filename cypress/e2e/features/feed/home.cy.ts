@@ -55,7 +55,7 @@ describe("Home", () => {
       cy.url().should("include", "/login");
     });
 
-    it.only("should logout without showing session expired dialog", () => {
+    it("should logout without showing session expired dialog", () => {
       cy.loginByApi(TEST_USERS.user1.email, TEST_USERS.user1.password);
 
       cy.visit("/app");
@@ -85,6 +85,34 @@ describe("Home", () => {
       cy.get('[data-cy="composer-submit"]').click();
 
       cy.contains(tweet).should("be.visible");
+    });
+  });
+
+  describe("Right Sidebar", () => {
+    it("should persist theme after reload", () => {
+      cy.loginByApi(TEST_USERS.user1.email, TEST_USERS.user1.password);
+
+      cy.visit("/app");
+
+      cy.get('[data-cy="theme-toggle"]:visible')
+        .should("have.length", 1)
+        .click();
+
+      cy.reload();
+
+      cy.window().then((win) => {
+        expect(win.localStorage.getItem("theme-mode")).to.eq("light");
+      });
+    });
+
+    it("should redirect to explorer page", () => {
+      cy.loginByApi(TEST_USERS.user1.email, TEST_USERS.user1.password);
+
+      cy.visit("/app");
+
+      cy.get('[data-cy="show-more"]').click();
+
+      cy.url().should("include", "/app/explorer");
     });
   });
 
