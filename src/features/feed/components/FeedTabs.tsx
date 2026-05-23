@@ -21,6 +21,7 @@ export function FeedTabs({ tab, setTab }: FeedTabsProps) {
       >
         {tabs.map((tabItem) => (
           <Tab
+            data-cy={`feed-tab-${tabItem.value}`}
             key={tabItem.value}
             value={tabItem.value}
             label={tabItem.label}

@@ -39,7 +39,11 @@ export function HomeTimeline({
   };
 
   return (
-    <Box component="section" aria-labelledby="home-timeline-heading">
+    <Box
+      data-cy="home-timeline"
+      component="section"
+      aria-labelledby="home-timeline-heading"
+    >
       <Box component="header" sx={{ pt: 2, px: 3 }}>
         <Typography component="h2" id="home-timeline-heading">
           Página Inicial

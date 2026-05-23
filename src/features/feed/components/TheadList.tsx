@@ -26,6 +26,7 @@ export function ThreadList({ root, onLike, onReplyClick }: ThreadListProps) {
 
           {hasChildren && (
             <Box
+              data-cy={expanded ? "collapse-replies" : "expand-replies"}
               display="flex"
               alignItems="center"
               gap={0.4}
@@ -58,7 +59,9 @@ export function ThreadList({ root, onLike, onReplyClick }: ThreadListProps) {
             </Box>
           )}
 
-          {hasChildren && expanded && <Box>{renderReplies(reply.replies)}</Box>}
+          {hasChildren && expanded && (
+            <Box data-cy="nested-reply">{renderReplies(reply.replies)}</Box>
+          )}
         </Box>
       );
     });

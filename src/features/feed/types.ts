@@ -179,6 +179,7 @@ export type CustomAvatarProps = {
 
 export interface ReplyIconProps {
   onClick?: () => void;
+  dataCy?: string;
 }
 
 export interface LikeIconProps {

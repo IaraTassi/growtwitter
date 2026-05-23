@@ -31,6 +31,7 @@ export function FeedCardContent({
 
   return (
     <Box
+      data-cy="feed-card"
       component="article"
       display="grid"
       gridTemplateColumns="56px 1fr"
@@ -156,7 +157,7 @@ export function FeedCardContent({
           })}
         >
           <Box display="flex" alignItems="center" gap={1}>
-            <ReplyIcon onClick={handleReplyClick} />
+            <ReplyIcon dataCy="reply-button" onClick={handleReplyClick} />
             <Typography variant="caption" sx={{ paddingTop: "0.2rem" }}>
               {tweet.repliesCount}
             </Typography>

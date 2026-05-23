@@ -88,7 +88,7 @@ describe("Home", () => {
     });
   });
 
-  describe("Right Sidebar", () => {
+  describe("RightBar", () => {
     it("should persist theme after reload", () => {
       cy.loginByApi(TEST_USERS.user1.email, TEST_USERS.user1.password);
 
@@ -116,5 +116,101 @@ describe("Home", () => {
     });
   });
 
-  describe("Feed", () => {});
+  describe("Feed", () => {
+    it("should render home timeline", () => {
+      cy.visit("/app");
+
+      cy.get('[data-cy="home-timeline"]').should("be.visible");
+    });
+
+    it("should switch between feed tabs", () => {
+      cy.visit("/app");
+
+      cy.get('[data-cy="feed-tab-foryou"]').click();
+
+      cy.get('[data-cy="feed-tab-foryou"]').should(
+        "have.attr",
+        "aria-selected",
+        "true",
+      );
+
+      cy.get('[data-cy="feed-tab-following"]').click();
+
+      cy.get('[data-cy="feed-tab-following"]').should(
+        "have.attr",
+        "aria-selected",
+        "true",
+      );
+    });
+
+    it("should create a reply from feed timeline", () => {
+      const parentTweet = `parent ${Date.now()}`;
+      const reply = `reply ${Date.now()}`;
+
+      cy.createTweetByApi(parentTweet);
+
+      cy.visit("/app");
+
+      cy.get('[data-cy="feed-tab-foryou"]').click();
+
+      cy.contains(parentTweet, { timeout: 10000 })
+        .should("be.visible")
+        .parents('[data-cy="feed-card"]')
+        .find('[data-cy="reply-button"]')
+        .click();
+
+      cy.get('[data-cy="composer-input"]').should("be.visible").type(reply);
+
+      cy.get('[data-cy="composer-submit"]').click();
+
+      cy.contains(reply).should("be.visible");
+    });
+
+    it("should toggle nested thread replies", () => {
+      const parentTweet = `parent ${Date.now()}`;
+      const replyLevel1 = `reply level 1 ${Date.now()}`;
+      const replyLevel2 = `reply level 2 ${Date.now()}`;
+
+      cy.createTweetByApi(parentTweet);
+
+      cy.visit("/app");
+
+      cy.get('[data-cy="feed-tab-foryou"]').click();
+
+      cy.contains(parentTweet)
+        .should("be.visible")
+        .parents('[data-cy="feed-card"]')
+        .find('[data-cy="reply-button"]')
+        .click();
+
+      cy.get('[data-cy="composer-input"]')
+        .should("be.visible")
+        .type(replyLevel1);
+
+      cy.get('[data-cy="composer-submit"]').click();
+
+      cy.contains(replyLevel1).should("be.visible");
+
+      cy.contains(replyLevel1)
+        .parents('[data-cy="feed-card"]')
+        .find('[data-cy="reply-button"]')
+        .click();
+
+      cy.get('[data-cy="composer-input"]')
+        .should("be.visible")
+        .type(replyLevel2);
+
+      cy.get('[data-cy="composer-submit"]').click();
+
+      cy.reload();
+
+      cy.get('[data-cy="feed-tab-foryou"]').click();
+
+      cy.get('[data-cy="expand-replies"]').should("exist").first().click();
+
+      cy.get('[data-cy="collapse-replies"]').should("exist").first().click();
+
+      cy.get('[data-cy="expand-replies"]').should("exist");
+    });
+  });
 });

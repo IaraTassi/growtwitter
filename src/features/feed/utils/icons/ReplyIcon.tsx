@@ -1,9 +1,10 @@
 import { SvgIcon } from "@mui/material";
 import type { ReplyIconProps } from "../../types";
 
-export function ReplyIcon({ onClick }: ReplyIconProps) {
+export function ReplyIcon({ onClick, dataCy }: ReplyIconProps) {
   return (
     <SvgIcon
+      data-cy={dataCy}
       viewBox="0 0 13 13"
       onClick={onClick}
       sx={(theme) => ({

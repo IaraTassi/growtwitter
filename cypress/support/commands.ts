@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-// ***********************************************
 
 Cypress.Commands.add("loginByApi", (identifier: string, password: string) => {
   cy.request({
@@ -14,5 +13,20 @@ Cypress.Commands.add("loginByApi", (identifier: string, password: string) => {
 
     window.localStorage.setItem("token", token);
     window.localStorage.setItem("user", JSON.stringify(user));
+  });
+});
+
+Cypress.Commands.add("createTweetByApi", (content: string) => {
+  const token = window.localStorage.getItem("token");
+
+  return cy.request({
+    method: "POST",
+    url: `${Cypress.env("API_URL")}/tweets`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: {
+      content,
+    },
   });
 });
