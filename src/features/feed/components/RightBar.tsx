@@ -13,7 +13,7 @@ export function RightBar() {
         py: 2,
         width: "100%",
         maxWidth: 300,
-        position: "sticky",
+        position: "fixed",
         top: 0,
       }}
     >

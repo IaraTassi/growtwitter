@@ -128,7 +128,7 @@ export function HomeTimeline({
         open={modalOpen}
         onClose={handleCloseModal}
         userImageUrl={userImageUrl}
-        submitLabel="Tweetar"
+        submitLabel="Responder"
         onSubmit={handleSubmitReply}
       />
     </Box>
