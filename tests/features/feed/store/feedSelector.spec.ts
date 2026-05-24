@@ -43,6 +43,7 @@ describe("feedSelectors", () => {
       },
       loading: false,
       error: null,
+      hydrated: true,
     },
     feed: {
       tweets: [],
