@@ -66,7 +66,7 @@ describe("useSessionManager", () => {
     expect(mockDispatch).not.toHaveBeenCalled();
   });
 
-  it("should logout immediately when token is expired", () => {
+  it("should logout immediately when token is expired", async () => {
     mockedUseSelector.mockImplementation((fn) => fn(createState("token")));
 
     jwtDecodeMock.mockReturnValue({
@@ -76,6 +76,9 @@ describe("useSessionManager", () => {
     renderHook(() => useSessionManager());
 
     expect(mockDispatch).toHaveBeenCalledWith(logout());
+
+    await Promise.resolve();
+
     expect(mockNavigate).toHaveBeenCalledWith(
       "/login?expired=true",
       expect.any(Object),
