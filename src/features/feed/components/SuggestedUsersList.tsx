@@ -16,7 +16,7 @@ export function SuggestedUsersList({
         const variant = isVerified ? "primary" : "secondary";
 
         return (
-          <Box key={user.id} sx={{ px: 3 }}>
+          <Box data-cy="suggestion-card" key={user.id} sx={{ px: 3 }}>
             <Box
               display="flex"
               alignItems="center"
@@ -56,6 +56,7 @@ export function SuggestedUsersList({
                   </Box>
 
                   <Typography
+                    data-cy="user-username"
                     sx={(theme) => ({
                       fontWeight: 400,
                       fontSize: 12,
@@ -68,6 +69,7 @@ export function SuggestedUsersList({
               </Box>
 
               <PrimaryButton
+                data-cy="follow-button"
                 variant={user.isFollowing ? "outlined" : "contained"}
                 onClick={() => onToggleFollow(user.id)}
               >

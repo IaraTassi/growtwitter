@@ -16,7 +16,7 @@ export function ExplorerTimeline({
   }
 
   return (
-    <Box component="section">
+    <Box data-cy="explorer-timeline" component="section">
       <Box component="header" sx={{ py: 2, px: 3 }}>
         <Typography component="h2">Explorar usuários</Typography>
       </Box>
@@ -24,7 +24,11 @@ export function ExplorerTimeline({
       <SuggestedUsersList users={users} onToggleFollow={onToggleFollow} />
 
       {remaining > 0 && (
-        <Box sx={{ px: 3, pt: 2, cursor: "pointer" }} onClick={onLoadMore}>
+        <Box
+          data-cy="show-more-users"
+          sx={{ px: 3, pt: 2, cursor: "pointer" }}
+          onClick={onLoadMore}
+        >
           Mostrar mais ({remaining})
         </Box>
       )}
