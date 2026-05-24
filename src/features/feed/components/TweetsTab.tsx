@@ -95,7 +95,7 @@ export function TweetsTab({ userId }: TweetsTabProps) {
 
   if (!visibleTweets.length) {
     return (
-      <Box className="tweets-tab" sx={{ p: 4 }}>
+      <Box data-cy="tab-tweets" className="tweets-tab" sx={{ p: 4 }}>
         <Box className="header">
           <Typography sx={{ fontWeight: 800, fontSize: "1.375rem" }}>
             Ainda não fez nenhum growtweet?
@@ -119,7 +119,7 @@ export function TweetsTab({ userId }: TweetsTabProps) {
   }
 
   return (
-    <Box>
+    <Box data-cy="tab-tweets">
       {visibleTweets.map((tweet) => (
         <TweetItem
           key={tweet.id}

@@ -1,18 +1,16 @@
 /// <reference types="cypress" />
 
-Cypress.Commands.add("loginByApi", (identifier: string, password: string) => {
+Cypress.Commands.add("loginByApi", (email: string, password: string) => {
   cy.request({
     method: "POST",
     url: "https://growtwitter-api-r4bi.onrender.com/api/users/login",
     body: {
-      identifier,
+      identifier: email,
       password,
     },
-  }).then((response) => {
-    const { token, user } = response.body;
-
-    window.localStorage.setItem("token", token);
-    window.localStorage.setItem("user", JSON.stringify(user));
+  }).then(({ body }) => {
+    window.localStorage.setItem("token", body.token);
+    window.localStorage.setItem("user", JSON.stringify(body.user));
   });
 });
 

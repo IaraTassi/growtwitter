@@ -31,7 +31,11 @@ export function ProfileTimeline({ user }: ProfileTimelineProps) {
   );
 
   return (
-    <Box component="section" aria-labelledby="profile-timeline-heading">
+    <Box
+      data-cy="profile-timeline"
+      component="section"
+      aria-labelledby="profile-timeline-heading"
+    >
       <Box component="header" sx={{ py: 2, px: 3 }}>
         <ProfileHeader name={user.name} tweetsCount={tweetsCount} />
       </Box>

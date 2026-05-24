@@ -16,7 +16,7 @@ export function LikesTab({ userId }: LikesTabProps) {
 
   if (data.length === 0) {
     return (
-      <Box className="likes-tab" sx={{ p: 4 }}>
+      <Box data-cy="tab-likes" className="likes-tab" sx={{ p: 4 }}>
         <Box component="header">
           <Typography
             sx={{
@@ -45,7 +45,7 @@ export function LikesTab({ userId }: LikesTabProps) {
   }
 
   return (
-    <Box>
+    <Box data-cy="tab-likes">
       {data.map((tweet) => (
         <LikedTweetItem key={tweet.id} tweet={tweet} />
       ))}

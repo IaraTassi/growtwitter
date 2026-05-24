@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 
 export function MediaTab() {
   return (
-    <Box sx={{ p: 4 }}>
+    <Box data-cy="tab-media" sx={{ p: 4 }}>
       <Typography
         sx={{
           fontWeight: 800,

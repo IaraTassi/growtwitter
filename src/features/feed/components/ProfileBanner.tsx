@@ -35,6 +35,7 @@ export function ProfileBanner({
       </Box>
 
       <Box
+        data-cy="profile-avatar"
         sx={{
           position: "absolute",
           bottom: -(avatarSize / 2),

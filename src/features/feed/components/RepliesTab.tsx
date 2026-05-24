@@ -19,7 +19,7 @@ export function RepliesTab({ userId }: RepliesTabProps) {
 
   if (!data.length) {
     return (
-      <Box className="replies-tab" sx={{ p: 4 }}>
+      <Box data-cy="tab-replies" className="replies-tab" sx={{ p: 4 }}>
         <Box component="header">
           <Typography sx={{ fontWeight: 800, fontSize: "1.375rem" }}>
             Postou, recebeu resposta
@@ -43,7 +43,7 @@ export function RepliesTab({ userId }: RepliesTabProps) {
   }
 
   return (
-    <Box>
+    <Box data-cy="tab-replies">
       {roots.map((node) => (
         <ReplyThread key={node.id} node={node} />
       ))}

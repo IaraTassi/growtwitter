@@ -52,5 +52,7 @@ export function ProfilePage() {
   if (error || !user)
     return <Typography sx={{ px: 3, pt: 2 }}>Perfil não encontrado</Typography>;
 
-  return <ProfileTimeline key={user.id} user={user} />;
+  return (
+    <ProfileTimeline data-cy="profile-timeline" key={user.id} user={user} />
+  );
 }

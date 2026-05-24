@@ -24,12 +24,14 @@ export function ProfileInfo({
   return (
     <Box sx={{ px: 3, py: 1 }}>
       <Typography
+        data-cy="profile-name"
         component="h1"
         sx={{ fontSize: "0.875rem", fontWeight: 800, lineHeight: 1.2 }}
       >
         {user.name}
       </Typography>
       <Typography
+        data-cy="profile-username"
         component="span"
         sx={(theme) => ({
           display: "block",
@@ -112,6 +114,7 @@ export function ProfileInfo({
       ) : !isOwnProfile ? (
         <Box sx={{ mt: 1.2 }}>
           <PrimaryButton
+            data-cy="follow-button"
             variant={isFollowing ? "outlined" : "contained"}
             onClick={() => onToggleFollow(user.id)}
           >

@@ -5,6 +5,7 @@ import { Box } from "@mui/material";
 export function ProfileLink({ userId, children, sx }: ProfileLinkProps) {
   return (
     <Link
+      data-cy="profile-link"
       to={`/app/profile/${userId}`}
       style={{ textDecoration: "none", color: "inherit" }}
     >
