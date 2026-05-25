@@ -25,6 +25,7 @@ const authSlice = createSlice({
     },
 
     hydrate(state, action: PayloadAction<HydratePayload>) {
+      console.log("HYDRATE:", action.payload);
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.hydrated = true;
