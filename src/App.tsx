@@ -15,8 +15,6 @@ export function App() {
   useEffect(() => {
     const persistedAuth = loadAuth();
 
-    console.log("BOOT AUTH:", persistedAuth);
-
     dispatch(hydrate(persistedAuth ?? { user: null, token: null }));
   }, [dispatch]);
 

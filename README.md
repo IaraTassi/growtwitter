@@ -29,6 +29,11 @@ A modern Twitter-like social media application built with React, TypeScript and 
 
 ![Mobile Preview](./public/gifs/Mobile.gif)
 
+## 🌐 Live Demo
+
+- Frontend: https://growtwitter-zeta.vercel.app/
+- Backend API: https://growtwitter-api-r4bi.onrender.com
+
 ## ⚙️ Tech Stack
 
 - React 19

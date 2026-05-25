@@ -25,8 +25,6 @@ const authSlice = createSlice({
     },
 
     hydrate(state, action: PayloadAction<HydratePayload>) {
-      console.log("HYDRATE:", action.payload);
-
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.hydrated = true;
@@ -47,14 +45,10 @@ const authSlice = createSlice({
       })
 
       .addCase(loginThunk.pending, (state) => {
-        if (!state.hydrated) return;
-
         state.loading = true;
         state.error = null;
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
-        if (!state.hydrated) return;
-
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
@@ -65,6 +59,7 @@ const authSlice = createSlice({
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Erro ao fazer login";
+        state.hydrated = true;
       });
   },
 });
