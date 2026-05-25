@@ -33,7 +33,19 @@ export async function login(data: LoginDto): Promise<LoginResponse> {
     body: JSON.stringify(data),
   });
 
-  const body = await response.json();
+  const clonedResponse = response.clone();
+
+  let body;
+
+  try {
+    body = await response.json();
+  } catch {
+    const raw = await clonedResponse.text();
+
+    console.error("RAW LOGIN RESPONSE:", raw);
+
+    throw new Error("Invalid server response");
+  }
 
   if (!response.ok) {
     throw new Error(body.message ?? "Invalid credentials");
